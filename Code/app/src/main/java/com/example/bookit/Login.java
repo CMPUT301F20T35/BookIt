@@ -22,7 +22,6 @@ public class Login extends AppCompatActivity {
         final EditText Email=findViewById(R.id. emailText);
         final EditText Password=findViewById(R.id.password);
         fs=new FireStoreHelper(this);
-
         Button login=findViewById(R.id.Login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +44,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }
                 fs.loginAuth(email, password);
+
             }
         });
 
