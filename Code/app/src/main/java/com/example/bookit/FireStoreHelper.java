@@ -52,7 +52,6 @@ public class FireStoreHelper {
     public void logout() {
         fAuth=FirebaseAuth.getInstance();
         fAuth.signOut();//logout
-        context.startActivity(new Intent(context,Login.class));
     }
 
 
