@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Login extends AppCompatActivity {
 
     FireStoreHelper fs;
+    ProgressBar progressBar;//show the progress during the login
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -21,8 +23,10 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.login_activity);
         final EditText Email=findViewById(R.id. emailText);
         final EditText Password=findViewById(R.id.password);
+        progressBar = findViewById(R.id.progressBar);
         fs=new FireStoreHelper(this);
         Button login=findViewById(R.id.Login);
+        progressBar.setVisibility(View.GONE);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,8 +47,7 @@ public class Login extends AppCompatActivity {
                     Password.setError("Password at least 6 Characters");
                     return;
                 }
-                fs.loginAuth(email, password);
-
+                fs.loginAuth(email, password,progressBar);
             }
         });
 

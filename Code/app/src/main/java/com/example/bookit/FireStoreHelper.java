@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,21 +29,24 @@ public class FireStoreHelper {
     }
     /**
      * used to authenticate the email and password
-     * @param email,password
+     * @param email,password,progressBar
      * */
-    public void loginAuth(String email,String password)
+    public void loginAuth(String email, String password, final ProgressBar progressBar)
     {
-
+        progressBar.setVisibility(View.VISIBLE);
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
+
+
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity) context).finish();
             }else {
                 Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         }
 
