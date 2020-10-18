@@ -32,7 +32,8 @@ public class FireStoreHelper {
     public void loginAuth(String email,String password)
     {
 
-        fAuth = FirebaseAuth.getInstance();fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
@@ -45,6 +46,15 @@ public class FireStoreHelper {
 
     });
     }
+    /**
+     * used to sign out of the user
+     * */
+    public void logout() {
+        fAuth=FirebaseAuth.getInstance();
+        fAuth.signOut();//logout
+        context.startActivity(new Intent(context,Login.class));
+    }
+
 
     public FirebaseAuth getfAuth() {
         return fAuth;
