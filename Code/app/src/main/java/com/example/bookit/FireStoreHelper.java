@@ -1,5 +1,6 @@
 package com.example.bookit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -39,6 +40,7 @@ public class FireStoreHelper {
             if(task.isSuccessful()){
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
+                ((Activity) context).finish();
             }else {
                 Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -52,6 +54,8 @@ public class FireStoreHelper {
     public void logout() {
         fAuth=FirebaseAuth.getInstance();
         fAuth.signOut();//logout
+        context.startActivity(new Intent(context,Login.class));
+        ((Activity) context).finish();//end the MainActivity so that user is unable to go back
     }
 
 

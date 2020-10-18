@@ -32,8 +32,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 fs.logout();
-                startActivity(new Intent(getContext(),Login.class));
-                getActivity().finish();//end the MainActivity so that user is unable to go back
             }
             });
         // Inflate the layout for this fragment

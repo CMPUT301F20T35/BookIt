@@ -44,6 +44,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }
                 fs.loginAuth(email, password);
+
             }
         });
 
