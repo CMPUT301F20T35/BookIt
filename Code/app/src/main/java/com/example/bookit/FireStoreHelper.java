@@ -62,6 +62,25 @@ public class FireStoreHelper {
         ((Activity) context).finish();//end the MainActivity so that user is unable to go back
     }
 
+    public void signUp(String email, String password, String username,
+                       String number, final ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(context, "Sign up Successfully", Toast.LENGTH_SHORT).show();
+                        ((Activity) context).finish();
+                    }else {
+                        System.out.println("f");
+                        Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                }
+            });
+    }
 
     public FirebaseAuth getfAuth() {
         return fAuth;
