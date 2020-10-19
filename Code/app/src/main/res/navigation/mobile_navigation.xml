@@ -8,25 +8,21 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.bookit.HomeFragment"
-        android:label="Notification"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.bookit.ProfileFragment"
-        android:label="My profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_my_book"
         android:name="com.example.bookit.MyBookFragment"
-        android:label="My Book Inventory"
         tools:layout="@layout/fragment_mybook" />
 
     <fragment
         android:id="@+id/navigation_borrow_book"
         android:name="com.example.bookit.BorrowFragment"
-        android:label="Borrow Book"
         tools:layout="@layout/fragment_borrow" />
 
 </navigation>
