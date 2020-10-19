@@ -5,26 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_account_default"
-        app:layout_constraintBottom_toTopOf="@+id/usernameedit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/contactinfoedit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
-        android:inputType="number"
         android:hint="Contact info"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameedit" />
@@ -33,13 +21,12 @@
         android:id="@+id/usernameedit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
         android:ems="10"
         android:hint="username"
 
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        tools:layout_editor_absoluteY="328dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
