@@ -9,9 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHolder> {
@@ -28,12 +26,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     @NonNull
     @Override
     public BookAdapter.LinearViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false));
+        return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.owner_book,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull BookAdapter.LinearViewHolder holder, int position) {
-        holder.textView.setText(bookData.get(position).getTitle());
+        holder.bookName.setText(bookData.get(position).getTitle());
+        holder.authorName.setText(bookData.get(position).getAuthor());
     }
 
 
@@ -45,11 +44,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     //inherit viewholder
     class LinearViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textView;
+        private TextView bookName;
+        private TextView authorName;
 
         public LinearViewHolder(View itemView){
             super(itemView);
-            textView = itemView.findViewById(R.id.book_name);
+            bookName = itemView.findViewById(R.id.book_name);
+            authorName = itemView.findViewById(R.id.author);
+
         }
     }
 }

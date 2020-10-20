@@ -28,6 +28,7 @@ public class MyBookFragment extends Fragment {
                 null,"Perfect","YBS");
         ArrayList<Book> testList = new ArrayList<Book>();
         testList.add(book);
+        //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new BookAdapter(getActivity(),testList));
         return root;
