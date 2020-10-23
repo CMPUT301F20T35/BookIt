@@ -2,6 +2,7 @@ package com.example.bookit;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -65,14 +66,8 @@ public class ProfileFragment extends Fragment {
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
                 username.setText(testUser.getUserName());
                 contactInfo.setText(testUser.getContactInfo());
-                builder.setPositiveButton("update", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {}
-                });
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {}
-                });
+                builder.setPositiveButton("update", null);
+                builder.setNegativeButton("cancel", null);
 
                 final AlertDialog alertDialog = builder.create();
                 alertReady = false;
@@ -120,6 +115,7 @@ public class ProfileFragment extends Fragment {
                 });
 
                 alertDialog.show();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable( getResources().getColor(R.color.dialogColor)));
             }
         });
 
