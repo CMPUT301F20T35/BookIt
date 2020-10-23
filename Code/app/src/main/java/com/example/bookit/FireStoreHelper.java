@@ -18,8 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FireStoreHelper {
     FirebaseAuth fAuth;
     Context context;
-
-
+    boolean isSuccessful=false;
 
     public FireStoreHelper() {
     }
@@ -30,27 +29,30 @@ public class FireStoreHelper {
     /**
      * used to authenticate the email and password
      * @param email,password,progressBar
+     * @return a bool indicating if login successfully
      * */
-    public void loginAuth(String email, String password, final ProgressBar progressBar)
+    public boolean loginAuth(String email, String password, final ProgressBar progressBar)
     {
+
         progressBar.setVisibility(View.VISIBLE);
+
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
 
-
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity) context).finish();
+                isSuccessful=true;
             }else {
                 Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
+                isSuccessful=false;
             }
         }
-
-    });
+    });return isSuccessful;
     }
     /**
      * used to sign out of the user

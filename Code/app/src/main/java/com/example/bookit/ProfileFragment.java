@@ -35,12 +35,12 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_profile, container, false);
         final User testUser = new User("xiu", "xiu", "testID",
-                "testEmail", 911, "123456abc");
+                "testEmail", "911", "123456abc");
         fs=new FireStoreHelper(getActivity());
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
         userNameView.setText(testUser.getUserName());
-        contactInfoView.setText(Integer.toString(testUser.getContactInfo()));
+        contactInfoView.setText(testUser.getContactInfo());
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);
         ImageButton editimage=v.findViewById(R.id.editimage);
@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
                 final EditText username=v.findViewById(R.id.usernameedit);
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
                 username.setText(testUser.getUserName());
-                contactInfo.setText(Integer.toString(testUser.getContactInfo()));
+                contactInfo.setText(testUser.getContactInfo());
                 builder.setPositiveButton("update", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {}
@@ -96,10 +96,10 @@ public class ProfileFragment extends Fragment {
                                 else{
                                     //need to update the firestore too
 
-                                    testUser.setContactInfo(parseInt(contactInfo.getText().toString().trim()));
+                                    testUser.setContactInfo(contactInfo.getText().toString().trim());
                                     testUser.setUserName(username.getText().toString().trim());
                                     userNameView.setText(testUser.getUserName());
-                                    contactInfoView.setText(Integer.toString(testUser.getContactInfo()));
+                                    contactInfoView.setText(testUser.getContactInfo());
                                     Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
                                     alertReady=true;
 
