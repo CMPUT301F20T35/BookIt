@@ -42,11 +42,12 @@ public abstract class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     }
 
-
+    //the direction of the swiping
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         return makeMovementFlags(0, ItemTouchHelper.LEFT);
     }
+
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {

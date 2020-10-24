@@ -10,7 +10,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,8 +47,10 @@ public class MyBookFragment extends Fragment {
         testList.add(book1);
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         //setting the separate line
-        rv.addItemDecoration(new MyDecoration());
+        DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
+        rv.addItemDecoration(divider);
 
         //adapter operation
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
