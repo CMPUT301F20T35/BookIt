@@ -57,13 +57,19 @@ public class ProfileFragment extends Fragment {
         fs.Fetch(new dbCallback() {
             @Override
             public void onCallback(Map map) {
-                System.out.println(map);
+                String s= (String) map.get("username");
+                userNameView.setText(s);
+                String n= (String) map.get("contactInfo");
+                contactInfoView.setText(n);
+
+
             }
         });///
+
         //final TextView userNameView = v.findViewById(R.id.userName);
         //final TextView contactInfoView = v.findViewById(R.id.contactInfo);
-        userNameView.setText(testUser.getUserName());
-        contactInfoView.setText(testUser.getContactInfo());
+        //userNameView.setText(testUser.getUserName());
+       // contactInfoView.setText(testUser.getContactInfo());
 
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);

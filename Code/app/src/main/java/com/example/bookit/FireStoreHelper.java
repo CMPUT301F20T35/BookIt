@@ -124,16 +124,15 @@ public class FireStoreHelper {
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                System.out.println(task);
+                //System.out.println(task);
                 if (task.isSuccessful()) {
 
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Map<String, Object> returnMap = new HashMap<>();
-                        returnMap.put("aaa","hello");
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        Log.d(TAG, "db firstName getString() is: " + document.getString("username"));
-                        Log.d(TAG, "db lastName getString() is: " + document.getString("number"));
+                        Map<String, String> returnMap = new HashMap<>();
+                        returnMap.put("username", (String) document.get("username"));
+                        returnMap.put("contactInfo", (String) document.get("number"));
+                        returnMap.put("email", (String) document.get("email"));
 
                         callback.onCallback(returnMap);
                     } else {
@@ -149,33 +148,7 @@ public class FireStoreHelper {
     //public void update(){}
 
 
-    public void Fetch (){
-        fAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = fAuth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("User").document(user.getUid());
-        //ArrayList<String> ItemList = new ArrayList<>();
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Map<String, Object> returnMap = new HashMap<>();
-                        returnMap.put("aaa","hello");
-                        //Map<String,String> returnuser = new HashMap<>();
-                        //ItemList.add(document.getString("username"));
-                    } else {
-                        //Log.d(TAG, "No such document");//wait to add
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());//wait to add
-                }
-            }
-        });
 
-     //System.out.println(returnuser);
-    }
 
     //public void update(){}
 
