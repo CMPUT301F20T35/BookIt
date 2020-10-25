@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,13 +27,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class MapsFragment extends Fragment {
-    LatLng latLng1;
-    Button confirm;
+    private LatLng latLng1;
+    ImageButton confirm;
+    ImageButton myLocation;
     Location location;
     public MapsFragment(){
-    }
-    public MapsFragment(LatLng latLng){
-        this.latLng1=latLng;
     }
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -49,19 +48,33 @@ public class MapsFragment extends Fragment {
 
         @Override
         public void onMapReady(final GoogleMap googleMap) {
-
-            Bundle bundle = getArguments();
-            Double lat;
-            Double lon;
+            //default location is device's current location
+            Bundle bundle = getArguments();//get the current position from mybookFragment abd make a mark on the map
+            final Double lat;
+            final Double lon;
             lat=bundle.getDouble("lat");
             lon=bundle.getDouble("long");
             latLng1=new LatLng(lat,lon);
             MarkerOptions markerOptions=new MarkerOptions();
             markerOptions.position(latLng1);
-            markerOptions.title("current Location: "+latLng1.latitude+":"+latLng1.longitude);
+            markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
             googleMap.clear();
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
             googleMap.addMarker(markerOptions);
+            //user choose to get back to the current location
+            myLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    latLng1=new LatLng(lat,lon);
+                    MarkerOptions markerOptions=new MarkerOptions();
+                    markerOptions.position(latLng1);
+                    markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
+                    googleMap.clear();
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
+                    googleMap.addMarker(markerOptions);
+                }
+            });
+            // user choose on any point ont the map
             googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
@@ -69,9 +82,8 @@ public class MapsFragment extends Fragment {
                     //initialise the marker
                     MarkerOptions markerOptions=new MarkerOptions();
                     markerOptions.position(latLng);
-                    markerOptions.title(latLng.latitude+":"+latLng.longitude);
+                    markerOptions.title("Location chose: "+latLng.latitude+":"+latLng.longitude);
                     googleMap.clear();
-                    //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                     googleMap.addMarker(markerOptions);
                 }
             });
@@ -86,24 +98,20 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_maps, container, false);
         confirm=v.findViewById(R.id.confirm);
+        myLocation=v.findViewById(R.id.current);
+
+        //create a new location object after confirm
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 location=new Location(latLng1.latitude,latLng1.longitude);
-                Log.d("dsads",Double.toString(location.getLatitude()));
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                MyBookFragment mybook=new MyBookFragment();
-                MapsFragment map=new MapsFragment();
-                
+                Log.d("asddssa", Double.toString(location.getLongitude()));
                 getActivity().onBackPressed();
-
-
             }
         });
 
         return v ;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

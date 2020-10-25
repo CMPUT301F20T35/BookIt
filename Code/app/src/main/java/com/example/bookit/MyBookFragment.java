@@ -90,7 +90,7 @@ public class MyBookFragment extends Fragment {
         });
 
 
-        //choose location
+        //choose a location to lend to borrower
         Button choose = view.findViewById(R.id.location);
         fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(getActivity());
 
@@ -114,6 +114,9 @@ public class MyBookFragment extends Fragment {
 
         return view;
     }
+    /**
+     * this function is for getting the current location(lat and long) of the device and pass it into the map fragment
+     * */
     @SuppressLint("MissingPermission")
     private void getLocation(){
         LocationManager locationManage=(LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
@@ -127,8 +130,6 @@ public class MyBookFragment extends Fragment {
                         bundle.putDouble("lat",location.getLatitude());
                         bundle.putDouble("long",location.getLongitude());
                         Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
-                        Log.d("lat",String.valueOf(location.getLatitude()));
-                        Log.d("long",String.valueOf(location.getLongitude()));
 
                     }else{
                         LocationRequest locationRequest=new LocationRequest().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -143,15 +144,13 @@ public class MyBookFragment extends Fragment {
                                 bundle.putDouble("lat",location.getLatitude());
                                 bundle.putDouble("long",location.getLongitude());
                                 Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
-                                Log.d("lat",String.valueOf(location.getLatitude()));
-                                Log.d("long",String.valueOf(location.getLongitude()));
                             }
                         };
                         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
                     }
                 }
             });
-        }
+        }else{Toast.makeText(getContext(),"please turn on the data or GPS",Toast.LENGTH_SHORT).show();}
 
 }
     @Override
