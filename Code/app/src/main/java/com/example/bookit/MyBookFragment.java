@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 public class MyBookFragment extends Fragment {
     private Button acceptedButton;
@@ -16,7 +17,7 @@ public class MyBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mybook, container, false);
+        final View view = inflater.inflate(R.layout.fragment_mybook, container, false);
         // get view of four buttons
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
@@ -27,6 +28,7 @@ public class MyBookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // switch to MyBookAcceptedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_accepted);
             }
         });
 
@@ -34,6 +36,7 @@ public class MyBookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // switch to MyBookAvailableFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_available);
             }
         });
 
@@ -41,6 +44,7 @@ public class MyBookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // switch to MyBookBorrowedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_borrowed);
             }
         });
 
@@ -48,6 +52,7 @@ public class MyBookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //switch to MyBookRequestedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_requested);
             }
         });
 
