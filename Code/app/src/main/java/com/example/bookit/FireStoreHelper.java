@@ -3,6 +3,7 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -16,10 +17,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class FireStoreHelper {
     FirebaseAuth fAuth;
@@ -27,7 +34,7 @@ public class FireStoreHelper {
     Context context;
     boolean isSuccessful=false;
 
-    public FireStoreHelper() {
+    public FireStoreHelper(ProfileFragment profileFragment) {
     }
 
     public FireStoreHelper( Context context) {
@@ -87,7 +94,6 @@ public class FireStoreHelper {
                         newUser.put("password", password);
                         newUser.put("username", username);
                         newUser.put("number", number);
-
                         db = FirebaseFirestore.getInstance();
                         final CollectionReference collectionReference = db.collection("User");
                         collectionReference.
@@ -105,6 +111,41 @@ public class FireStoreHelper {
             });
 
     }
+    public void Fetch(){
+        final String[] username = {""};
+        final String[] Phonenumber = {""};
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        ///
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                System.out.println(task);
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        Log.d(TAG, "db firstName getString() is: " + document.getString("username"));
+                        Log.d(TAG, "db lastName getString() is: " + document.getString("number"));
+
+                        username[0] = (String) document.getString("username");
+                        Phonenumber[0] = (String) document.getString("number");
+                        Log.d(TAG, "String mFirstName is: " + username[0]);
+                        Log.d(TAG, "String mLastName is: " + Phonenumber[0]);
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    //public void update(){}
 
     public FirebaseAuth getfAuth() {
         return fAuth;

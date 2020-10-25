@@ -38,6 +38,7 @@ public class ProfileFragment extends Fragment {
         final User testUser = new User("xiu", "xiu", "testID",
                 "testEmail", "911", "123456abc");
         fs=new FireStoreHelper(getActivity());
+        fs.Fetch();///
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
         userNameView.setText(testUser.getUserName());
