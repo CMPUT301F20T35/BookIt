@@ -1,28 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/mobile_navigation"
+app:startDestination="@+id/navigation_home">
 
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.bookit.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+<fragment
+    android:id="@+id/navigation_home"
+    android:name="com.example.bookit.HomeFragment"
+    tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.example.bookit.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+<fragment
+    android:id="@+id/navigation_profile"
+    android:name="com.example.bookit.ProfileFragment"
+    tools:layout="@layout/fragment_profile" />
 
-    <fragment
-        android:id="@+id/navigation_my_book"
-        android:name="com.example.bookit.MyBookFragment"
-        tools:layout="@layout/fragment_mybook" />
+<fragment
+    android:id="@+id/navigation_my_book"
+    android:name="com.example.bookit.MyBookFragment"
+    tools:layout="@layout/fragment_mybook" >
+    <action
+        android:id="@+id/action_navigation_my_book_to_navigation_mybook_requested"
+        app:destination="@id/navigation_mybook_requested" />
+    <action
+        android:id="@+id/action_navigation_my_book_to_navigation_mybook_accepted"
+        app:destination="@id/navigation_mybook_accepted" />
+    <action
+        android:id="@+id/action_navigation_my_book_to_navigation_mybook_borrowed"
+        app:destination="@id/navigation_mybook_borrowed" />
+    <action
+        android:id="@+id/action_navigation_my_book_to_navigation_mybook_available2"
+        app:destination="@id/navigation_mybook_available" />
+</fragment>
 
-    <fragment
-        android:id="@+id/navigation_borrow_book"
-        android:name="com.example.bookit.BorrowFragment"
-        tools:layout="@layout/fragment_borrow" />
+<fragment
+    android:id="@+id/navigation_borrow_book"
+    android:name="com.example.bookit.BorrowFragment"
+    tools:layout="@layout/fragment_borrow" />
+
+
+<fragment
+    android:id="@+id/navigation_mybook_requested"
+    android:name="com.example.bookit.MyBookRequestedFragment"
+    tools:layout="@layout/fragment_mybook_requested" />
+<fragment
+    android:id="@+id/navigation_mybook_accepted"
+    android:name="com.example.bookit.MyBookAcceptedFragment"
+    tools:layout="@layout/fragment_mybook_accepted" />
+<fragment
+    android:id="@+id/navigation_mybook_borrowed"
+    android:name="com.example.bookit.MyBookBorrowedFragment"
+    tools:layout="@layout/fragment_mybook_borrowed" />
+<fragment
+    android:id="@+id/navigation_mybook_available"
+    android:name="com.example.bookit.MyBookAvailableFragment"
+    tools:layout="@layout/fragment_mybook_available"/>
 
 </navigation>
