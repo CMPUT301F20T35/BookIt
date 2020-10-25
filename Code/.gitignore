@@ -7,7 +7,8 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-"**/*/res/values/google_maps_api.xml.DS_Store"
+.DS_Store
+"**/*/res/values/google_maps_api.xml"
 /build
 /captures
 .externalNativeBuild
