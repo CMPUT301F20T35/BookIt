@@ -124,21 +124,16 @@ public class FireStoreHelper {
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                System.out.println(task);
                 if (task.isSuccessful()) {
 
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Map<String, Object> returnMap = new HashMap<>();
-                        returnMap.put("aaa","hello");
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        Log.d(TAG, "db firstName getString() is: " + document.getString("username"));
-                        Log.d(TAG, "db lastName getString() is: " + document.getString("number"));
+                        returnMap.put("username",document.getString("username"));
+                        returnMap.put("number",document.getString("number"));
+                        returnMap.put("email",document.getString("email"));
+                        returnMap.put("name",document.getString("name"));
 
-                        username[0] = (String) document.getString("username");
-                        Phonenumber[0] = (String) document.getString("number");
-                        Log.d(TAG, "String mFirstName is: " + username[0]);
-                        Log.d(TAG, "String mLastName is: " + Phonenumber[0]);
                         callback.onCallback(returnMap);
                     } else {
                         Log.d(TAG, "No such document");
