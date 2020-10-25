@@ -20,7 +20,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.ArrayList;
+
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +116,37 @@ public class FireStoreHelper {
             });
 
     }
+    public void Fetch(final dbCallback callback){ ;
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                System.out.println(task);
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> returnMap = new HashMap<>();
+                        returnMap.put("aaa","hello");
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        Log.d(TAG, "db firstName getString() is: " + document.getString("username"));
+                        Log.d(TAG, "db lastName getString() is: " + document.getString("number"));
+
+                        callback.onCallback(returnMap);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    //public void update(){}
 
 
     public void Fetch (){

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.Map;
 
 import java.util.HashMap;
 
@@ -42,6 +43,7 @@ public class ProfileFragment extends Fragment {
         final User testUser = new User("xiu", "xiu", "testID",
                 "testEmail", "911", "123456abc");
 
+
         fs=new FireStoreHelper(getActivity());
 
         //String username=info.get("username");
@@ -51,6 +53,18 @@ public class ProfileFragment extends Fragment {
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
         //userNameView.setText(username);
         //contactInfoView.setText(number);
+        fs=new FireStoreHelper(getActivity());
+        fs.Fetch(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                System.out.println(map);
+            }
+        });///
+        //final TextView userNameView = v.findViewById(R.id.userName);
+        //final TextView contactInfoView = v.findViewById(R.id.contactInfo);
+        userNameView.setText(testUser.getUserName());
+        contactInfoView.setText(testUser.getContactInfo());
+
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);
         ImageButton editimage=v.findViewById(R.id.editimage);
