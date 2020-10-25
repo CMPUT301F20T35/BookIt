@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,8 +19,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+
+import java.util.ArrayList;
+
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,27 +116,25 @@ public class FireStoreHelper {
             });
 
     }
-    public void Fetch(final dbCallback callback){
-        final String[] username = {""};
-        final String[] Phonenumber = {""};
+    public void Fetch(final dbCallback callback){ ;
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
-        User testuser;
-
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("User").document(user.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+
                 if (task.isSuccessful()) {
 
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Map<String, Object> returnMap = new HashMap<>();
-                        returnMap.put("username",document.getString("username"));
-                        returnMap.put("number",document.getString("number"));
-                        returnMap.put("email",document.getString("email"));
-                        returnMap.put("name",document.getString("name"));
+
+                        Map<String, String> returnMap = new HashMap<>();
+                        returnMap.put("username", (String) document.get("username"));
+                        returnMap.put("contactInfo", (String) document.get("number"));
+                        returnMap.put("email", (String) document.get("email"));
 
                         callback.onCallback(returnMap);
                     } else {
@@ -147,7 +149,12 @@ public class FireStoreHelper {
 
     //public void update(){}
 
-    public FirebaseAuth getfAuth() {
+
+
+
+    //public void update(){}
+
+    public FirebaseAuth getfAuth(){
         return fAuth;
     }
 
