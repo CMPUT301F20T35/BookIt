@@ -2,12 +2,15 @@ package com.example.bookit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity {
     FireStoreHelper fs;
@@ -15,14 +18,19 @@ public class SignUp extends AppCompatActivity {
 
 
     private boolean textCheck(EditText text) {
-
+        Context context = getApplicationContext();
         if (text.getText().toString().trim().isEmpty()) {
-            text.setError("Invalid text");
+            Toast.makeText(context, text.getHint() + " cannot be empty", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (text == findViewById(R.id.passwordSignUp) &&
                 text.getText().toString().trim().length()<6) {
-            text.setError("too short");
+            Toast.makeText(context, "password too short", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (text == findViewById(R.id.contactSignUp) &&
+                text.getText().toString().trim().length()<10) {
+            Toast.makeText(context, "phone format is xxx-xxx-xxxx", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -41,6 +49,8 @@ public class SignUp extends AppCompatActivity {
         final EditText signUpPassword = findViewById(R.id.passwordSignUp);
         final EditText signUpUsername = findViewById(R.id.userNameSignUp);
         final EditText signUpNumber = findViewById(R.id.contactSignUp);
+
+        signUpNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         Button signUp = findViewById(R.id.newUserSignUp);
 
