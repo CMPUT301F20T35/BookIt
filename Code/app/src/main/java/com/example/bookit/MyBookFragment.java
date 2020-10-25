@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,11 +34,15 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+import androidx.navigation.Navigation;
 
 public class MyBookFragment extends Fragment {
+    private Button acceptedButton;
+    private Button availableButton;
+    private Button borrowedButton;
+    private Button requestedButton;
     FusedLocationProviderClient fusedLocationProviderClient;
     LatLng latLng;
-    ArrayList<Double> loc;
     MyBookFragment myBook;
     MapsFragment map;
 
@@ -45,9 +50,48 @@ public class MyBookFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_mybook, container, false);
-        Button choose = v.findViewById(R.id.location);
+        final View view = inflater.inflate(R.layout.fragment_mybook, container, false);
+        // get view of four buttons
+        acceptedButton = view.findViewById(R.id.button_accepted);
+        availableButton = view.findViewById(R.id.button_available);
+        borrowedButton = view.findViewById(R.id.button_borrowed);
+        requestedButton = view.findViewById(R.id.button_requested);
+
+        acceptedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // switch to MyBookAcceptedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_accepted);
+            }
+        });
+
+        availableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // switch to MyBookAvailableFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_available);
+            }
+        });
+
+        borrowedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // switch to MyBookBorrowedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_borrowed);
+            }
+        });
+
+        requestedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //switch to MyBookRequestedFragment
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_mybook_requested);
+            }
+        });
+
+
+        //choose location
+        Button choose = view.findViewById(R.id.location);
         fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(getActivity());
 
         //final FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -55,13 +99,12 @@ public class MyBookFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                    loc=new ArrayList<Double>();
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                     getLocation();
                 }
                 else{
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},100);
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},100);
                 }
 
 
@@ -69,7 +112,7 @@ public class MyBookFragment extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
     @SuppressLint("MissingPermission")
     private void getLocation(){
@@ -84,11 +127,6 @@ public class MyBookFragment extends Fragment {
                         bundle.putDouble("lat",location.getLatitude());
                         bundle.putDouble("long",location.getLongitude());
                         Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
-                        /*FragmentTransaction transaction2 = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction2.replace(R.id.mybook, map, "mapfragment")
-                                .addToBackStack(null)
-                                .commit();*/
-                        //latLng=new LatLng(location.getLatitude(),location.getLongitude());
                         Log.d("lat",String.valueOf(location.getLatitude()));
                         Log.d("long",String.valueOf(location.getLongitude()));
 
@@ -100,8 +138,13 @@ public class MyBookFragment extends Fragment {
                         LocationCallback locationCallback=new LocationCallback(){
                             @Override
                             public void onLocationResult(LocationResult locationResult) {
-                                Location location1=locationResult.getLastLocation();
-                                latLng=new LatLng(location1.getLatitude(),location1.getLongitude());
+                                Location location=locationResult.getLastLocation();
+                                Bundle bundle = new Bundle();
+                                bundle.putDouble("lat",location.getLatitude());
+                                bundle.putDouble("long",location.getLongitude());
+                                Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
+                                Log.d("lat",String.valueOf(location.getLatitude()));
+                                Log.d("long",String.valueOf(location.getLongitude()));
                             }
                         };
                         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
@@ -118,8 +161,9 @@ public class MyBookFragment extends Fragment {
             getLocation();
         }
         else{
-            Toast.makeText(getContext(),"permisssion denied",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"permission denied",Toast.LENGTH_SHORT).show();
         }
+
     }
 
 }
