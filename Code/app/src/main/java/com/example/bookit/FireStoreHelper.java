@@ -61,7 +61,7 @@ public class FireStoreHelper {
                 ((Activity) context).finish();
                 isSuccessful=true;
             }else {
-                Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error ! Wrong Email or password !", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 isSuccessful=false;
             }
@@ -94,6 +94,7 @@ public class FireStoreHelper {
                         newUser.put("password", password);
                         newUser.put("username", username);
                         newUser.put("number", number);
+                        newUser.put("name", "");
                         db = FirebaseFirestore.getInstance();
                         final CollectionReference collectionReference = db.collection("User");
                         collectionReference.
@@ -111,12 +112,14 @@ public class FireStoreHelper {
             });
 
     }
-    public void Fetch(){
+    public void Fetch(final dbCallback callback){
         final String[] username = {""};
         final String[] Phonenumber = {""};
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
-        ///
+        User testuser;
+
+        db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("User").document(user.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -126,7 +129,8 @@ public class FireStoreHelper {
 
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-
+                        Map<String, Object> returnMap = new HashMap<>();
+                        returnMap.put("aaa","hello");
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         Log.d(TAG, "db firstName getString() is: " + document.getString("username"));
                         Log.d(TAG, "db lastName getString() is: " + document.getString("number"));
@@ -135,7 +139,7 @@ public class FireStoreHelper {
                         Phonenumber[0] = (String) document.getString("number");
                         Log.d(TAG, "String mFirstName is: " + username[0]);
                         Log.d(TAG, "String mLastName is: " + Phonenumber[0]);
-
+                        callback.onCallback(returnMap);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -145,6 +149,7 @@ public class FireStoreHelper {
             }
         });
     }
+
     //public void update(){}
 
     public FirebaseAuth getfAuth() {

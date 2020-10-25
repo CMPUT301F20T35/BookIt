@@ -32,7 +32,7 @@
         android:inputType="textEmailAddress"
         android:textColor="#040404"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,11 +48,11 @@
         android:hint="password"
         android:inputType="textPassword"
         android:textColor="#0B0A0A"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="275dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailTextSignUp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1" />
 
     <EditText
@@ -63,11 +63,11 @@
         android:hint="username"
         android:inputType="textPersonName"
         android:textColor="#0B0A0A"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="350dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordSignUp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1" />
 
     <EditText
@@ -75,15 +75,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="contact number"
-        android:inputType="phone"
-        android:maxLength="10"
+        android:hint="number (xxx) xxx-xxxx"
+        android:inputType="phone|number"
         android:textColor="#0B0A0A"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="425dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameSignUp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1" />
 
     <Button

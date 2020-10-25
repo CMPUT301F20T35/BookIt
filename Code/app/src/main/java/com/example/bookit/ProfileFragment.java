@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -38,7 +39,12 @@ public class ProfileFragment extends Fragment {
         final User testUser = new User("xiu", "xiu", "testID",
                 "testEmail", "911", "123456abc");
         fs=new FireStoreHelper(getActivity());
-        fs.Fetch();///
+        fs.Fetch(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                System.out.println(map);
+            }
+        });///
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
         userNameView.setText(testUser.getUserName());
