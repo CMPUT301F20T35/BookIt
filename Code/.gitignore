@@ -8,7 +8,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-"**/*/res/values/google_maps_api.xml"
+/.app/src/debug/res/values/google_maps_api.xml
 /build
 /captures
 .externalNativeBuild
