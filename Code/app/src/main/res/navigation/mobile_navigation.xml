@@ -13,16 +13,43 @@
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.bookit.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
-
+        tools:layout="@layout/fragment_profile"/>
     <fragment
         android:id="@+id/navigation_my_book"
         android:name="com.example.bookit.MyBookFragment"
-        tools:layout="@layout/fragment_mybook" />
+        tools:layout="@layout/fragment_mybook" >
+        <action
+            android:id="@+id/action_from_mybook_to_mybook_nav"
+            app:destination="@+id/chooseLocation"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseLocation"
+        android:name="com.example.bookit.MapsFragment"
+        tools:layout="@layout/fragment_maps" />
 
     <fragment
         android:id="@+id/navigation_borrow_book"
         android:name="com.example.bookit.BorrowFragment"
         tools:layout="@layout/fragment_borrow" />
+
+
+    <navigation android:id="@+id/mybook_gragh" app:startDestination="@id/navigation_my_book">
+        <fragment
+            android:id="@+id/navigation_my_book"
+            android:name="com.example.bookit.MyBookFragment"
+            tools:layout="@layout/fragment_mybook" >
+            <action
+                android:id="@+id/action_chooseLocation"
+                app:destination="@+id/chooseLocation"
+                />
+        </fragment>
+        <fragment
+            android:id="@+id/chooseLocation"
+            android:name="com.example.bookit.MapsFragment"
+            tools:layout="@layout/fragment_maps" />
+    </navigation>
+
+
 
 </navigation>
