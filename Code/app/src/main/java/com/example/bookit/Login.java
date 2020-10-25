@@ -50,7 +50,6 @@ public class Login extends AppCompatActivity {
                 fs.loginAuth(email, password,progressBar);
             }
         });
-
         Button signUp = findViewById(R.id.signup);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +58,7 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
     }
 
