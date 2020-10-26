@@ -129,6 +129,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_requested_to_borrow_borrowed"
             app:destination="@id/navigation_borrow_borrowed" />
+        <action
+            android:id="@+id/action_borrow_requested_to_book_Detail"
+            app:destination="@id/navigation_book_detail" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_accepted"
@@ -172,9 +175,30 @@ app:startDestination="@+id/navigation_home">
             android:id="@+id/action_borrow_available_to_borrow_requested"
             app:destination="@id/navigation_borrow_requested" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_book_detail"
+        android:name="com.example.bookit.BookDetailFragment"
+        tools:layout="@layout/fragment_book_detail" >
+        <action
+            android:id="@+id/action_book_detail_to_scan_code"
+            app:destination="@id/navigation_scan_code" />
+        <action
+            android:id="@+id/action_book_detail_to_owner_detail"
+            app:destination="@id/navigation_owner_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_scan_code"
+        android:name="com.example.bookit.ScanCodeFragment"
+        tools:layout="@layout/fragment_scan_code" >
 
-
-
+        <action
+            android:id="@+id/action_scan_code_to_borrow_requested"
+            app:destination="@id/navigation_borrow_requested" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_owner_detail"
+        android:name="com.example.bookit.OwnerDetailFragment"
+        tools:layout="@layout/fragment_owner_detail" />
 
 
 </navigation>
