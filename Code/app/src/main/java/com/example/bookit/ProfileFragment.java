@@ -56,15 +56,10 @@ public class ProfileFragment extends Fragment {
 
         fs=new FireStoreHelper(getActivity());
 
-        //String username=info.get("username");
-        //String number=info.get("Number");//contact info
-        //String email=info.get("email");
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
-        //userNameView.setText(username);
-        //contactInfoView.setText(number);
 
-        SharedPreferences pref = container.getContext().
+        final SharedPreferences pref = container.getContext().
                 getSharedPreferences("Profile", Context.MODE_PRIVATE);
 
         if (!pref.contains("username") ||
@@ -119,8 +114,8 @@ public class ProfileFragment extends Fragment {
                 builder.setView(v);
                 final EditText username=v.findViewById(R.id.usernameedit);
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
-                username.setText(testUser.getUserName());
-                contactInfo.setText(testUser.getContactInfo());
+                username.setText(pref.getString("username", ""));
+                contactInfo.setText(pref.getString("contactInfo", ""));
                 builder.setPositiveButton("update", null);
                 builder.setNegativeButton("cancel", null);
 
@@ -146,10 +141,7 @@ public class ProfileFragment extends Fragment {
                                 else{
                                     //need to update the firestore too
 
-                                    testUser.setContactInfo(contactInfo.getText().toString().trim());
-                                    testUser.setUserName(username.getText().toString().trim());
-                                    userNameView.setText(testUser.getUserName());
-                                    contactInfoView.setText(testUser.getContactInfo());
+
                                     Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
                                     alertReady=true;
 
@@ -170,7 +162,6 @@ public class ProfileFragment extends Fragment {
                 });
 
                 alertDialog.show();
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable( getResources().getColor(R.color.dialogColor)));
             }
         });
 
@@ -194,7 +185,6 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE) {
-
             if (data==null){
                 Toast.makeText(getActivity(), "cancelled", Toast.LENGTH_LONG).show();
             }
