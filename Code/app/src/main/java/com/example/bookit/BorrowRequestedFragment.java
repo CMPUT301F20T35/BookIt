@@ -15,6 +15,8 @@ public class BorrowRequestedFragment extends Fragment {
     private Button availableButton;
     private Button borrowedButton;
 
+    private Button test;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -23,7 +25,7 @@ public class BorrowRequestedFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
         borrowedButton = view.findViewById(R.id.button_borrowed);
-
+        test= view.findViewById(R.id.button);
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +47,14 @@ public class BorrowRequestedFragment extends Fragment {
             public void onClick(View v) {
                 // switch to MyBookBorrowedFragment
                 Navigation.findNavController(view).navigate(R.id.action_borrow_requested_to_borrow_borrowed);
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_borrow_requested_to_book_Detail);
+
             }
         });
 
