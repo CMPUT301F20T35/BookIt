@@ -4,57 +4,58 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
+import androidx.navigation.Navigation;
 
 public class BorrowFragment extends Fragment {
-
-    private RecyclerView rv;
-    private BookAdapter borrowAdapter;
-
-    CoordinatorLayout coordinatorLayout;
-
+    private Button acceptedButton;
+    private Button availableButton;
+    private Button borrowedButton;
+    private Button requestedButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_borrow, container, false);
-        rv = root.findViewById(R.id.rv_2);
+        final View view = inflater.inflate(R.layout.fragment_borrow, container, false);
+        // get view of four buttons
+        acceptedButton = view.findViewById(R.id.button_accepted);
+        availableButton = view.findViewById(R.id.button_available);
+        borrowedButton = view.findViewById(R.id.button_borrowed);
+        requestedButton = view.findViewById(R.id.button_requested);
 
-        //initilize test array and adapter
-        Book book = new Book("TestBookBorrow","YBS","123456",null,
-                null,"Perfect","YBS");
-        Book book1 = new Book("TestBook1Borrow","YBS","123456",null,
-                null,"Perfect","YBS");
-        final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(book);
-        testList.add(book1);
-        //set up manager and adapter to contain data
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //setting the separate line
-        DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
-        rv.addItemDecoration(divider);
-
-        //setting onclick , implementing intent at here.
-        borrowAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(int pos) {
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                // switch to MyBookAcceptedFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_to_borrow_accepted);
             }
-
-
         });
-        rv.setAdapter(borrowAdapter);
 
-        return root;
+        availableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // switch to MyBookAvailableFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_to_borrow_available);
+            }
+        });
+
+        borrowedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // switch to MyBookBorrowedFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_to_borrow_borrowed);
+            }
+        });
+
+        requestedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //switch to MyBookRequestedFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_to_borrow_requested);
+            }
+        });
+
+        return view;
     }
 }

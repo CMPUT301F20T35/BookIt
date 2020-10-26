@@ -8,11 +8,11 @@ public class User {
     private String userName;
     private String userID;
     private String email;
-    private int contactInfo;
+    private String contactInfo;
     private Image image;
     private String password;
 
-    public User(String name, String userName, String userID, String email, int contactInfo, String password) {
+    public User(String name, String userName, String userID, String email, String contactInfo, String password) {
         this.name = name;
         this.userName = userName;
         this.userID = userID;
@@ -53,11 +53,11 @@ public class User {
         this.email = email;
     }
 
-    public int getContactInfo() {
+    public String getContactInfo() {
         return contactInfo;
     }
 
-    public void setContactInfo(int contactInfo) {
+    public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
     }
 
