@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -107,7 +108,6 @@ public class FireStoreHelper {
                         Toast.makeText(context, "Sign up Successfully", Toast.LENGTH_SHORT).show();
                         ((Activity) context).finish();
                     }else {
-                        System.out.println("f");
                         Toast.makeText(context, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }
@@ -116,7 +116,8 @@ public class FireStoreHelper {
             });
 
     }
-    public void Fetch(final dbCallback callback){ ;
+    public void Fetch(final dbCallback callback, AlertDialog dialog){
+        dialog.show();
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();

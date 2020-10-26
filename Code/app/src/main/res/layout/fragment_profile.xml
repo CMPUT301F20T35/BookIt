@@ -35,7 +35,7 @@
         android:layout_width="123dp"
         android:layout_height="35dp"
         android:layout_marginBottom="24dp"
-        android:text="TextView"
+        android:text=""
         app:layout_constraintBottom_toTopOf="@+id/contactInfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -45,7 +45,7 @@
         android:layout_width="125dp"
         android:layout_height="32dp"
         android:layout_marginBottom="24dp"
-        android:text="TextView"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/editButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
