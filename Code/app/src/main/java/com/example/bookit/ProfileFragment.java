@@ -34,7 +34,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static java.lang.Integer.parseInt;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment{
     boolean alertReady;
     FireStoreHelper fs;
     public static final int PICK_IMAGE = 1;
@@ -67,6 +67,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences pref = container.getContext().
                 getSharedPreferences("Profile", Context.MODE_PRIVATE);
 
+
         if (!pref.contains("username") ||
                 !pref.contains("username")) {
             fs=new FireStoreHelper(getActivity());
@@ -98,8 +99,8 @@ public class ProfileFragment extends Fragment {
        // contactInfoView.setText(testUser.getContactInfo());
 
         Button signOut=v.findViewById(R.id.logoutButton);
-        ImageButton edit=v.findViewById(R.id.editButton);
-        ImageButton editimage=v.findViewById(R.id.editimage);
+        ImageButton edit=v.findViewById(R.id.editButton);///
+        ImageButton editimage=v.findViewById(R.id.editimage);//
         image=v.findViewById(R.id.imageView5);
         //change profile image
         editimage.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +120,8 @@ public class ProfileFragment extends Fragment {
                 builder.setView(v);
                 final EditText username=v.findViewById(R.id.usernameedit);
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
-                username.setText(testUser.getUserName());
-                contactInfo.setText(testUser.getContactInfo());
+                username.setText(userNameView.getText());
+                contactInfo.setText(contactInfoView.getText());
                 builder.setPositiveButton("update", null);
                 builder.setNegativeButton("cancel", null);
 
@@ -146,10 +147,12 @@ public class ProfileFragment extends Fragment {
                                 else{
                                     //need to update the firestore too
 
-                                    testUser.setContactInfo(contactInfo.getText().toString().trim());
-                                    testUser.setUserName(username.getText().toString().trim());
-                                    userNameView.setText(testUser.getUserName());
-                                    contactInfoView.setText(testUser.getContactInfo());
+                                    //testUser.setContactInfo(contactInfo.getText().toString().trim());
+                                   // testUser.setUserName(username.getText().toString().trim());
+                                    //////////////////update need here
+                                    fs.update(username.getText().toString(),contactInfo.getText().toString());
+                                    userNameView.setText(username.getText());
+                                    contactInfoView.setText(contactInfo.getText());
                                     Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
                                     alertReady=true;
 
@@ -206,5 +209,6 @@ public class ProfileFragment extends Fragment {
         }
 
     }
+
 
 }

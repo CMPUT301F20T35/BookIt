@@ -3,6 +3,7 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -148,7 +149,22 @@ public class FireStoreHelper {
         });
     }
 
-    //public void update(){}
+    public void update(String username,String contactIfo){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (username.equals("")){}
+        else{
+
+            final CollectionReference collectionReference = db.collection("User");
+            collectionReference.
+                    document(user.getUid()).update("username",username,"number",contactIfo);
+
+
+
+        };
+
+    }
 
 
 
@@ -162,5 +178,6 @@ public class FireStoreHelper {
     public void setfAuth(FirebaseAuth fAuth) {
         this.fAuth = fAuth;
     }
+
 
 }
