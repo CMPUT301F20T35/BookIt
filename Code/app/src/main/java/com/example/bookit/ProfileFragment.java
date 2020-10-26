@@ -150,11 +150,18 @@ public class ProfileFragment extends Fragment{
                                     //testUser.setContactInfo(contactInfo.getText().toString().trim());
                                    // testUser.setUserName(username.getText().toString().trim());
                                     //////////////////update need here
-                                    fs.update(username.getText().toString(),contactInfo.getText().toString());
+                                    fs.update(username.getText().toString(),contactInfo.getText()
+                                            .toString());
+                                    SharedPreferences.Editor prefEditor = getContext().
+                                            getSharedPreferences("Profile", Context.MODE_PRIVATE)
+                                            .edit();
+                                    prefEditor.clear().commit();
+                                    Toast.makeText(getContext(), "update successfully!", Toast
+                                            .LENGTH_SHORT).show();
+                                    alertReady=true;
                                     userNameView.setText(username.getText());
                                     contactInfoView.setText(contactInfo.getText());
-                                    Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
-                                    alertReady=true;
+
 
                                 }
                                 if(alertReady){
@@ -176,6 +183,7 @@ public class ProfileFragment extends Fragment{
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable( getResources().getColor(R.color.dialogColor)));
             }
         });
+
 
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
