@@ -2,7 +2,6 @@ package com.example.bookit;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
