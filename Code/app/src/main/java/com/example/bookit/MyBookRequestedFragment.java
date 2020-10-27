@@ -96,14 +96,6 @@ public class MyBookRequestedFragment extends Fragment {
         });
         rv.setAdapter(bAdapter);
 
-        //set add button function
-        addButton = view.findViewById(R.id.button_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-            }
-        });
-
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
         return view;
