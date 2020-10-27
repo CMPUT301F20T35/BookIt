@@ -7,7 +7,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
         app:cardCornerRadius="22dp">
 
@@ -17,7 +17,9 @@
                 android:src="@drawable/avator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"/>
 
     </androidx.cardview.widget.CardView>
 
