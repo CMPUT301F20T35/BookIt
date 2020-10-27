@@ -78,11 +78,13 @@ public class MyBookBorrowedFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
+
         //adapter operation
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_detail);
             }
 
 
