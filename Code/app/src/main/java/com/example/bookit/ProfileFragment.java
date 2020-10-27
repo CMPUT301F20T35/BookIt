@@ -1,11 +1,15 @@
 package com.example.bookit;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.Map;
+
+import java.util.HashMap;
+
+import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -31,17 +40,58 @@ public class ProfileFragment extends Fragment {
     public static final int PICK_IMAGE = 1;
     protected ImageView image;
     private Uri MediaUri;
+    AlertDialog dialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_profile, container, false);
         final User testUser = new User("xiu", "xiu", "testID",
                 "testEmail", "911", "123456abc");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(container.getContext());
+        builder.setCancelable(true);
+        builder.setView(inflater.inflate(R.layout.loading_dialog, null));
+
+        dialog = builder.create();
+
         fs=new FireStoreHelper(getActivity());
+
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
-        userNameView.setText(testUser.getUserName());
-        contactInfoView.setText(testUser.getContactInfo());
+
+        final SharedPreferences pref = container.getContext().
+                getSharedPreferences("Profile", Context.MODE_PRIVATE);
+
+        if (!pref.contains("username") ||
+                !pref.contains("username")) {
+            fs=new FireStoreHelper(getActivity());
+            fs.Fetch(new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String s= (String) map.get("username");
+                    userNameView.setText(s);
+                    String n= (String) map.get("contactInfo");
+                    contactInfoView.setText(n);
+
+                    SharedPreferences.Editor prefEditor = getContext().
+                            getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
+                    prefEditor.putString("username", s);
+                    prefEditor.putString("contactInfo", n);
+                    prefEditor.commit();
+                    dialog.dismiss();
+                }
+            }, dialog);///
+        } else {
+            userNameView.setText(pref.getString("username", ""));
+            contactInfoView.setText(pref.getString("contactInfo", ""));
+        }
+
+
+        //final TextView userNameView = v.findViewById(R.id.userName);
+        //final TextView contactInfoView = v.findViewById(R.id.contactInfo);
+        //userNameView.setText(testUser.getUserName());
+       // contactInfoView.setText(testUser.getContactInfo());
+
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);
         ImageButton editimage=v.findViewById(R.id.editimage);
@@ -64,8 +114,8 @@ public class ProfileFragment extends Fragment {
                 builder.setView(v);
                 final EditText username=v.findViewById(R.id.usernameedit);
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
-                username.setText(testUser.getUserName());
-                contactInfo.setText(testUser.getContactInfo());
+                username.setText(pref.getString("username", ""));
+                contactInfo.setText(pref.getString("contactInfo", ""));
                 builder.setPositiveButton("update", null);
                 builder.setNegativeButton("cancel", null);
 
@@ -91,10 +141,7 @@ public class ProfileFragment extends Fragment {
                                 else{
                                     //need to update the firestore too
 
-                                    testUser.setContactInfo(contactInfo.getText().toString().trim());
-                                    testUser.setUserName(username.getText().toString().trim());
-                                    userNameView.setText(testUser.getUserName());
-                                    contactInfoView.setText(testUser.getContactInfo());
+
                                     Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
                                     alertReady=true;
 
@@ -115,7 +162,6 @@ public class ProfileFragment extends Fragment {
                 });
 
                 alertDialog.show();
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable( getResources().getColor(R.color.dialogColor)));
             }
         });
 
@@ -139,7 +185,6 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE) {
-
             if (data==null){
                 Toast.makeText(getActivity(), "cancelled", Toast.LENGTH_LONG).show();
             }
