@@ -51,8 +51,8 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="56dp"
         android:text="Email:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,8 +62,8 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="28dp"
         android:text="Phone:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,8 +73,8 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="56dp"
         android:text="xxx@gmail.com"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/textView8"
@@ -90,4 +90,12 @@
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="612dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
