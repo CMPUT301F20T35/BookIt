@@ -66,13 +66,9 @@ public class BorrowAvailableFragment extends Fragment {
         rv = view.findViewById(R.id.rv_1);
 
         //initilize test array and adapter
-        Book book = new Book("TestBook","YBS","123456",null,
-                null,"Perfect","YBS");
-        Book book1 = new Book("TestBook1","YBS","123456",null,
-                null,"Perfect","YBS");
+
         final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(book);
-        testList.add(book1);
+
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
