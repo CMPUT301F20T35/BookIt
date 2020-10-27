@@ -6,22 +6,29 @@ public class Book {
     private String title;
     private String author;
     private String ISBN;
-    private ImageView bookImage;
-    private ImageView codeImage;
     private String description;
     private String ownerName;
+    private RequestHandler requests;
+//missing image list
 
-    public Book(String title, String author, String ISBN, ImageView bookImage, ImageView codeImage,
-                String description, String ownerName) {
+
+    public Book(String title, String author, String ISBN,
+                String description, String ownerName, RequestHandler requestHandler) {
+
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
-        this.bookImage = bookImage;
-        this.codeImage = codeImage;
         this.description = description;
         this.ownerName = ownerName;
+        this.requests=requestHandler;
+    }
+    public RequestHandler getRequests() {
+        return requests;
     }
 
+    public void setRequests(RequestHandler requests) {
+        this.requests = requests;
+    }
     public String getTitle() {
         return title;
     }
@@ -46,21 +53,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    public ImageView getBookImage() {
-        return bookImage;
-    }
 
-    public void setBookImage(ImageView bookImage) {
-        this.bookImage = bookImage;
-    }
-
-    public ImageView getCodeImage() {
-        return codeImage;
-    }
-
-    public void setCodeImage(ImageView codeImage) {
-        this.codeImage = codeImage;
-    }
 
     public String getDescription() {
         return description;

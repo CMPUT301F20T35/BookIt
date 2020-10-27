@@ -66,13 +66,9 @@ public class BorrowBorrowedFragment extends Fragment {
         rv = view.findViewById(R.id.rv_1);
 
         //initialize test array and adapter
-        Book book = new Book("TestBook","YBS","123456",null,
-                null,"Perfect","YBS");
-        Book book1 = new Book("TestBook1","YBS","123456",null,
-                null,"Perfect","YBS");
+
         final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(book);
-        testList.add(book1);
+
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -85,6 +81,7 @@ public class BorrowBorrowedFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_navigation_borrow_borrowed_to_navigation_book_detail3);
             }
 
 

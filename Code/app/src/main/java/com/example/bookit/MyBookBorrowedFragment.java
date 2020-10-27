@@ -68,13 +68,9 @@ public class MyBookBorrowedFragment extends Fragment {
         rv = view.findViewById(R.id.rv_1);
 
         //initilize test array and adapter
-        Book book = new Book("TestBook","YBS","123456",null,
-                null,"Perfect","YBS");
-        Book book1 = new Book("TestBook1","YBS","123456",null,
-                null,"Perfect","YBS");
+
         final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(book);
-        testList.add(book1);
+
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -82,11 +78,13 @@ public class MyBookBorrowedFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
+
         //adapter operation
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_detail);
             }
 
 
@@ -97,10 +95,7 @@ public class MyBookBorrowedFragment extends Fragment {
         addButton = view.findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Book book2 = new Book("TestBook2","YBS","123456",null,
-                        null,"Perfect","YBS");
-                testList.add(book2);
-                bAdapter.notifyDataSetChanged();
+
             }
         });
 
