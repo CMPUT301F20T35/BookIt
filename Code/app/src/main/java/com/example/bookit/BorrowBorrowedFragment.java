@@ -65,7 +65,7 @@ public class BorrowBorrowedFragment extends Fragment {
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
 
-        //initilize test array and adapter
+        //initialize test array and adapter
         Book book = new Book("TestBook","YBS","123456",null,
                 null,"Perfect","YBS");
         Book book1 = new Book("TestBook1","YBS","123456",null,
