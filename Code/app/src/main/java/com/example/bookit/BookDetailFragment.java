@@ -24,7 +24,7 @@ public class BookDetailFragment extends Fragment {
         returnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_book_detail_to_scan_code);
+                getActivity().onBackPressed();
 
             }
         });
