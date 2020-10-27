@@ -22,7 +22,6 @@ public class NewBookEditFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_new_book_edit, container, false);
-        System.out.println("very start");
         bookPager = view.findViewById(R.id.newBookPager);
         loadCards();
 
@@ -32,14 +31,11 @@ public class NewBookEditFragment extends Fragment {
 
     private void loadCards() {
         imgArrayList = new ArrayList<>();
-        System.out.println("very 1");
         imgArrayList.add(R.drawable.avator);
         imgArrayList.add(R.drawable.background);
-        System.out.println("very 2");
         bookImgAdapter = new BookImageAdapter(getContext(), imgArrayList);
         System.out.println(imgArrayList);
         bookPager.setAdapter(bookImgAdapter);
-        System.out.println("very 4");
         bookPager.setPadding(100, 0, 100, 0);
     }
 }
