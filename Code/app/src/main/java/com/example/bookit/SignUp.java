@@ -12,6 +12,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,27 +25,6 @@ public class SignUp extends AppCompatActivity {
     FireStoreHelper fs;
     ProgressBar progressBar;
 
-
-    private boolean textCheck(EditText text) {
-        Context context = getApplicationContext();
-        if (text.getText().toString().trim().isEmpty()) {
-            Toast.makeText(context, text.getHint() + " cannot be empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (text == findViewById(R.id.passwordSignUp) &&
-                text.getText().toString().trim().length()<6) {
-            Toast.makeText(context, "password too short", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (text == findViewById(R.id.contactSignUp) ) {
-            Pattern pattern = Pattern.compile("^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
-            Matcher matcher = pattern.matcher(text.getText().toString());
-            if (!matcher.matches()) {
-                Toast.makeText(context, "wrong phone format, must be (xxx) xxx-xxx", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +51,38 @@ public class SignUp extends AppCompatActivity {
                 String password = signUpPassword.getText().toString().trim();
                 String username = signUpUsername.getText().toString().trim();
                 String number = signUpNumber.getText().toString().trim();
-                System.out.println(number);
-                if (!textCheck(signUpEmail) || !textCheck(signUpPassword)
-                        || !textCheck(signUpUsername) || !textCheck(signUpNumber)) {
+
+                signUpValidator validator = new signUpValidator(password, username, email, number);
+
+                Context context = getApplicationContext();
+
+                Map<String, Object> newUser = new LinkedHashMap<>();
+                newUser.put("email", email);
+                newUser.put("password", password);
+                newUser.put("username", username);
+                newUser.put("number", number);
+
+                for (Map.Entry<String, Object> entry : newUser.entrySet()) {
+                    if(!validator.emptyCheck(entry.getValue())) {
+                        Toast.makeText(context, entry.getKey() +
+                                " cannot be empty",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                if (!validator.numberCheck()) {
+                    Toast.makeText(context, "wrong phone format, must be (xxx) xxx-xxx",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (!validator.passwordCheck()) {
+                    Toast.makeText(context, "password too short", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                fs.signUp(email, password, username, number, progressBar);
+                newUser.put("name", "");
+
+                validator.uniqueUsername(newUser, progressBar, fs, context);
 
             }
         });
