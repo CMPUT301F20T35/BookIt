@@ -98,12 +98,15 @@ public class ProfileFragment extends Fragment{
         ImageButton editimage=v.findViewById(R.id.editimage);//
         image=v.findViewById(R.id.imageView5);
         //change profile image
+
         editimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showImageChooser();
             }
         });
+
+
         //update the profile using alertDialog
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,13 +204,13 @@ public class ProfileFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE) {
             if (data==null){
                 Toast.makeText(getActivity(), "cancelled", Toast.LENGTH_LONG).show();
             }
             else {
                 MediaUri = data.getData();
+                fs.image_update(MediaUri);
                 image.setImageURI(MediaUri);
                 Toast.makeText(getActivity(), "update profile image successfully", Toast.LENGTH_LONG).show();
             }
