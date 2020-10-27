@@ -36,6 +36,7 @@ public class BorrowAcceptedFragment extends Fragment {
         availableButton = view.findViewById(R.id.button_available);
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
+        searchButton = view.findViewById(R.id.button_search);
 
         availableButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,10 +87,10 @@ public class BorrowAcceptedFragment extends Fragment {
         rv.setAdapter(bAdapter);
 
         //set search button function
-        searchButton = view.findViewById(R.id.button_search);
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                // switch to BorrowSearchFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_accepted_to_borrow_search);
             }
         });
 
