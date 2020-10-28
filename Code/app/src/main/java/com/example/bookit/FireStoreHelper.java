@@ -11,8 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.solver.state.State;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +67,6 @@ public class FireStoreHelper {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
-
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity) context).finish();
@@ -77,6 +79,7 @@ public class FireStoreHelper {
         }
     });return isSuccessful;
     }
+
     /**
      * used to sign out of the user
      * */
@@ -85,6 +88,67 @@ public class FireStoreHelper {
         fAuth.signOut();//logout
         context.startActivity(new Intent(context,Login.class));
         ((Activity) context).finish();//end the MainActivity so that user is unable to go back
+    }
+
+    /**
+     * used to add a valid book to the firestore
+     * */
+    public void addBook(Book book){
+        db = FirebaseFirestore.getInstance();
+        final String stateId;
+
+        Map<String, Object> bookHash = new HashMap<>();
+        bookHash.put("author",book.getAuthor());
+        bookHash.put("ISBN",book.getISBN());
+        bookHash.put("description",book.getDescription());
+        bookHash.put("ownerName",book.getOwnerName());
+        bookHash.put("title",book.getTitle());
+/*
+        Map<String, Object> stateHash = new HashMap<>();
+        final BookState s=book.getRequests().getState();
+
+        stateHash.put("bookStatus",s.getBookStatus());
+        stateHash.put("handOffState",s.getHandOffState());
+        stateHash.put("Location",s.getLocation());
+
+        final Map<String, Object> requestHash = new HashMap<>();
+        RequestHandler r=book.getRequests();
+        requestHash.put("acceptedRequestor",r.getAcceptedRequestor());
+        requestHash.put("pendingRequestors",r.getRequestors());*/
+
+        db.collection("Book").add(bookHash)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        //hash.put("request",book.getRequests());
+                        //requestHash.put("state",db.document("State/"+documentReference.getId()));
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        //db.collection("requestHash").document(documentReference.getId()).set(s);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+        /*
+        db.collection("RequestHandler").add(requestHash)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });*/
+
     }
 
     public void signUp(final Map newUser, final ProgressBar progressBar) {
@@ -96,6 +160,7 @@ public class FireStoreHelper {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             FirebaseUser user = fAuth.getCurrentUser();
                             newUser.put("id", user.getUid());
 
