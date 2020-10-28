@@ -3,6 +3,8 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.Editable;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,12 +33,15 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -181,22 +187,27 @@ public class FireStoreHelper {
 
 
     }
-    public void load_image(final ImageView v, final ProfileFragment c){
+    public void load_image(final ImageView v) throws IOException {
 
         fAuth = FirebaseAuth.getInstance();
-        mstore= FirebaseStorage.getInstance().getReference();
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
-        String name="current";
-        StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(c)
-                        .load(uri)
-                        .into(v);
-            }
-        });
+        String name = "current";
+        StorageReference storageReference=mstore.getReferenceFromUrl("gs://bookit-fc94f.appspot.com/").child("images/"+user.getUid()+"/"+name+".jpg");
+
+            final File f = File.createTempFile("image", "jpg");
+            storageReference.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                    System.out.println("11111");
+                    v.setImageBitmap(b);
+                }
+            });
+
     }
+
+
 
 
 
