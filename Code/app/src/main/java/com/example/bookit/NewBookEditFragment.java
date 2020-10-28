@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class NewBookEditFragment extends Fragment {
     private EditText newBookDescriptionET;
     private Button addNewBook;
     AlertDialog dialog;
+    FireStoreHelper db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,12 +49,25 @@ public class NewBookEditFragment extends Fragment {
         builder.setView(inflater.inflate(R.layout.loading_dialog, null));
 
         dialog = builder.create();
+        db=new FireStoreHelper(getContext());
 
         addNewBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // try to add new book, if success, go back mybook page
                 // if fail, Toast message
+                String title=newBookTitleET.getText().toString().trim();
+                String author=newBookAuthorET.getText().toString().trim();
+                String ISBN=newBookISBNET.getText().toString().trim();
+                String desc=newBookDescriptionET.getText().toString().trim();
+                String owner="xiu";
+                RequestHandler requestHandler=new RequestHandler();
+                Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
+                db.addBook(book);
+                getActivity().onBackPressed();
+
+
+
             }
         });
 

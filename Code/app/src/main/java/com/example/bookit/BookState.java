@@ -2,24 +2,27 @@ package com.example.bookit;
 
 import androidx.annotation.Nullable;
 
-public class State {
+import com.google.firebase.firestore.GeoPoint;
+
+public class BookState {
     private String bookStatus;
-    private Location location;
+    private GeoPoint location;
     private String handOffState;
 
-    public State() {
-        this("AVAILABLE",null,null);
+    public BookState() {
+        this("AVAILABLE",new GeoPoint(0,0),null);
     }
+
 
     /**
      * This constructor takes in three parameters
      * @param bookStatus
      * @param handOffState
-     * @param location
+     * @param geoPoint
      */
-    public State(String bookStatus, @Nullable Location location, @Nullable String handOffState) {
+    public BookState(String bookStatus, @Nullable GeoPoint geoPoint, @Nullable String handOffState) {
         this.bookStatus = bookStatus;
-        this.location = location;
+        this.location = geoPoint;
         this.handOffState = handOffState;
     }
 
@@ -31,13 +34,14 @@ public class State {
         this.bookStatus = bookStatus;
     }
 
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocation(GeoPoint geoPoint) {
+        this.location = geoPoint;
     }
+
 
     public String getHandOffState() {
         return handOffState;
