@@ -3,8 +3,11 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -12,8 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.ForwardingListeningExecutorService;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.HashMap;
@@ -42,6 +50,7 @@ public class FireStoreHelper {
     FirebaseFirestore db;
     Context context;
     boolean isSuccessful=false;
+    private StorageReference mstore;
 
     public FireStoreHelper(ProfileFragment profileFragment) {
     }
@@ -147,8 +156,47 @@ public class FireStoreHelper {
         });
     }
 
-    //public void update(){}
+    public void update(String username,String contactIfo){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (username.equals("")){}
+        else{
 
+            final CollectionReference collectionReference = db.collection("User");
+            collectionReference.
+                    document(user.getUid()).update("username",username,"number",contactIfo);
+
+        }
+
+    }
+    public void image_update(Uri u){
+        //ImageView image=v.findViewById(R.id.imageView5);
+        fAuth = FirebaseAuth.getInstance();
+        mstore= FirebaseStorage.getInstance().getReference();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name="current";
+        StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
+        storageReference.putFile(u);
+
+
+    }
+    public void load_image(final ImageView v, final ProfileFragment c){
+
+        fAuth = FirebaseAuth.getInstance();
+        mstore= FirebaseStorage.getInstance().getReference();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name="current";
+        StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(c)
+                        .load(uri)
+                        .into(v);
+            }
+        });
+    }
 
 
 
@@ -161,5 +209,6 @@ public class FireStoreHelper {
     public void setfAuth(FirebaseAuth fAuth) {
         this.fAuth = fAuth;
     }
+
 
 }

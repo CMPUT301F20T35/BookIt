@@ -34,7 +34,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static java.lang.Integer.parseInt;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment{
     boolean alertReady;
     FireStoreHelper fs;
     public static final int PICK_IMAGE = 1;
@@ -61,6 +61,7 @@ public class ProfileFragment extends Fragment {
 
         final SharedPreferences pref = container.getContext().
                 getSharedPreferences("Profile", Context.MODE_PRIVATE);
+
 
         if (!pref.contains("username") ||
                 !pref.contains("username")) {
@@ -93,16 +94,19 @@ public class ProfileFragment extends Fragment {
        // contactInfoView.setText(testUser.getContactInfo());
 
         Button signOut=v.findViewById(R.id.logoutButton);
-        ImageButton edit=v.findViewById(R.id.editButton);
-        ImageButton editimage=v.findViewById(R.id.editimage);
+        ImageButton edit=v.findViewById(R.id.editButton);///
+        ImageButton editimage=v.findViewById(R.id.editimage);//
         image=v.findViewById(R.id.imageView5);
         //change profile image
+
         editimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showImageChooser();
             }
         });
+
+
         //update the profile using alertDialog
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +118,8 @@ public class ProfileFragment extends Fragment {
                 builder.setView(v);
                 final EditText username=v.findViewById(R.id.usernameedit);
                 final EditText contactInfo=v.findViewById(R.id.contactinfoedit);
+                username.setText(userNameView.getText());
+                contactInfo.setText(contactInfoView.getText());
                 username.setText(pref.getString("username", ""));
                 contactInfo.setText(pref.getString("contactInfo", ""));
                 builder.setPositiveButton("update", null);
@@ -141,9 +147,23 @@ public class ProfileFragment extends Fragment {
                                 else{
                                     //need to update the firestore too
 
+                                    //testUser.setContactInfo(contactInfo.getText().toString().trim());
+                                   // testUser.setUserName(username.getText().toString().trim());
+                                    //////////////////update need here
+                                    fs.update(username.getText().toString(),contactInfo.getText()
+                                            .toString());
+                                    SharedPreferences.Editor prefEditor = getContext().
+                                            getSharedPreferences("Profile", Context.MODE_PRIVATE)
+                                            .edit();
+                                    prefEditor.clear().commit();
+                                    Toast.makeText(getContext(), "update successfully!", Toast
+                                            .LENGTH_SHORT).show();
 
                                     Toast.makeText(getContext(), "update successfully!", Toast.LENGTH_SHORT).show();
                                     alertReady=true;
+                                    userNameView.setText(username.getText());
+                                    contactInfoView.setText(contactInfo.getText());
+
 
                                 }
                                 if(alertReady){
@@ -165,6 +185,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -183,18 +204,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE) {
             if (data==null){
                 Toast.makeText(getActivity(), "cancelled", Toast.LENGTH_LONG).show();
             }
             else {
                 MediaUri = data.getData();
+                fs.image_update(MediaUri);
                 image.setImageURI(MediaUri);
                 Toast.makeText(getActivity(), "update profile image successfully", Toast.LENGTH_LONG).show();
             }
         }
 
     }
+
 
 }
