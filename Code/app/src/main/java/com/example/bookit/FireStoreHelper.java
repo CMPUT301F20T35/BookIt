@@ -167,9 +167,7 @@ public class FireStoreHelper {
             collectionReference.
                     document(user.getUid()).update("username",username,"number",contactIfo);
 
-
-
-        };
+        }
 
     }
     public void image_update(Uri u){
