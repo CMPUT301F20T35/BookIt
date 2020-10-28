@@ -112,42 +112,25 @@ public class FireStoreHelper {
         stateHash.put("Location",s.getLocation());
 
         final Map<String, Object> requestHash = new HashMap<>();
-        RequestHandler r=book.getRequests();
+        final RequestHandler r=book.getRequests();
         requestHash.put("acceptedRequestor",r.getAcceptedRequestor());
         requestHash.put("pendingRequestors",r.getRequestors());
 
-        db.collection("State").add(stateHash)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //hash.put("request",book.getRequests());
-                        //requestHash.put("state",db.document("State/"+documentReference.getId()));
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        //db.collection("requestHash").document(documentReference.getId()).set(s);
+        db.collection("Book").document(book.getISBN()).set(r);
 
+        db.collection("Book").document(book.getISBN()).update(bookHash)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Log.w(TAG, "Error updating document", e);
                     }
                 });
-        /*
-        db.collection("RequestHandler").add(requestHash)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });*/
 
     }
 
