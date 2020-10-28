@@ -57,6 +57,11 @@ app:startDestination="@+id/navigation_home">
         app:destination="@id/navigation_borrow_requested" />
 </fragment>
 
+    <fragment
+        android:id="@+id/navigation_addbook"
+        android:name="com.example.bookit.NewBookEditFragment"
+        tools:layout="@layout/fragment_new_book_edit">
+    </fragment>
 
 <fragment
     android:id="@+id/navigation_mybook_requested"
@@ -71,6 +76,9 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_requested_to_mybook_available"
         app:destination="@id/navigation_mybook_available" />
+    <action
+        android:id="@+id/action_mybook_to_newbook"
+        app:destination="@+id/navigation_addbook"/>
 </fragment>
 <fragment
     android:id="@+id/navigation_mybook_accepted"
@@ -85,7 +93,11 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_accepted_to_mybook_available"
         app:destination="@id/navigation_mybook_available" />
+    <action
+        android:id="@+id/action_mybook_to_newbook"
+        app:destination="@+id/navigation_addbook"/>
 </fragment>
+
 <fragment
     android:id="@+id/navigation_mybook_borrowed"
     android:name="com.example.bookit.MyBookBorrowedFragment"
@@ -102,6 +114,9 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_borrowed_to_book_detail"
         app:destination="@id/navigation_book_detail" />
+    <action
+        android:id="@+id/action_mybook_to_newbook"
+        app:destination="@+id/navigation_addbook"/>
 </fragment>
 <fragment
     android:id="@+id/navigation_mybook_available"
@@ -116,7 +131,11 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_available_to_mybook_borrowed"
         app:destination="@id/navigation_mybook_borrowed" />
+    <action
+        android:id="@+id/action_mybook_to_newbook"
+        app:destination="@+id/navigation_addbook"/>
 </fragment>
+
 
 
     <fragment
@@ -132,7 +151,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_requested_to_borrow_borrowed"
             app:destination="@id/navigation_borrow_borrowed" />
-         />
+        <action
+            android:id="@+id/action_borrow_requested_to_borrow_search"
+            app:destination="@id/navigation_borrow_search" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_accepted"
@@ -147,6 +168,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_accepted_to_borrow_requested"
             app:destination="@id/navigation_borrow_requested" />
+        <action
+            android:id="@+id/action_borrow_accepted_to_borrow_search"
+            app:destination="@id/navigation_borrow_search" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_borrowed"
@@ -164,7 +188,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_navigation_borrow_borrowed_to_navigation_book_detail3"
             app:destination="@id/navigation_book_detail" />
-        />
+        <action
+            android:id="@+id/action_borrow_borrowed_to_borrow_search"
+            app:destination="@id/navigation_borrow_search" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_available"
@@ -179,6 +205,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_available_to_borrow_requested"
             app:destination="@id/navigation_borrow_requested" />
+        <action
+            android:id="@+id/action_borrow_available_to_borrow_search"
+            app:destination="@id/navigation_borrow_search" />
     </fragment>
     <fragment
         android:id="@+id/navigation_book_detail"
@@ -192,6 +221,11 @@ app:startDestination="@+id/navigation_home">
         android:id="@+id/navigation_owner_detail"
         android:name="com.example.bookit.OwnerDetailFragment"
         tools:layout="@layout/fragment_owner_detail" />
+
+    <fragment
+        android:id="@+id/navigation_borrow_search"
+        android:name="com.example.bookit.BorrowSearchFragment"
+        tools:layout="@layout/fragment_borrow_search" />
 
 
 </navigation>

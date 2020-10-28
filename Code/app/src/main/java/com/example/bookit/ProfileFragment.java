@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
     public static final int PICK_IMAGE = 1;
     protected ImageView image;
     private Uri MediaUri;
-    AlertDialog dialog;
+    private AlertDialog dialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

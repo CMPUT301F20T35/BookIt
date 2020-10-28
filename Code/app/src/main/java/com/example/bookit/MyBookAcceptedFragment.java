@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.solver.state.State;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -93,10 +92,7 @@ public class MyBookAcceptedFragment extends Fragment {
         addButton = view.findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Book book2 = new Book("TestBook2","YBS","123456",null,
-                        null,new RequestHandler(new State(),new ArrayList<String>(),"ZZY"));
-                testList.add(book2);
-                bAdapter.notifyDataSetChanged();
+
             }
         });
 
