@@ -1,10 +1,14 @@
 package com.example.bookit;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -12,21 +16,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class NewBookEditFragment extends Fragment {
 
     private ViewPager bookPager;
-    private ArrayList<Integer> imgArrayList;
+    private ArrayList<Uri> imgArrayList;
     private BookImageAdapter bookImgAdapter;
+    public static final int PICK_IMAGE = 1;
+    private Uri MediaUri;
 
     private EditText newBookTitleET;
     private EditText newBookAuthorET;
     private EditText newBookISBNET;
     private EditText newBookDescriptionET;
     private Button addNewBook;
+    private Button addImage;
     AlertDialog dialog;
     FireStoreHelper db;
 
@@ -36,7 +46,15 @@ public class NewBookEditFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_new_book_edit, container, false);
         bookPager = view.findViewById(R.id.newBookPager);
-        loadCards();
+        //loadCards();
+        imgArrayList = new ArrayList<>();
+        addImage=view.findViewById(R.id.add_book_image);
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showImageChooser();
+            }
+        });
 
         newBookTitleET = view.findViewById(R.id.newBookTitle);
         newBookAuthorET = view.findViewById(R.id.newBookAuthor);
@@ -51,6 +69,8 @@ public class NewBookEditFragment extends Fragment {
         dialog = builder.create();
         db=new FireStoreHelper(getContext());
 
+
+
         addNewBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +84,7 @@ public class NewBookEditFragment extends Fragment {
                 RequestHandler requestHandler=new RequestHandler();
                 Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
                 db.addBook(book);
+                db.book_image_add(imgArrayList,book);//add the image array to the firebase storage
                 getActivity().onBackPressed();
 
 
@@ -74,15 +95,30 @@ public class NewBookEditFragment extends Fragment {
         return view;
     }
 
-    private void loadCards() {
-        imgArrayList = new ArrayList<>();
-        imgArrayList.add(R.drawable.avator);
-        imgArrayList.add(R.drawable.add_img);
+    //this method is for choosing a new image for profile
+    private void showImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), PICK_IMAGE);
+    }
 
-//        imgArrayList.add(R.drawable.background);
-        bookImgAdapter = new BookImageAdapter(getContext(), imgArrayList);
-        System.out.println(imgArrayList);
-        bookPager.setAdapter(bookImgAdapter);
-        bookPager.setPadding(100, 0, 100, 0);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            if (data==null){
+                Toast.makeText(getActivity(), "cancelled", Toast.LENGTH_LONG).show();
+            }
+            else {
+                MediaUri = data.getData();
+                imgArrayList.add(MediaUri);
+                bookImgAdapter = new BookImageAdapter(getContext(),imgArrayList);
+                bookPager.setAdapter(bookImgAdapter);
+                bookPager.setPadding(100, 0, 100, 0);
+                Toast.makeText(getActivity(), "upload image successfully", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 }
