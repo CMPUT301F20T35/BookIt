@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -30,7 +33,7 @@ public class MyBookAcceptedFragment extends Fragment {
     private FloatingActionButton addButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_accepted, container, false);
         // get view of four buttons
@@ -62,6 +65,14 @@ public class MyBookAcceptedFragment extends Fragment {
             }
         });
 
+        addButton = view.findViewById(R.id.button_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
+            }
+        });
+
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
@@ -88,13 +99,6 @@ public class MyBookAcceptedFragment extends Fragment {
         });
         rv.setAdapter(bAdapter);
 
-        //set add button function
-        addButton = view.findViewById(R.id.button_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-            }
-        });
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
