@@ -62,6 +62,14 @@ public class MyBookRequestedFragment extends Fragment {
             }
         });
 
+        addButton = view.findViewById(R.id.button_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
+            }
+        });
+
 // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
@@ -87,14 +95,6 @@ public class MyBookRequestedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
-
-        //set add button function
-        addButton = view.findViewById(R.id.button_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-            }
-        });
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
