@@ -82,7 +82,7 @@ public class BorrowBorrowedFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).navigate(R.id.action_navigation_borrow_borrowed_to_navigation_book_detail3);
+                Navigation.findNavController(view).navigate(R.id.action_borrow_borrowed_to_book_return);
             }
 
 
