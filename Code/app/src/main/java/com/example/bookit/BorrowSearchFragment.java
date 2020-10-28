@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,6 +31,7 @@ public class BorrowSearchFragment extends Fragment {
         searchButton = view.findViewById(R.id.button_search);
         searchText = view.findViewById(R.id.text_search);
         rv = view.findViewById(R.id.rv_search);
+
 
 
 
