@@ -103,7 +103,7 @@ public class FireStoreHelper {
         bookHash.put("description",book.getDescription());
         bookHash.put("ownerName",book.getOwnerName());
         bookHash.put("title",book.getTitle());
-/*
+
         Map<String, Object> stateHash = new HashMap<>();
         final BookState s=book.getRequests().getState();
 
@@ -114,9 +114,9 @@ public class FireStoreHelper {
         final Map<String, Object> requestHash = new HashMap<>();
         RequestHandler r=book.getRequests();
         requestHash.put("acceptedRequestor",r.getAcceptedRequestor());
-        requestHash.put("pendingRequestors",r.getRequestors());*/
+        requestHash.put("pendingRequestors",r.getRequestors());
 
-        db.collection("Book").add(bookHash)
+        db.collection("State").add(stateHash)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
