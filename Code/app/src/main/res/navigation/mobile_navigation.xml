@@ -117,6 +117,7 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_to_newbook"
         app:destination="@+id/navigation_addbook"/>
+  
 </fragment>
 <fragment
     android:id="@+id/navigation_mybook_available"
@@ -186,8 +187,8 @@ app:startDestination="@+id/navigation_home">
             android:id="@+id/action_borrow_borrowed_to_borrow_requested"
             app:destination="@id/navigation_borrow_requested" />
         <action
-            android:id="@+id/action_navigation_borrow_borrowed_to_navigation_book_detail3"
-            app:destination="@id/navigation_book_detail" />
+            android:id="@+id/action_borrow_borrowed_to_book_return"
+            app:destination="@id/navigation_book_return" />
         <action
             android:id="@+id/action_borrow_borrowed_to_borrow_search"
             app:destination="@id/navigation_borrow_search" />
@@ -210,9 +211,9 @@ app:startDestination="@+id/navigation_home">
             app:destination="@id/navigation_borrow_search" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_book_detail"
-        android:name="com.example.bookit.BookDetailFragment"
-        tools:layout="@layout/fragment_book_detail" >
+        android:id="@+id/navigation_book_return"
+        android:name="com.example.bookit.BookReturnFragment"
+        tools:layout="@layout/fragment_book_return" >
         <action
             android:id="@+id/action_book_detail_to_owner_detail"
             app:destination="@id/navigation_owner_detail" />
@@ -225,7 +226,19 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/navigation_borrow_search"
         android:name="com.example.bookit.BorrowSearchFragment"
-        tools:layout="@layout/fragment_borrow_search" />
+        tools:layout="@layout/fragment_borrow_search" >
+        <action
+            android:id="@+id/action_borrow_search_to_book_request"
+            app:destination="@id/navigation_book_request" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_book_request"
+        android:name="com.example.bookit.BookRequestFragment"
+        tools:layout="@layout/fragment_book_request" >
+        <action
+            android:id="@+id/action_book_request_to_owner_detail"
+            app:destination="@id/navigation_owner_detail" />
+    </fragment>
 
 
 </navigation>
