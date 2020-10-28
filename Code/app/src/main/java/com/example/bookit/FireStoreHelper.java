@@ -260,7 +260,6 @@ public class FireStoreHelper {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
-
                     v.setImageBitmap(b);
                 }
             });
