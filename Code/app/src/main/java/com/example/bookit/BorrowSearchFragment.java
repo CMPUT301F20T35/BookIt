@@ -2,12 +2,14 @@ package com.example.bookit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -41,7 +43,9 @@ public class BorrowSearchFragment extends Fragment {
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
+                // switch to book request fragment
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_borrow_search_to_book_request);
             }
         });
         rv.setAdapter(bAdapter);
@@ -64,15 +68,7 @@ public class BorrowSearchFragment extends Fragment {
                 // searching method need to be implemented here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 testList.add(new Book(searInfo, "zhengyao", "123", "haha", "bingshen", null));
                 bAdapter.notifyDataSetChanged();
-            }
-        });
-
-        // set listener for item click
-        rv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // switch to book request fragment
-                Navigation.findNavController(view).navigate(R.id.action_borrow_search_to_book_request);
+                searchText.setText("");
             }
         });
 
