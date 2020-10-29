@@ -3,8 +3,13 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -12,8 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.ForwardingListeningExecutorService;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,12 +35,19 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 
 
 import java.util.HashMap;
@@ -42,6 +60,7 @@ public class FireStoreHelper {
     FirebaseFirestore db;
     Context context;
     boolean isSuccessful=false;
+    private StorageReference mstore;
 
     public FireStoreHelper(ProfileFragment profileFragment) {
     }
@@ -64,7 +83,6 @@ public class FireStoreHelper {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
-
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity) context).finish();
@@ -77,6 +95,7 @@ public class FireStoreHelper {
         }
     });return isSuccessful;
     }
+
     /**
      * used to sign out of the user
      * */
@@ -85,6 +104,44 @@ public class FireStoreHelper {
         fAuth.signOut();//logout
         context.startActivity(new Intent(context,Login.class));
         ((Activity) context).finish();//end the MainActivity so that user is unable to go back
+    }
+
+    /**
+     * used to add a valid book to the firestore
+     * */
+    public void addBook(Book book){
+        db = FirebaseFirestore.getInstance();
+        final String stateId;
+
+        Map<String, Object> bookHash = new HashMap<>();
+        bookHash.put("author",book.getAuthor());
+        bookHash.put("ISBN",book.getISBN());
+        bookHash.put("description",book.getDescription());
+        bookHash.put("ownerName",book.getOwnerName());
+        bookHash.put("title",book.getTitle());
+        final RequestHandler r=book.getRequests();
+
+
+        try{
+            db.collection("Book").document(book.getISBN()).set(r);
+            db.collection("Book").document(book.getISBN()).update(bookHash)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error updating document", e);
+                        }
+                    });
+        }catch (IllegalArgumentException e){
+            Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
+                    .LENGTH_SHORT).show();
+        }
+
     }
 
     public void signUp(final Map newUser, final ProgressBar progressBar) {
@@ -96,6 +153,7 @@ public class FireStoreHelper {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             FirebaseUser user = fAuth.getCurrentUser();
                             newUser.put("id", user.getUid());
 
@@ -147,7 +205,67 @@ public class FireStoreHelper {
         });
     }
 
-    //public void update(){}
+    public void update(String username,String contactIfo){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (username.equals("")){}
+        else{
+
+            final CollectionReference collectionReference = db.collection("User");
+            collectionReference.
+                    document(user.getUid()).update("username",username,"number",contactIfo);
+
+        }
+
+    }
+    public void image_update(Uri u){
+        //ImageView image=v.findViewById(R.id.imageView5);
+        fAuth = FirebaseAuth.getInstance();
+        mstore= FirebaseStorage.getInstance().getReference();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name="current";
+        StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
+        storageReference.putFile(u);
+    }
+
+    /**
+     * for adding images to the firebase
+     * @param u,book
+     */
+    public void book_image_add(ArrayList<Uri> u,Book book) {
+        mstore= FirebaseStorage.getInstance().getReference();
+        StorageReference storageReference;
+        int k=0;
+        if (u.size()!=0&& !book.getISBN().equals("")){
+            for (Uri i:u){
+                k++;
+                storageReference=mstore.child("book_images/"+book.getISBN()+"/image"+k+".jpg");
+                storageReference.putFile(i);
+            }
+
+        }}
+
+
+    public void load_image(final ImageView v) throws IOException {
+
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name = "current";
+        StorageReference storageReference=mstore.getReferenceFromUrl("gs://bookit-fc94f.appspot.com/").child("images/"+user.getUid()+"/"+name+".jpg");
+
+            final File f = File.createTempFile("image", "jpg");
+            storageReference.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                    v.setImageBitmap(b);
+                }
+            });
+
+    }
+
 
 
 
@@ -161,5 +279,6 @@ public class FireStoreHelper {
     public void setfAuth(FirebaseAuth fAuth) {
         this.fAuth = fAuth;
     }
+
 
 }
