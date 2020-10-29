@@ -10,10 +10,10 @@
         android:layout_width="124dp"
         android:layout_height="115dp"
         android:layout_marginBottom="84dp"
-        android:src="@drawable/avator"
+
         app:layout_constraintBottom_toTopOf="@+id/userName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
