@@ -5,15 +5,16 @@ import androidx.constraintlayout.solver.state.State;
 import java.util.ArrayList;
 
 public class RequestHandler {
-    private State state;
+
+    private BookState state;
     private ArrayList<String> requestors;
     private String acceptedRequestor;
 
     public RequestHandler() {
-        this(new State(),new ArrayList<String>(), "");
+        this(new BookState(),new ArrayList<String>(), "");
     }
 
-    public RequestHandler(State state) {
+    public RequestHandler(BookState state) {
         this(state,new ArrayList<String>(), "");
 
     }
@@ -23,19 +24,20 @@ public class RequestHandler {
      * @param pendingRequestors: list of pending requesters username
      * @param acceptedRequestor: the requester's username that is accepted
      */
-    public RequestHandler(State state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
+    public RequestHandler(BookState state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
         this.state = state;
         this.requestors = pendingRequestors;
         this.acceptedRequestor = acceptedRequestor;
     }
 
-    public State getState() {
+    public BookState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(BookState state) {
         this.state = state;
     }
+
 
     public ArrayList<String> getRequestors() {
         return requestors;
