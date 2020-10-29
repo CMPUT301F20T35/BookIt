@@ -239,7 +239,7 @@ public class FireStoreHelper {
         mstore= FirebaseStorage.getInstance().getReference();
         StorageReference storageReference;
         int k=0;
-        if (u.size()!=0){
+        if (u.size()!=0&& !book.getISBN().equals("")){
             for (Uri i:u){
                 k++;
                 storageReference=mstore.child("book_images/"+book.getISBN()+"/image"+k+".jpg");

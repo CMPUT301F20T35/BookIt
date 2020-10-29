@@ -38,6 +38,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     public void onBindViewHolder(@NonNull BookAdapter.LinearViewHolder holder, final int position) {
         holder.bookName.setText(bookData.get(position).getTitle());
         holder.authorName.setText(bookData.get(position).getAuthor());
+        holder.state.setText("Test state");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,11 +68,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
 
         private TextView bookName;
         private TextView authorName;
+        private TextView state;
 
         public LinearViewHolder(View itemView){
             super(itemView);
             bookName = itemView.findViewById(R.id.book_name);
             authorName = itemView.findViewById(R.id.author);
+            state = itemView.findViewById(R.id.status);
         }
     }
 
