@@ -3,10 +3,13 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.Editable;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +22,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.android.gms.tasks.OnFailureListener;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ForwardingListeningExecutorService;
@@ -35,6 +40,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +53,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
+import com.google.firebase.storage.UploadTask;
 
 
 import java.util.HashMap;
@@ -162,6 +168,14 @@ public class FireStoreHelper {
                             collectionReference.
                                     document(user.getUid()).
                                     set(newUser);
+
+
+                            mstore= FirebaseStorage.getInstance().getReference();
+                            String name="current";
+                            StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
+                            Uri uri = Uri.parse("android.resource://"+ R.class.getPackage().getName()+"/"+R.drawable.default_profile);
+                            storageReference.putFile(uri);
+
                             Toast.makeText(context, "Sign up Successfully", Toast.LENGTH_SHORT).show();
                             ((Activity) context).finish();
                         }else {
@@ -247,7 +261,7 @@ public class FireStoreHelper {
         }}
 
 
-    public void load_image(final ImageView v) throws IOException {
+    public void load_image(final dbCallback callback) throws IOException {
 
         fAuth = FirebaseAuth.getInstance();
         FirebaseStorage mstore = FirebaseStorage.getInstance();
@@ -260,7 +274,15 @@ public class FireStoreHelper {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
-                    v.setImageBitmap(b);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] by = baos.toByteArray();
+                    String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                    Map<String, String> returnMap = new HashMap<>();
+                    returnMap.put("userimg", imageEncoded);
+
+                    callback.onCallback(returnMap);
+
                 }
             });
 
