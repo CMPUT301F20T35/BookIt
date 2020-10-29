@@ -56,6 +56,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import org.w3c.dom.Document;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,9 +117,29 @@ public class FireStoreHelper {
     /**
      * used to add a valid book to the firestore
      * */
-    public void addBook(Book book){
+    public void addBook(final Book book){
         db = FirebaseFirestore.getInstance();
         final String stateId;
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = fAuth.getCurrentUser();
+        DocumentReference docRef = db.collection("User")
+                .document(currentUser.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot d = task.getResult();
+                if (d.exists()) {
+                    book.setOwnerName((String) d.get("username"));
+                } else {
+                    Toast.makeText(context.getApplicationContext(),task.getException().getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        DocumentReference bookReference = db.collection("Book")
+                .document(book.getISBN());
+        if (bookReference)
 
         Map<String, Object> bookHash = new HashMap<>();
         bookHash.put("author",book.getAuthor());

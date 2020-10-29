@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewBookEditFragment extends Fragment {
 
@@ -80,19 +82,33 @@ public class NewBookEditFragment extends Fragment {
                 String author=newBookAuthorET.getText().toString().trim();
                 String ISBN=newBookISBNET.getText().toString().trim();
                 String desc=newBookDescriptionET.getText().toString().trim();
-                String owner="xiu";
+                String owner="";
                 RequestHandler requestHandler=new RequestHandler();
                 Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
-                db.addBook(book);
-                db.book_image_add(imgArrayList,book);//add the image array to the firebase storage
-                getActivity().onBackPressed();
-
-
+                if (bookInfoValidator(book)) {
+                    db.addBook(book);
+                    db.book_image_add(imgArrayList,book);//add the image array to the firebase storage
+                    getActivity().onBackPressed();
+                }
 
             }
         });
 
         return view;
+    }
+
+    private boolean bookInfoValidator(Book book) {
+        String regex = "^(?:ISBN(?:-10)?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$)[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(book.getISBN());
+        if (book.getAuthor().isEmpty() || book.getISBN().isEmpty() || book.getTitle().isEmpty()) {
+            return false;
+        }
+        // for isbn format validation
+//        else if (!matcher.matches()) {
+//            return  false;
+//        }
+        return true;
     }
 
     //this method is for choosing a new image for profile
