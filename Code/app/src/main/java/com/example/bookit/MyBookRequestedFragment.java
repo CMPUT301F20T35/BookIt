@@ -58,19 +58,15 @@ public class MyBookRequestedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // switch to MyBookBorrowedFragment
+
+
                 Navigation.findNavController(view).navigate(R.id.action_mybook_requested_to_mybook_borrowed);
             }
         });
 
-        addButton = view.findViewById(R.id.button_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
-            }
-        });
 
-// Inflate the layout for this fragment
+
+        // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
 
@@ -85,11 +81,27 @@ public class MyBookRequestedFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
-        //adapter operation
+        addButton = view.findViewById(R.id.button_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Book book = new Book("ybs","YBS","123","optional","ybs",null);
+                testList.add(book);
+                bAdapter.notifyDataSetChanged();
+
+                //this is xiu's code, the above code is used for testing, delete them later and replace with the bottom cde
+                //Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
+            }
+        });
+
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
+                //on item click listener
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_mybook_toRequestList);
+
             }
 
 

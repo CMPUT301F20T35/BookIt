@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginRight="15dp">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/requester" />
+        <TextView
+            android:id="@+id/user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/accpet"
+            android:layout_width="50sp"
+            android:layout_height="30sp"
+            android:layout_marginTop="15dp"
+            android:text="Accpet"
+            android:textSize="7sp"/>
+
+        <Button
+            android:id="@+id/deny"
+            android:layout_width="50sp"
+            android:layout_height="30sp"
+            android:layout_marginTop="8dp"
+            android:text="Deny"
+            android:textSize="7sp"/>
+    </LinearLayout>
+
+
+</LinearLayout>
