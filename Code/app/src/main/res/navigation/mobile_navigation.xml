@@ -175,6 +175,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_accepted_to_borrow_search"
             app:destination="@id/navigation_borrow_search" />
+        <action
+            android:id="@+id/action_borrow_accepted_to_borrow_location"
+            app:destination="@id/fragment_borrow_location" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_borrowed"
@@ -246,7 +249,11 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/fragment_requestList"
         android:name="com.example.bookit.fragment_requestList"
-        android:label="fragment_request_list"
         tools:layout="@layout/fragment_request_list" />
+
+    <fragment
+        android:id="@+id/fragment_borrow_location"
+        android:name="com.example.bookit.BorrowLocationFragment"
+        tools:layout="@layout/fragment_borrow_location" />
 
 </navigation>
