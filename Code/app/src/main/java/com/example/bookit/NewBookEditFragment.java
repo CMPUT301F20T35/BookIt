@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +39,7 @@ public class NewBookEditFragment extends Fragment {
     private EditText newBookAuthorET;
     private EditText newBookISBNET;
     private EditText newBookDescriptionET;
-    private Button addNewBook;
+    private FloatingActionButton addNewBook;
     private Button addImage;
     AlertDialog dialog;
     FireStoreHelper db;
