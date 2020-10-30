@@ -56,6 +56,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import org.w3c.dom.Document;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,38 +117,71 @@ public class FireStoreHelper {
     /**
      * used to add a valid book to the firestore
      * */
-    public void addBook(Book book){
+    public void addBook(final Book book){
         db = FirebaseFirestore.getInstance();
         final String stateId;
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = fAuth.getCurrentUser();
+        DocumentReference docRef = db.collection("User")
+                .document(currentUser.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot d = task.getResult();
+                if (d.exists()) {
+                    book.setOwnerName((String) d.get("username"));
+                } else {
+                    Toast.makeText(context.getApplicationContext(),task.getException().getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-        Map<String, Object> bookHash = new HashMap<>();
-        bookHash.put("author",book.getAuthor());
-        bookHash.put("ISBN",book.getISBN());
-        bookHash.put("description",book.getDescription());
-        bookHash.put("ownerName",book.getOwnerName());
-        bookHash.put("title",book.getTitle());
-        final RequestHandler r=book.getRequests();
+        DocumentReference bookReference = db.collection("Book")
+                .document(book.getISBN());
+
+        bookReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (! task.getResult().exists()) {
+                        Map<String, Object> bookHash = new HashMap<>();
+                        bookHash.put("author",book.getAuthor());
+                        bookHash.put("ISBN",book.getISBN());
+                        bookHash.put("description",book.getDescription());
+                        bookHash.put("ownerName",book.getOwnerName());
+                        bookHash.put("title",book.getTitle());
+                        final RequestHandler r=book.getRequests();
 
 
-        try{
-            db.collection("Book").document(book.getISBN()).set(r);
-            db.collection("Book").document(book.getISBN()).update(bookHash)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        try{
+                            db.collection("Book").document(book.getISBN()).set(r);
+                            db.collection("Book").document(book.getISBN()).update(bookHash)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                        }catch (IllegalArgumentException e){
+                            Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
+                                    .LENGTH_SHORT).show();
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error updating document", e);
-                        }
-                    });
-        }catch (IllegalArgumentException e){
-            Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
-                    .LENGTH_SHORT).show();
-        }
+                    } else {
+                        Toast.makeText(context.getApplicationContext(),"this book already existed, change a book",Toast
+                                .LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
 
     }
 
