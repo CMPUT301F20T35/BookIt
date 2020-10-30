@@ -13,6 +13,7 @@
         android:layout_height="210dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:background="#6B5BCAE8"
         android:clipToPadding="false"
         android:foregroundGravity="center"
         android:overScrollMode="never"
@@ -22,59 +23,6 @@
 
 
     </androidx.viewpager.widget.ViewPager>
-
-    <EditText
-        android:id="@+id/newBookTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Title"
-        android:inputType="text"
-        android:textColor="#040404"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newBookInfo" />
-
-    <TextView
-        android:id="@+id/newBookInfo"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="46dp"
-        android:gravity="center"
-        android:text="NEW BOOK INFO"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newBookPager" />
-
-    <EditText
-        android:id="@+id/newBookDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Description(optional)"
-        android:inputType="text"
-        android:textColor="#040404"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newBookISBN" />
-
-    <Button
-        android:id="@+id/addNewBookBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="ADD"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.468"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newBookDescription" />
 
     <EditText
         android:id="@+id/newBookISBN"
@@ -87,9 +35,59 @@
         android:textColor="#040404"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newBookAuthor" />
+
+    <EditText
+        android:id="@+id/newBookDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Description(optional)"
+        android:inputType="text"
+        android:textColor="#040404"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newBookISBN" />
+
+    <EditText
+        android:id="@+id/newBookTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="text"
+        android:textColor="#040404"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newBookInfo" />
+
+    <Button
+        android:id="@+id/addNewBookBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="ADD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newBookDescription" />
+
+    <TextView
+        android:id="@+id/newBookInfo"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="72dp"
+        android:gravity="center"
+        android:text="NEW BOOK INFO"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newBookPager" />
 
     <EditText
         android:id="@+id/newBookAuthor"
@@ -102,7 +100,6 @@
         android:textColor="#040404"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newBookTitle" />
 
@@ -110,10 +107,12 @@
         android:id="@+id/add_book_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add image"
+        android:text="Add image(click image to delete)"
         app:layout_constraintBottom_toTopOf="@+id/newBookInfo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newBookPager" />
+        app:layout_constraintTop_toBottomOf="@+id/newBookPager"
+        app:layout_constraintVertical_bias="0.187" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

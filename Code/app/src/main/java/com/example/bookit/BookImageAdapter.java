@@ -38,15 +38,26 @@ public class BookImageAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull final ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_item, container, false);
 
         ImageView bookImgView = view.findViewById(R.id.bookImgView);
 
-        Uri img = imgArrayList.get(position);
+        final Uri img = imgArrayList.get(position);
         bookImgView.setImageURI(img);
 
         container.addView(view, position);
+
+        //click to delete the image
+        bookImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgArrayList.remove(position);
+                container.removeViewAt(position);
+                notifyDataSetChanged();
+
+            }
+        });
         return view;
     }
 
