@@ -62,24 +62,19 @@ public class BorrowAcceptedFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
+        // set up recycler view
         rv = view.findViewById(R.id.rv_1);
-
-
         final ArrayList<Book> testList = new ArrayList<Book>();
-
-        //set up manager and adapter to contain data
+        // hard code, only for testing purpose !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        testList.add(new Book("起飞", "ybs", "9014123432348", "haha", "ybs", null));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
-
-        //adapter operation
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_borrow_accepted_to_borrow_location);
             }
 
 
