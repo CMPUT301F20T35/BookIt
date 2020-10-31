@@ -134,7 +134,7 @@ public class MyBookAcceptedFragment extends Fragment {
     private void scan() {
 
         IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(MyBookAcceptedFragment.this);
-
+        integrator.setCaptureActivity(CodeCapture.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
         integrator.setOrientationLocked(true);
         integrator.setPrompt("Scanning");
