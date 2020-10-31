@@ -256,6 +256,16 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/fragment_borrow_location"
         android:name="com.example.bookit.BorrowLocationFragment"
-        tools:layout="@layout/fragment_borrow_location" />
+        tools:layout="@layout/fragment_borrow_location" >
+        <action
+            android:id="@+id/fragment_borrow_location_to_view_map_fragment"
+            app:destination="@id/viewMapFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewMapFragment"
+        android:name="com.example.bookit.ViewMapsFragment"
+        tools:layout="@layout/fragment_view_maps" />
+
 
 </navigation>

@@ -186,8 +186,6 @@ public class ProfileFragment extends Fragment {
                                     }
                                 }
                                 else{
-                                    //need to update the firestore too
-
                                     //testUser.setContactInfo(contactInfo.getText().toString().trim());
                                    // testUser.setUserName(username.getText().toString().trim());
                                     //////////////////update need here
