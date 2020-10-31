@@ -63,6 +63,7 @@ app:startDestination="@+id/navigation_home">
         tools:layout="@layout/fragment_new_book_edit">
     </fragment>
 
+
 <fragment
     android:id="@+id/navigation_mybook_requested"
     android:name="com.example.bookit.MyBookRequestedFragment"
@@ -82,6 +83,7 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_toRequestList"
         app:destination="@id/fragment_requestList" />
+
 </fragment>
 <fragment
     android:id="@+id/navigation_mybook_accepted"
