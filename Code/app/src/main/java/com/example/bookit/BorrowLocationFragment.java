@@ -1,6 +1,7 @@
 package com.example.bookit;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,15 @@ public class BorrowLocationFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // switch to Maps Fragment
+                Location location=new Location(-113.525995,53.523454);//hard coded edmonton location
+                if(location!=null){
+                    Bundle bundle = new Bundle();
+                    Log.d("faedfa",Double.toString(location.getLatitude()));
+                    bundle.putDouble("lat",location.getLatitude());
+                    bundle.putDouble("long",location.getLongitude());
+                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
+
+                }
             }
         });
 

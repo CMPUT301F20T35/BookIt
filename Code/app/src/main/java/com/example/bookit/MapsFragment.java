@@ -57,9 +57,10 @@ public class MapsFragment extends Fragment {
             latLng1=new LatLng(lat,lon);
             MarkerOptions markerOptions=new MarkerOptions();
             markerOptions.position(latLng1);
-            markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
+            markerOptions.title("my current Location");
+            markerOptions.snippet("Latitude:"+latLng1.latitude+" Longitude:"+latLng1.longitude);
             googleMap.clear();
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15));
             googleMap.addMarker(markerOptions);
             //user choose to get back to the current location
             myLocation.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +69,10 @@ public class MapsFragment extends Fragment {
                     latLng1=new LatLng(lat,lon);
                     MarkerOptions markerOptions=new MarkerOptions();
                     markerOptions.position(latLng1);
-                    markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
+                    markerOptions.title("my current Location:");
+                    markerOptions.snippet("Latitude:"+latLng1.latitude+" Longitude:"+latLng1.longitude);
                     googleMap.clear();
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15));
                     googleMap.addMarker(markerOptions);
                 }
             });
@@ -82,7 +84,9 @@ public class MapsFragment extends Fragment {
                     //initialise the marker
                     MarkerOptions markerOptions=new MarkerOptions();
                     markerOptions.position(latLng);
-                    markerOptions.title("Location chose: "+latLng.latitude+":"+latLng.longitude);
+                    markerOptions.title("Location chose");
+                    markerOptions.snippet("Latitude:"+latLng.latitude+" Longitude:"+latLng.longitude);
+
                     googleMap.clear();
                     googleMap.addMarker(markerOptions);
                 }
