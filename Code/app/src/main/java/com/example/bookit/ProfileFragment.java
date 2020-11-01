@@ -1,14 +1,18 @@
 package com.example.bookit;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -42,6 +47,7 @@ public class ProfileFragment extends Fragment {
     protected ImageView image;
     private Uri MediaUri;
     private AlertDialog dialog;
+    @SuppressLint("WrongThread")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,6 +113,42 @@ public class ProfileFragment extends Fragment {
 
         //change profile image
 
+<<<<<<< HEAD
+=======
+        if (!pref.contains("profileimg")) {
+            try {
+                fs.load_image(new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String imageEncoded = (String) map.get("userimg");
+                        SharedPreferences.Editor prefEditor = getContext().
+                                getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
+                        prefEditor.putString("profileimg", imageEncoded);
+                        prefEditor.commit();
+
+                        byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                        Bitmap img = BitmapFactory
+                                .decodeByteArray(decodedByte, 0, decodedByte.length);
+                        image.setImageBitmap(img);
+                    }
+                });
+
+//
+//                SharedPreferences.Editor prefEditor = getContext().
+//                        getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
+//                prefEditor.putString("imagePreferance", imageEncoded);
+//                prefEditor.commit();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            byte[] decodedByte = Base64.decode(pref.getString("profileimg", ""), 0);
+            Bitmap img = BitmapFactory
+                    .decodeByteArray(decodedByte, 0, decodedByte.length);
+            image.setImageBitmap(img);
+        }
+>>>>>>> master
+
 
         editimage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,8 +196,6 @@ public class ProfileFragment extends Fragment {
                                     }
                                 }
                                 else{
-                                    //need to update the firestore too
-
                                     //testUser.setContactInfo(contactInfo.getText().toString().trim());
                                    // testUser.setUserName(username.getText().toString().trim());
                                     //////////////////update need here
@@ -222,6 +262,10 @@ public class ProfileFragment extends Fragment {
                 fs.image_update(MediaUri);
                 image.setImageURI(MediaUri);
                 Toast.makeText(getActivity(), "update profile image successfully", Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor prefEditor = getContext().
+                        getSharedPreferences("Profile", Context.MODE_PRIVATE)
+                        .edit();
+                prefEditor.clear().commit();
             }
         }
 

@@ -39,6 +39,7 @@ public class BookReturnFragment extends Fragment {
             }
         });
 
+        backButton = view.findViewById(R.id.bt_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,13 +1,15 @@
 package com.example.bookit;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -18,9 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -31,9 +37,10 @@ public class MyBookAcceptedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
+    private ImageButton scanBtn;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_accepted, container, false);
         // get view of four buttons
@@ -68,8 +75,16 @@ public class MyBookAcceptedFragment extends Fragment {
         addButton = view.findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
+            }
+        });
+
+        scanBtn = view.findViewById(R.id.ownerScanBtn);
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scan();
             }
         });
 
@@ -115,6 +130,51 @@ public class MyBookAcceptedFragment extends Fragment {
         }
     }
 
+
+    private void scan() {
+
+        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(MyBookAcceptedFragment.this);
+        integrator.setCaptureActivity(CodeCapture.class);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
+        integrator.setOrientationLocked(true);
+        integrator.setPrompt("Scanning");
+        integrator.initiateScan();
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println(123);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(result.getContents());
+                builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scan();
+                    }
+                });
+                builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        getActivity().onBackPressed();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                Toast.makeText(getActivity(), "No Result", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
 
     private void enableSwipeToDeleteAndUndo(){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {

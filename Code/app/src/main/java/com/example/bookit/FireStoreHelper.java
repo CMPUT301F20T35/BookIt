@@ -3,10 +3,13 @@ package com.example.bookit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.Editable;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,10 +19,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.android.gms.tasks.OnFailureListener;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ForwardingListeningExecutorService;
@@ -33,6 +40,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,10 +49,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+
+import org.w3c.dom.Document;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +91,6 @@ public class FireStoreHelper {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
-
                 Toast.makeText(context, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity) context).finish();
@@ -92,6 +103,7 @@ public class FireStoreHelper {
         }
     });return isSuccessful;
     }
+
     /**
      * used to sign out of the user
      * */
@@ -100,6 +112,77 @@ public class FireStoreHelper {
         fAuth.signOut();//logout
         context.startActivity(new Intent(context,Login.class));
         ((Activity) context).finish();//end the MainActivity so that user is unable to go back
+    }
+
+    /**
+     * used to add a valid book to the firestore
+     * */
+    public void addBook(final Book book){
+        db = FirebaseFirestore.getInstance();
+        final String stateId;
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = fAuth.getCurrentUser();
+        DocumentReference docRef = db.collection("User")
+                .document(currentUser.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot d = task.getResult();
+                if (d.exists()) {
+                    book.setOwnerName((String) d.get("username"));
+                } else {
+                    Toast.makeText(context.getApplicationContext(),task.getException().getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        DocumentReference bookReference = db.collection("Book")
+                .document(book.getISBN());
+
+        bookReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (! task.getResult().exists()) {
+                        Map<String, Object> bookHash = new HashMap<>();
+                        bookHash.put("author",book.getAuthor());
+                        bookHash.put("ISBN",book.getISBN());
+                        bookHash.put("description",book.getDescription());
+                        bookHash.put("ownerName",book.getOwnerName());
+                        bookHash.put("title",book.getTitle());
+                        final RequestHandler r=book.getRequests();
+
+
+                        try{
+                            db.collection("Book").document(book.getISBN()).set(r);
+                            db.collection("Book").document(book.getISBN()).update(bookHash)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                        }catch (IllegalArgumentException e){
+                            Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
+                                    .LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context.getApplicationContext(),"this book already existed, change a book",Toast
+                                .LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
+
     }
 
     public void signUp(final Map newUser, final ProgressBar progressBar) {
@@ -111,6 +194,7 @@ public class FireStoreHelper {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             FirebaseUser user = fAuth.getCurrentUser();
                             newUser.put("id", user.getUid());
 
@@ -119,6 +203,14 @@ public class FireStoreHelper {
                             collectionReference.
                                     document(user.getUid()).
                                     set(newUser);
+
+
+                            mstore= FirebaseStorage.getInstance().getReference();
+                            String name="current";
+                            StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
+                            Uri uri = Uri.parse("android.resource://"+ R.class.getPackage().getName()+"/"+R.drawable.default_profile);
+                            storageReference.putFile(uri);
+
                             Toast.makeText(context, "Sign up Successfully", Toast.LENGTH_SHORT).show();
                             ((Activity) context).finish();
                         }else {
@@ -184,10 +276,27 @@ public class FireStoreHelper {
         String name="current";
         StorageReference storageReference=mstore.child("images/"+user.getUid()+"/"+name+".jpg");
         storageReference.putFile(u);
-
-
     }
-    public void load_image(final ImageView v) throws IOException {
+
+    /**
+     * for adding images to the firebase
+     * @param u,book
+     */
+    public void book_image_add(ArrayList<Uri> u,Book book) {
+        mstore= FirebaseStorage.getInstance().getReference();
+        StorageReference storageReference;
+        int k=0;
+        if (u.size()!=0&& !book.getISBN().equals("")){
+            for (Uri i:u){
+                k++;
+                storageReference=mstore.child("book_images/"+book.getISBN()+"/image"+k+".jpg");
+                storageReference.putFile(i);
+            }
+
+        }}
+
+
+    public void load_image(final dbCallback callback) throws IOException {
 
         fAuth = FirebaseAuth.getInstance();
         FirebaseStorage mstore = FirebaseStorage.getInstance();
@@ -200,7 +309,15 @@ public class FireStoreHelper {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
-                    v.setImageBitmap(b);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] by = baos.toByteArray();
+                    String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                    Map<String, String> returnMap = new HashMap<>();
+                    returnMap.put("userimg", imageEncoded);
+
+                    callback.onCallback(returnMap);
+
                 }
             });
 

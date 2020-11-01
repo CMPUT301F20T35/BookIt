@@ -5,6 +5,7 @@ package com.example.bookit;
 
 import android.content.Context;
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 
 public class BookImageAdapter extends PagerAdapter {
     private Context context;
-    private ArrayList<Integer> imgArrayList;
+    private ArrayList<Uri> imgArrayList;
 
-    public BookImageAdapter(Context context, ArrayList<Integer> imgArrayList) {
+    public BookImageAdapter(Context context, ArrayList<Uri> imgArrayList) {
         this.context = context;
         this.imgArrayList = imgArrayList;
     }
@@ -37,15 +38,26 @@ public class BookImageAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull final ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_item, container, false);
 
         ImageView bookImgView = view.findViewById(R.id.bookImgView);
 
-        int img = imgArrayList.get(position);
-        bookImgView.setImageResource(img);
+        final Uri img = imgArrayList.get(position);
+        bookImgView.setImageURI(img);
 
         container.addView(view, position);
+
+        //click to delete the image
+        bookImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgArrayList.remove(position);
+                container.removeViewAt(position);
+                notifyDataSetChanged();
+
+            }
+        });
         return view;
     }
 
