@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment {
         final SharedPreferences pref = container.getContext().
                 getSharedPreferences("Profile", Context.MODE_PRIVATE);
 
+        image=v.findViewById(R.id.imageView5);
 
         if (!pref.contains("username") ||
                 !pref.contains("username")) {
@@ -81,13 +82,19 @@ public class ProfileFragment extends Fragment {
                     prefEditor.putString("contactInfo", n);
                     prefEditor.commit();
                     dialog.dismiss();
+
                 }
             }, dialog);///
         } else {
             userNameView.setText(pref.getString("username", ""));
             contactInfoView.setText(pref.getString("contactInfo", ""));
         }
+        try {
+            fs.load_image(image);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //final TextView userNameView = v.findViewById(R.id.userName);
         //final TextView contactInfoView = v.findViewById(R.id.contactInfo);
@@ -97,13 +104,9 @@ public class ProfileFragment extends Fragment {
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);///
         ImageButton editimage=v.findViewById(R.id.editimage);//
-        image=v.findViewById(R.id.imageView5);
+
         //change profile image
-        try {
-            fs.load_image(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         editimage.setOnClickListener(new View.OnClickListener() {
             @Override
