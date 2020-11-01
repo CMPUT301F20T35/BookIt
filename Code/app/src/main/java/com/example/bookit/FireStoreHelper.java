@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,11 +60,13 @@ import com.google.firebase.storage.UploadTask;
 import org.w3c.dom.Document;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
-public class FireStoreHelper {
+public class
+FireStoreHelper {
     FirebaseAuth fAuth;
     FirebaseFirestore db;
     Context context;
@@ -243,6 +246,7 @@ public class FireStoreHelper {
                         returnMap.put("contactInfo", (String) document.get("number"));
                         returnMap.put("email", (String) document.get("email"));
 
+
                         callback.onCallback(returnMap);
                     } else {
                         Log.d(TAG, "No such document");
@@ -315,7 +319,6 @@ public class FireStoreHelper {
                     String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
                     Map<String, String> returnMap = new HashMap<>();
                     returnMap.put("userimg", imageEncoded);
-
                     callback.onCallback(returnMap);
 
                 }
@@ -324,7 +327,64 @@ public class FireStoreHelper {
     }
 
 
+    public void fetch_MyBook(String which ,final dbCallback callback){
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
+
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name= document.get("username").toString();
+                        db.collection("Book")
+                                .whereEqualTo("ownerName",name)
+                                .whereEqualTo("state.bookStatus",which)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if(task1.isSuccessful()){
+                                            for (QueryDocumentSnapshot document:task1.getResult()){
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        }else{}
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
 
 
     //public void update(){}

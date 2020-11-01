@@ -20,11 +20,13 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MyBookAvailableFragment extends Fragment {
     private Button acceptedButton;
     private Button borrowedButton;
+    FireStoreHelper fs;
     private Button requestedButton;
     private RecyclerView rv;
     private BookAdapter bAdapter;
@@ -38,6 +40,7 @@ public class MyBookAvailableFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
+        fs=new FireStoreHelper(getActivity());
 
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +77,22 @@ public class MyBookAvailableFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
+        fs.fetch_MyBook("AVAILABLE", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
 
+                    }
+                }
+
+
+
+
+
+
+
+
+
+        );
         //initilize test array and adapter
 
         final ArrayList<Book> testList = new ArrayList<Book>();
