@@ -47,7 +47,11 @@ public class MyBookFragment extends Fragment {
     MapsFragment map;
 
     @Override
-
+    /**
+     * fragment used for displaying options for owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook, container, false);

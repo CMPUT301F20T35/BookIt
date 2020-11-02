@@ -17,6 +17,11 @@ public class BorrowLocationFragment extends Fragment {
     private ImageView backButton;
 
     @Override
+    /**
+     * fragment used for borrower confirming location of the hand off
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_borrow_location
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow_location, container, false);

@@ -49,6 +49,11 @@ public class ProfileFragment extends Fragment {
     private AlertDialog dialog;
     @SuppressLint("WrongThread")
     @Override
+    /**
+     * fragment used for displaying profile of an user
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_profile
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_profile, container, false);

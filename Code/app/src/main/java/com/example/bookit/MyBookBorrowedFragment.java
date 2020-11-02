@@ -31,6 +31,11 @@ public class MyBookBorrowedFragment extends Fragment {
     private FloatingActionButton addButton;
 
     @Override
+    /**
+     * fragment used for displaying borrowed books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_borrowed
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_borrowed, container, false);

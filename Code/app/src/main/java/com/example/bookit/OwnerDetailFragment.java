@@ -12,6 +12,11 @@ import androidx.navigation.Navigation;
 public class OwnerDetailFragment extends Fragment {
     Button back;
     @Override
+    /**
+     * fragment used for displaying owner detail
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_owner_detail
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_owner_detail, container, false);

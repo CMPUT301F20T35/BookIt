@@ -19,6 +19,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     private ArrayList<Book> bookData = new ArrayList<>();
     private OnItemClickListener mlistener;
 
+    /**
+     * This constructor takes in three parameters
+     * @param context
+     * @param bookData arrayList contains Book object
+     * @param listener
+     */
     public BookAdapter(Context context, ArrayList<Book> bookData, OnItemClickListener listener){
         this.mContext = context;
         this.bookData = bookData;

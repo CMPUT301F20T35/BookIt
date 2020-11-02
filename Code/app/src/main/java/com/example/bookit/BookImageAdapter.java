@@ -20,6 +20,11 @@ public class BookImageAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<Uri> imgArrayList;
 
+    /**
+     * This constructor takes in two parameters
+     * @param context
+     * @param imgArrayList arrayList contains Uri object
+     */
     public BookImageAdapter(Context context, ArrayList<Uri> imgArrayList) {
         this.context = context;
         this.imgArrayList = imgArrayList;
