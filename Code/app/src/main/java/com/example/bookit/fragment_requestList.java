@@ -23,6 +23,11 @@ public class fragment_requestList extends Fragment {
 
 
     @Override
+    /**
+     * fragment used for owner accepting or denying requester
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_request_list
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_request_list, container, false);

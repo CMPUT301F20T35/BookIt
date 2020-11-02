@@ -15,6 +15,11 @@ public class BorrowFragment extends Fragment {
     private Button requestedButton;
 
     @Override
+    /**
+     * fragment used for displaying option for borrower
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_borrow
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow, container, false);

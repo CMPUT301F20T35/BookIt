@@ -17,6 +17,11 @@ public class BookRequestFragment extends Fragment {
     private ImageView backButton;
 
     @Override
+    /**
+     * fragment used for requesting book
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_book_request
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_book_request, container, false);
