@@ -30,7 +30,7 @@ public class BorrowAcceptedFragment extends Fragment {
 
     @Override
     /**
-     * fragment used for displaying books wants to borrow and book being accepted
+     * fragment used for displaying books being accepted and borrower wants to borrow
      * @return view of the fragment
      * @see fragment corresponding to layout file fragment_borrow_accepted
      */

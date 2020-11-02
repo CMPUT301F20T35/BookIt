@@ -31,7 +31,7 @@ public class BorrowAvailableFragment extends Fragment {
 
     @Override
     /**
-     * fragment used for displaying books wants to borrow and book being available
+     * fragment used for displaying books being available and borrower wants to borrow
      * @return view of the fragment
      * @see fragment corresponding to layout file fragment_borrow_available
      */
