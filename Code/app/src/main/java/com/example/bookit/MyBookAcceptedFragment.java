@@ -115,7 +115,7 @@ public class MyBookAcceptedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
-        fs.fetch_MyBook("Acccepted", new dbCallback() {
+        fs.fetch_MyBook("ACCEPTED", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
                         String title=map.get("title").toString();
