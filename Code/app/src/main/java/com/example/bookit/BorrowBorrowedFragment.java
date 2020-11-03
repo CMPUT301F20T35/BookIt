@@ -29,6 +29,11 @@ public class BorrowBorrowedFragment extends Fragment {
     private ImageButton searchButton;
 
     @Override
+    /**
+     * fragment used for displaying books being borrowed and borrower wants to borrow
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_borrow_borrowed
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow_borrowed, container, false);

@@ -33,6 +33,11 @@ public class MyBookAvailableFragment extends Fragment {
     private FloatingActionButton addButton;
 
     @Override
+    /**
+     * fragment used for displaying available books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_available
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_available, container, false);

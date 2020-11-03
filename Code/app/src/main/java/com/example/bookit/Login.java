@@ -21,6 +21,10 @@ public class Login extends AppCompatActivity {
     FireStoreHelper fs;
     ProgressBar progressBar;//show the progress during the login
     @Override
+    /**
+     * activity used for user login
+     * @see activity corresponding to layout file login_activity
+     */
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);

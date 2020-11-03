@@ -42,6 +42,11 @@ public class MyBookAcceptedFragment extends Fragment {
     private ImageButton scanBtn;
 
     @Override
+    /**
+     * fragment used for displaying accepted books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_accepted
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_accepted, container, false);
