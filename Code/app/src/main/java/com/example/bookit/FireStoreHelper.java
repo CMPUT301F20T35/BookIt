@@ -19,11 +19,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.android.gms.tasks.OnFailureListener;
 
@@ -69,7 +71,8 @@ public class FireStoreHelper {
     Context context;
     boolean isSuccessful=false;
     private StorageReference mstore;
-
+    private String username;
+    int i;
     public FireStoreHelper(ProfileFragment profileFragment) {
     }
 
@@ -222,6 +225,8 @@ public class FireStoreHelper {
                         });
 
     }
+
+
     public void Fetch(final dbCallback callback, AlertDialog dialog){
         dialog.show();
         fAuth = FirebaseAuth.getInstance();
@@ -237,7 +242,6 @@ public class FireStoreHelper {
 
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-
                         Map<String, String> returnMap = new HashMap<>();
                         returnMap.put("username", (String) document.get("username"));
                         returnMap.put("contactInfo", (String) document.get("number"));
@@ -278,22 +282,107 @@ public class FireStoreHelper {
         storageReference.putFile(u);
     }
 
+    public void book_image_update(Uri u,String isbn){
+        fAuth = FirebaseAuth.getInstance();
+        mstore= FirebaseStorage.getInstance().getReference();
+        StorageReference storageReference=mstore.child("book_images/"+isbn+"/"+"image1.jpg");
+        storageReference.putFile(u);
+    }
+
+    public void load_book_image(String isbn,final dbCallback callback)throws IOException{
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        ArrayList<Uri> imgArrayList = null;
+
+        StorageReference listRef=mstore.getReference().child("book_images/"+isbn+"/image1.jpg");
+
+        final File f = File.createTempFile("image", "jpg");
+        listRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] by = baos.toByteArray();
+                String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                Map<String, String> returnMap = new HashMap<>();
+                returnMap.put("bookimage", imageEncoded);
+                callback.onCallback(returnMap);
+
+            }
+        });
+
+
+
+    }
+
+    public void load_book_multiple_images(String isbn,final dbCallback callback)throws IOException{
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        ArrayList<Uri> imgArrayList = null;
+
+        StorageReference listRef=mstore.getReference().child("book_images/1234000");
+        i=0;
+        listRef.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            // All the prefixes under listRef.
+                            // You may call listAll() recursively on them.
+                        }
+                        Map<String, String> returnMap = new HashMap<>();
+
+                        for (StorageReference item : listResult.getItems()) {
+                            // All the items under listRef
+                            final File f;
+                            try {
+                                f = File.createTempFile("image", "jpg");
+                                item.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        i++;
+                                        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                        b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                        byte[] by = baos.toByteArray();
+                                        String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                                        Log.d("sdsdsaw:"+i, imageEncoded);
+
+                                        returnMap.put("img"+i, imageEncoded);
+                                        returnMap.put("size",Integer.toString(listResult.getItems().size()));
+                                        Log.d("iiiiiiiii", String.valueOf(i));
+                                        //System.out.println(finalI);
+                                        callback.onCallback(returnMap);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("erroradca","ohno");
+                    }
+                });
+
+    }
+
+
+
     /**
      * for adding images to the firebase
      * @param u,book
      */
-    public void book_image_add(ArrayList<Uri> u,Book book) {
+    public void book_image_add(Uri u,Book book) {
         mstore= FirebaseStorage.getInstance().getReference();
         StorageReference storageReference;
-        int k=0;
-        if (u.size()!=0&& !book.getISBN().equals("")){
-            for (Uri i:u){
-                k++;
-                storageReference=mstore.child("book_images/"+book.getISBN()+"/image"+k+".jpg");
-                storageReference.putFile(i);
-            }
+        storageReference=mstore.child("book_images/"+book.getISBN()+"/image1"+".jpg");
+        storageReference.putFile(u);
+    }
 
-        }}
+
 
 
     public void load_image(final dbCallback callback) throws IOException {
@@ -315,7 +404,6 @@ public class FireStoreHelper {
                     String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
                     Map<String, String> returnMap = new HashMap<>();
                     returnMap.put("userimg", imageEncoded);
-
                     callback.onCallback(returnMap);
 
                 }

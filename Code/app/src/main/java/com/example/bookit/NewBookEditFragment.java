@@ -89,7 +89,7 @@ public class NewBookEditFragment extends Fragment {
                 Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
                 if (bookInfoValidator(book)) {
                     db.addBook(book);
-                    db.book_image_add(imgArrayList,book);//add the image array to the firebase storage
+                    db.book_image_add(MediaUri,book);//add the image array to the firebase storage
                     getActivity().onBackPressed();
                 }
 
@@ -130,8 +130,7 @@ public class NewBookEditFragment extends Fragment {
             }
             else {
                 MediaUri = data.getData();
-                imgArrayList.add(MediaUri);
-                bookImgAdapter = new BookImageAdapter(getContext(),imgArrayList);
+                bookImgAdapter = new BookImageAdapter(getContext(),MediaUri);
                 bookPager.setAdapter(bookImgAdapter);
                 bookPager.setPadding(100, 0, 100, 0);
                 Toast.makeText(getActivity(), "upload image successfully", Toast.LENGTH_LONG).show();

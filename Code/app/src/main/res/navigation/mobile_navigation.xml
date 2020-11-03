@@ -140,9 +140,18 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_to_newbook"
         app:destination="@+id/navigation_addbook"/>
+    <action
+        android:id="@+id/action_mybook_available_to_mybook_detail"
+        app:destination="@+id/book_detail"/>
 </fragment>
 
 
+    <fragment
+        android:id="@+id/book_detail"
+        android:name="com.example.bookit.BookDetail"
+        tools:layout="@layout/fragment_book_detail">
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_borrow_requested"

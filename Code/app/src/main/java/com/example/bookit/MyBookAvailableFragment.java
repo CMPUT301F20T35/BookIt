@@ -71,6 +71,7 @@ public class MyBookAvailableFragment extends Fragment {
             }
         });
 
+
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
@@ -81,6 +82,9 @@ public class MyBookAvailableFragment extends Fragment {
 
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Book testBook=new Book("testbook","xiu","111","what a fun book","xiu",new RequestHandler());
+        testList.add(testBook);
+        //bAdapter.notifyDataSetChanged();
 
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
@@ -91,6 +95,11 @@ public class MyBookAvailableFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Book bookCliced=testList.get(pos);
+                String isbn=bookCliced.getISBN();
+                Bundle bundle=new Bundle();
+                bundle.putString("isbn",isbn);
+                Navigation.findNavController(view).navigate(R.id.action_mybook_available_to_mybook_detail,bundle);
             }
 
 
