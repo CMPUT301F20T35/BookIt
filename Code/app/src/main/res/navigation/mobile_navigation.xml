@@ -251,7 +251,11 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/fragment_requestList"
         android:name="com.example.bookit.fragment_requestList"
-        tools:layout="@layout/fragment_request_list" />
+        tools:layout="@layout/fragment_request_list" >
+        <action
+            android:id="@+id/action_fragment_requestList_to_owner_detail"
+            app:destination="@id/navigation_owner_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_borrow_location"
@@ -260,6 +264,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/fragment_borrow_location_to_view_map_fragment"
             app:destination="@id/viewMapFragment" />
+        <action
+            android:id="@+id/action_fragment_borrow_location_to_owner_detail2"
+            app:destination="@id/navigation_owner_detail" />
     </fragment>
 
     <fragment
