@@ -25,6 +25,7 @@ public class MyBookRequestedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button borrowedButton;
+    FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
@@ -37,7 +38,7 @@ public class MyBookRequestedFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
         borrowedButton = view.findViewById(R.id.button_borrowed);
-
+        fs=new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

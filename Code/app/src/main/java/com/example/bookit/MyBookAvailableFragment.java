@@ -77,22 +77,8 @@ public class MyBookAvailableFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-        fs.fetch_MyBook("AVAILABLE", new dbCallback() {
-                    @Override
-                    public void onCallback(Map map) {
-
-                    }
-                }
 
 
-
-
-
-
-
-
-
-        );
         //initilize test array and adapter
 
         final ArrayList<Book> testList = new ArrayList<Book>();
@@ -114,7 +100,25 @@ public class MyBookAvailableFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+        fs.fetch_MyBook("AVAILABLE", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        //System.out.println(title);
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        testList.add(b);
+                        bAdapter.notifyDataSetChanged();
 
+                    }
+                }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////b
+
+        );
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();

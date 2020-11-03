@@ -29,11 +29,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MyBookAcceptedFragment extends Fragment {
     private Button availableButton;
     private Button borrowedButton;
     private Button requestedButton;
+    FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
@@ -47,7 +49,7 @@ public class MyBookAcceptedFragment extends Fragment {
         availableButton = view.findViewById(R.id.button_available);
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
-
+        fs=new FireStoreHelper(getActivity());
         availableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +115,25 @@ public class MyBookAcceptedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+        fs.fetch_MyBook("Acccepted", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        //System.out.println(title);
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        testList.add(b);
+                        bAdapter.notifyDataSetChanged();
 
+                    }
+                }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////b
+
+        );
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
