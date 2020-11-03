@@ -27,6 +27,10 @@ public class SignUp extends AppCompatActivity {
 
 
     @Override
+    /**
+     * activity used for user signing up
+     * @see activity corresponding to layout file activity_sign_up
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);

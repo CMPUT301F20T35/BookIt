@@ -25,6 +25,13 @@ public class signUpValidator {
 
     FirebaseFirestore db;
 
+    /**
+     * This consrtuctor takes in four parameter
+     * @param password password of user
+     * @param username username of user
+     * @param email email of user
+     * @param number number of user
+     */
     public signUpValidator(String password, String username, String email, String number) {
         this.password = password;
         this.username = username;
@@ -32,6 +39,11 @@ public class signUpValidator {
         this.number = number;
     }
 
+    /**
+     * Check whether the input is empty
+     * @param text input text
+     * @return false if input is empty, true otherwise
+     */
     public boolean emptyCheck(Object text) {
         if (text.toString().trim().isEmpty()) {
             return false;
@@ -39,6 +51,10 @@ public class signUpValidator {
         return true;
     }
 
+    /**
+     * Check the validity of input number
+     * @return false if invalid, true otherwise
+     */
     public boolean numberCheck() {
         Pattern pattern = Pattern.compile("^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
         Matcher matcher = pattern.matcher(this.number);
@@ -48,6 +64,10 @@ public class signUpValidator {
         return true;
     }
 
+    /**
+     * Check the length of password
+     * @return false if length < 6, true otherwise
+     */
     public boolean passwordCheck() {
         if (this.password.length() < 6) {
             return false;
@@ -55,6 +75,13 @@ public class signUpValidator {
         return true;
     }
 
+    /**
+     * Check if the user name is unique
+     * @param newUser new user name
+     * @param progressBar bar represent the progress
+     * @param fs firestore being used
+     * @param context context of the environment
+     */
     public void uniqueUsername(final Map newUser, final ProgressBar progressBar,
                                final FireStoreHelper fs, final Context context) {
         progressBar.setVisibility(View.VISIBLE);
