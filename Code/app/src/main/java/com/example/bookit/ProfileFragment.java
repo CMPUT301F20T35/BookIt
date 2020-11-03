@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,13 +69,15 @@ public class ProfileFragment extends Fragment {
 
         fs=new FireStoreHelper(getActivity());
 
+
         final TextView userNameView = v.findViewById(R.id.userName);
         final TextView contactInfoView = v.findViewById(R.id.contactInfo);
 
         final SharedPreferences pref = container.getContext().
                 getSharedPreferences("Profile", Context.MODE_PRIVATE);
 
-
+        image=v.findViewById(R.id.imageView5);
+        //fs.fetch_MyBook("");
         if (!pref.contains("username") ||
                 !pref.contains("username")) {
             fs=new FireStoreHelper(getActivity());
@@ -92,14 +95,26 @@ public class ProfileFragment extends Fragment {
                     prefEditor.putString("contactInfo", n);
                     prefEditor.commit();
                     dialog.dismiss();
+
                 }
             }, dialog);///
         } else {
             userNameView.setText(pref.getString("username", ""));
             contactInfoView.setText(pref.getString("contactInfo", ""));
         }
+        try {
+            fs.load_image(new dbCallback()
+                          {   @Override
+                              public void onCallback(Map map){
+                              
+                              }
+                          }
 
 
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //final TextView userNameView = v.findViewById(R.id.userName);
         //final TextView contactInfoView = v.findViewById(R.id.contactInfo);
         //userNameView.setText(testUser.getUserName());
@@ -108,7 +123,7 @@ public class ProfileFragment extends Fragment {
         Button signOut=v.findViewById(R.id.logoutButton);
         ImageButton edit=v.findViewById(R.id.editButton);///
         ImageButton editimage=v.findViewById(R.id.editimage);//
-        image=v.findViewById(R.id.imageView5);
+
         //change profile image
 
         if (!pref.contains("profileimg")) {

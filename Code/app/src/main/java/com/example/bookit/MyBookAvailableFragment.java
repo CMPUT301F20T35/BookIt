@@ -20,11 +20,13 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MyBookAvailableFragment extends Fragment {
     private Button acceptedButton;
     private Button borrowedButton;
+    FireStoreHelper fs;
     private Button requestedButton;
     private RecyclerView rv;
     private BookAdapter bAdapter;
@@ -43,6 +45,7 @@ public class MyBookAvailableFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
+        fs=new FireStoreHelper(getActivity());
 
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +83,7 @@ public class MyBookAvailableFragment extends Fragment {
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
 
+
         //initilize test array and adapter
 
         final ArrayList<Book> testList = new ArrayList<Book>();
@@ -101,7 +105,25 @@ public class MyBookAvailableFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+        fs.fetch_MyBook("AVAILABLE", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        //System.out.println(title);
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        testList.add(b);
+                        bAdapter.notifyDataSetChanged();
 
+                    }
+                }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////b
+
+        );
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
