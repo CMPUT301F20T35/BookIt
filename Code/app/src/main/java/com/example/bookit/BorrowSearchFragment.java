@@ -26,6 +26,11 @@ public class BorrowSearchFragment extends Fragment {
     private BookAdapter bAdapter;
 
     @Override
+    /**
+     * fragment used for borrower searching books they want to borrow
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_borrow_search
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow_search, container, false);

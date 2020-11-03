@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,11 +63,13 @@ import com.google.firebase.storage.UploadTask;
 import org.w3c.dom.Document;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
-public class FireStoreHelper {
+public class
+FireStoreHelper {
     FirebaseAuth fAuth;
     FirebaseFirestore db;
     Context context;
@@ -247,6 +251,7 @@ public class FireStoreHelper {
                         returnMap.put("contactInfo", (String) document.get("number"));
                         returnMap.put("email", (String) document.get("email"));
 
+
                         callback.onCallback(returnMap);
                     } else {
                         Log.d(TAG, "No such document");
@@ -315,59 +320,7 @@ public class FireStoreHelper {
 
     }
 
-    public void load_book_multiple_images(String isbn,final dbCallback callback)throws IOException{
-        FirebaseStorage mstore = FirebaseStorage.getInstance();
-        ArrayList<Uri> imgArrayList = null;
 
-        StorageReference listRef=mstore.getReference().child("book_images/1234000");
-        i=0;
-        listRef.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-                        for (StorageReference prefix : listResult.getPrefixes()) {
-                            // All the prefixes under listRef.
-                            // You may call listAll() recursively on them.
-                        }
-                        Map<String, String> returnMap = new HashMap<>();
-
-                        for (StorageReference item : listResult.getItems()) {
-                            // All the items under listRef
-                            final File f;
-                            try {
-                                f = File.createTempFile("image", "jpg");
-                                item.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        i++;
-                                        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                        b.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                                        byte[] by = baos.toByteArray();
-                                        String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
-                                        Log.d("sdsdsaw:"+i, imageEncoded);
-
-                                        returnMap.put("img"+i, imageEncoded);
-                                        returnMap.put("size",Integer.toString(listResult.getItems().size()));
-                                        Log.d("iiiiiiiii", String.valueOf(i));
-                                        //System.out.println(finalI);
-                                        callback.onCallback(returnMap);
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("erroradca","ohno");
-                    }
-                });
-
-    }
 
 
 
@@ -412,7 +365,64 @@ public class FireStoreHelper {
     }
 
 
+    public void fetch_MyBook(String which ,final dbCallback callback){
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
+
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name= document.get("username").toString();
+                        db.collection("Book")
+                                .whereEqualTo("ownerName",name)
+                                .whereEqualTo("state.bookStatus",which)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if(task1.isSuccessful()){
+                                            for (QueryDocumentSnapshot document:task1.getResult()){
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        }else{}
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
 
 
     //public void update(){}

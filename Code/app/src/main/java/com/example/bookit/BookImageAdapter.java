@@ -21,8 +21,16 @@ public class BookImageAdapter extends PagerAdapter {
     private Uri uri;
 
     public BookImageAdapter(Context context, Uri uri) {
+
+    /**
+     * This constructor takes in two parameters
+     * @param context
+     * @param imgArrayList arrayList contains Uri object
+     */
+
         this.context = context;
-        this.uri=uri;}
+        this.uri=uri;
+    }
 
 
     @Override

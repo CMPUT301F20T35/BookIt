@@ -20,17 +20,23 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MyBookBorrowedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button requestedButton;
-
+    FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
 
     @Override
+    /**
+     * fragment used for displaying borrowed books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_borrowed
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_borrowed, container, false);
@@ -38,7 +44,7 @@ public class MyBookBorrowedFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
         requestedButton = view.findViewById(R.id.button_requested);
-
+        fs=new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +107,28 @@ public class MyBookBorrowedFragment extends Fragment {
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
-        return view;
+        fs.fetch_MyBook("BORROWED", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        //System.out.println(title);
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        testList.add(b);
+                        bAdapter.notifyDataSetChanged();
+
+                    }
+                }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////b
+
+        );return view;
+
+
+
     }
 
 

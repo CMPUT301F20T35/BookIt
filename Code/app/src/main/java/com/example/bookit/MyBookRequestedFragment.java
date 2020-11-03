@@ -21,17 +21,24 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MyBookRequestedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button borrowedButton;
+    FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
     //FireStoreHelper fs;
 
     @Override
+    /**
+     * fragment used for displaying requested books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_requested
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_requested, container, false);
@@ -41,7 +48,7 @@ public class MyBookRequestedFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
         borrowedButton = view.findViewById(R.id.button_borrowed);
-
+        fs=new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +118,26 @@ public class MyBookRequestedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+
+        fs.fetch_MyBook("REQUESTED", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        //System.out.println(title);
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        testList.add(b);
+                        bAdapter.notifyDataSetChanged();
+
+                    }
+                }
+
+
+        );
+
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
         return view;

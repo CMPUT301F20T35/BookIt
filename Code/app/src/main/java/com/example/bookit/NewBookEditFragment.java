@@ -45,6 +45,11 @@ public class NewBookEditFragment extends Fragment {
     FireStoreHelper db;
 
     @Override
+    /**
+     * fragment used for
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_new_book_edit
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
