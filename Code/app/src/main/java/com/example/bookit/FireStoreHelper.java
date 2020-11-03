@@ -296,8 +296,6 @@ FireStoreHelper {
 
     public void load_book_image(String isbn,final dbCallback callback)throws IOException{
         FirebaseStorage mstore = FirebaseStorage.getInstance();
-        ArrayList<Uri> imgArrayList = null;
-
         StorageReference listRef=mstore.getReference().child("book_images/"+isbn+"/image1.jpg");
 
         final File f = File.createTempFile("image", "jpg");
@@ -319,7 +317,22 @@ FireStoreHelper {
 
 
     }
+    public void delete_book_image(String isbn){
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        StorageReference ref=mstore.getReference().child("book_images/"+isbn+"/image1.jpg");
+        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
 
+    }
 
 
 
@@ -329,10 +342,12 @@ FireStoreHelper {
      * @param u,book
      */
     public void book_image_add(Uri u,Book book) {
-        mstore= FirebaseStorage.getInstance().getReference();
-        StorageReference storageReference;
-        storageReference=mstore.child("book_images/"+book.getISBN()+"/image1"+".jpg");
-        storageReference.putFile(u);
+        if (u!= null){
+            mstore= FirebaseStorage.getInstance().getReference();
+            StorageReference storageReference;
+            storageReference=mstore.child("book_images/"+book.getISBN()+"/image1"+".jpg");
+            storageReference.putFile(u);
+        }
     }
 
 
@@ -374,8 +389,6 @@ FireStoreHelper {
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-
                 if (task.isSuccessful()) {
 
                     DocumentSnapshot document = task.getResult();

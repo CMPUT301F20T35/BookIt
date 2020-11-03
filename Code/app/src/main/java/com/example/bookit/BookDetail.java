@@ -9,28 +9,18 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -45,11 +35,21 @@ public class BookDetail extends Fragment {
     //private ViewPager bookPager;
     private BookImageAdapter bookImgAdapter;
     private ImageButton editImage;
+    private ImageButton delete;
     private Button finish;
+    private TextView titleView;
+    private TextView ownerView;
+    private TextView isbnView;
+    private TextView descriptionView;
+    private TextView authorView;
+
     protected ImageView imageView;
     FireStoreHelper db;
     private String isbn;
-
+    private String title;
+    private String description;
+    private String owner;
+    private String author;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,14 +57,31 @@ public class BookDetail extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_book_detail, container, false);
         editImage=v.findViewById(R.id.editimage2);
-        //bookPager=v.findViewById(R.id.BookPager);
-        imgArrayList = new ArrayList<>();
-        imgArrayList2 = new ArrayList<>();
+        delete=v.findViewById(R.id.deleteButton);
+        titleView=v.findViewById(R.id.title);
+        ownerView=v.findViewById(R.id.Ownername);
+        isbnView=v.findViewById(R.id.isbn_text);
+        descriptionView=v.findViewById(R.id.description);
+        authorView=v.findViewById(R.id.author_text);
 
         Bundle b=getArguments();
         isbn=b.getString("isbn");
+        title=b.getString("title");
+        description=b.getString("description");
+        owner=b.getString("owner");
+        isbn=b.getString("isbn");
+        author=b.getString("author");
+        //set text
+        titleView.setText(title);
+        ownerView.setText(owner);
+        isbnView.setText(isbn);
+        descriptionView.setText(description);
+        authorView.setText(author);
+
 
         imageView = v.findViewById(R.id.imageView4);
+        imageView.setImageResource(R.drawable.add_img);
+
 
         try {
             db=new FireStoreHelper(getActivity());
@@ -94,6 +111,14 @@ public class BookDetail extends Fragment {
                 showImageChooser();
             }
         });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.delete_book_image(isbn);
+                imageView.setImageResource(R.drawable.add_img);
+            }
+        });
+
 
         finish=v.findViewById(R.id.finish);
         finish.setOnClickListener(new View.OnClickListener() {
