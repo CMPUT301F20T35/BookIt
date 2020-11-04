@@ -165,10 +165,7 @@ public class NewBookEditFragment extends Fragment {
     }
 
     private void fetchBook(String ISBN) {
-        String queryString = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + ISBN;
         new FetchBookTask().execute(ISBN);
-
-
     }
 
     @Override
@@ -199,6 +196,36 @@ public class NewBookEditFragment extends Fragment {
             }
         }
 
+    }
+
+    private void showResult(String title, String author, String ISBN) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Title: " + title + "\nAuthor: " + author
+                + "\nISBN-13: " + ISBN);
+
+        builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                scan();
+            }
+        });
+        builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+//                        getActivity().onBackPressed();
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        newBookTitleET = getView().findViewById(R.id.newBookTitle);
+        newBookAuthorET = getView().findViewById(R.id.newBookAuthor);
+        newBookISBNET = getView().findViewById(R.id.newBookISBN);
+
+        newBookTitleET.setText(title);
+        newBookAuthorET.setText(author);
+        newBookISBNET.setText(ISBN);
     }
 
     // citation: https://stackoverflow.com/a/16472082
@@ -285,33 +312,5 @@ public class NewBookEditFragment extends Fragment {
             }
         }
     }
-    private void showResult(String title, String author, String ISBN) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Title: " + title + "\nAuthor: " + author
-                + "\nISBN-13: " + ISBN);
 
-        builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                scan();
-            }
-        });
-        builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-//                        getActivity().onBackPressed();
-                dialogInterface.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        newBookTitleET = getView().findViewById(R.id.newBookTitle);
-        newBookAuthorET = getView().findViewById(R.id.newBookAuthor);
-        newBookISBNET = getView().findViewById(R.id.newBookISBN);
-
-        newBookTitleET.setText(title);
-        newBookAuthorET.setText(author);
-        newBookISBNET.setText(ISBN);
-    }
 }
