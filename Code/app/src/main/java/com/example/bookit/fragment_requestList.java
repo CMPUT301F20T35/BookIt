@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ public class fragment_requestList extends Fragment {
 
     RecyclerView rv;
     UserAdapter uAdapter;
-    private Button backButton;
+    private ImageView backButton;
     private TextView ownerDetail;
 
     @Override
