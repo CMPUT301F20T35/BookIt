@@ -130,8 +130,6 @@ public class MyBookAcceptedFragment extends Fragment {
                     }
                 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
-
         );
 
         //set swipe delete function
