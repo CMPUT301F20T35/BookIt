@@ -33,6 +33,20 @@ public class Book {
     }
 
     /**
+     *
+     * @param title
+     * @param author
+     * @param ISBN
+     * @param description
+     */
+    public Book(String title, String author, String ISBN, String description) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.description = description;
+    }
+
+    /**
      * getter of RequestHandler
      * @return request handler of the book
      */
