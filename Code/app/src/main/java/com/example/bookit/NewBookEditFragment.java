@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -29,10 +30,16 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.okhttp.Protocol;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
@@ -157,31 +164,11 @@ public class NewBookEditFragment extends Fragment {
 
     }
 
-    private void fetchBook(dbCallback callback, String ISBN) {
+    private void fetchBook(String ISBN) {
         String queryString = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + ISBN;
-        try {
-            HttpURLConnection connection = null;
-            try {
-                URL url = new URL(queryString);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setReadTimeout(5000); // 5 seconds
-                connection.setConnectTimeout(5000); // 5 seconds
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//            int responseCode = connection.getResponseCode();
-//            if (responseCode != 200) {
-//                Toast.makeText(getActivity(), "google api fail", Toast.LENGTH_LONG).show();
-//                return;
-//            }
-        } catch (Error e) {
+        new FetchBookTask().execute(ISBN);
 
-        }
+
     }
 
     @Override
@@ -202,29 +189,9 @@ public class NewBookEditFragment extends Fragment {
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (result != null) {
                 if (result.getContents() != null) {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-                    fetchBook(new dbCallback() {
-                        @Override
-                        public void onCallback(Map map) {
 
-                        }
-                    }, result.getContents());
-                    builder.setMessage(result.getContents());
-                    builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            scan();
-                        }
-                    });
-                    builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-//                        getActivity().onBackPressed();
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    android.app.AlertDialog dialog = builder.create();
-                    dialog.show();
+                    fetchBook(result.getContents());
+
                 } else {
                     Toast.makeText(getActivity(), "No Result", Toast.LENGTH_SHORT).show();
                 }
@@ -232,5 +199,119 @@ public class NewBookEditFragment extends Fragment {
             }
         }
 
+    }
+
+    // citation: https://stackoverflow.com/a/16472082
+    class FetchBookTask extends AsyncTask<String, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            final String isbn = strings[0];
+            if(isCancelled()) {
+                return null;
+            }
+
+            String query = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+            try{
+                HttpURLConnection connection = null;
+                // Build Connection.
+                try{
+                    URL url = new URL(query);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setReadTimeout(5000); // 5 seconds
+                    connection.setConnectTimeout(5000); // 5 seconds
+                } catch (MalformedURLException e) {
+                    // Impossible: The only two URLs used in the app are taken from string resources.
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    // Impossible: "GET" is a perfectly valid request method.
+                    e.printStackTrace();
+                }
+                int responseCode = connection.getResponseCode();
+                if(responseCode != 200){
+                    Log.w(getClass().getName(), "GoogleBooksAPI request failed. Response Code: " + responseCode);
+                    connection.disconnect();
+                    return null;
+                }
+
+                // Read data from response.
+                StringBuilder builder = new StringBuilder();
+                BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = responseReader.readLine();
+                while (line != null){
+                    builder.append(line);
+                    line = responseReader.readLine();
+                }
+                String responseString = builder.toString();
+                Log.d(getClass().getName(), "Response String: " + responseString);
+                JSONObject responseJson = new JSONObject(responseString);
+                connection.disconnect();
+                return responseJson;
+            } catch (SocketTimeoutException e) {
+                Log.w(getClass().getName(), "Connection timed out. Returning null");
+                return null;
+            } catch(IOException e){
+                Log.d(getClass().getName(), "IOException when connecting to Google Books API.");
+                e.printStackTrace();
+                return null;
+            } catch (JSONException e) {
+                Log.d(getClass().getName(), "JSONException when connecting to Google Books API.");
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if(isCancelled()) {
+                Toast.makeText(getActivity(), "canceled", Toast.LENGTH_LONG).show();
+            } else if(jsonObject == null) {
+                Toast.makeText(getActivity(), "no result", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    JSONObject basicJSON = jsonObject.getJSONArray("items")
+                            .getJSONObject(0)
+                            .getJSONObject("volumeInfo");
+                    String title = basicJSON.getString("title");
+                    String author = basicJSON.getJSONArray("authors").getString(0);
+                    String ISBN = basicJSON.getJSONArray("industryIdentifiers")
+                            .getJSONObject(1).getString("identifier");
+                    showResult(title, author, ISBN);
+                } catch (JSONException e) {
+                    Toast.makeText(getActivity(), "No result, try to scan other books",
+                            Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    private void showResult(String title, String author, String ISBN) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Title: " + title + "\nAuthor: " + author
+                + "\nISBN-13: " + ISBN);
+
+        builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                scan();
+            }
+        });
+        builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+//                        getActivity().onBackPressed();
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        newBookTitleET = getView().findViewById(R.id.newBookTitle);
+        newBookAuthorET = getView().findViewById(R.id.newBookAuthor);
+        newBookISBNET = getView().findViewById(R.id.newBookISBN);
+
+        newBookTitleET.setText(title);
+        newBookAuthorET.setText(author);
+        newBookISBNET.setText(ISBN);
     }
 }
