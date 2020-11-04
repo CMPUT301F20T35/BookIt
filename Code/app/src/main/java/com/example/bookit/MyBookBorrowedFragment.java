@@ -80,28 +80,21 @@ public class MyBookBorrowedFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
-        final ArrayList<Book> testList = new ArrayList<Book>();
-
+        final ArrayList<Book> dataList = new ArrayList<Book>();
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
-
         //adapter operation
-        bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_return);
             }
-
-
         });
         rv.setAdapter(bAdapter);
 
@@ -117,7 +110,7 @@ public class MyBookBorrowedFragment extends Fragment {
                         String ownerName=map.get("ownerName").toString();
                         //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
-                        testList.add(b);
+                        dataList.add(b);
                         bAdapter.notifyDataSetChanged();
 
                     }
@@ -126,9 +119,6 @@ public class MyBookBorrowedFragment extends Fragment {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////b
 
         );return view;
-
-
-
     }
 
 
@@ -147,11 +137,9 @@ public class MyBookBorrowedFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
@@ -162,7 +150,6 @@ public class MyBookBorrowedFragment extends Fragment {
 
             }
         };
-
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(rv);
     }

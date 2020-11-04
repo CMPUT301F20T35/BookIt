@@ -80,14 +80,10 @@ public class MyBookRequestedFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
         final ArrayList<Book> testList = new ArrayList<Book>();
-
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
@@ -112,10 +108,7 @@ public class MyBookRequestedFragment extends Fragment {
                 //on item click listener
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).navigate(R.id.action_mybook_toRequestList);
-
             }
-
-
         });
         rv.setAdapter(bAdapter);
 
@@ -134,8 +127,6 @@ public class MyBookRequestedFragment extends Fragment {
 
                     }
                 }
-
-
         );
 
         //set swipe delete function
@@ -159,11 +150,9 @@ public class MyBookRequestedFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);

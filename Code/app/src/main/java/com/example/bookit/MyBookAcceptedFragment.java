@@ -92,28 +92,23 @@ public class MyBookAcceptedFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
-        final ArrayList<Book> testList = new ArrayList<Book>();
-
+        final ArrayList<Book> dataList = new ArrayList<>();
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
         //adapter operation
-        bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
             }
-
-
         });
         rv.setAdapter(bAdapter);
+
         fs.fetch_MyBook("ACCEPTED", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -124,12 +119,10 @@ public class MyBookAcceptedFragment extends Fragment {
                         String ownerName=map.get("ownerName").toString();
                         //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
-                        testList.add(b);
+                        dataList.add(b);
                         bAdapter.notifyDataSetChanged();
-
                     }
                 }
-
         );
 
         //set swipe delete function
@@ -148,18 +141,14 @@ public class MyBookAcceptedFragment extends Fragment {
     }
 
 
-
-
     private void enableSwipeToDeleteAndUndo(){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
@@ -167,7 +156,6 @@ public class MyBookAcceptedFragment extends Fragment {
 //
 //                snackbar.setActionTextColor(Color.YELLOW);
 //                snackbar.show();
-
             }
         };
 
