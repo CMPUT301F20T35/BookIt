@@ -58,6 +58,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     apply plugin: "androidx.navigation.safeargs"
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:1.2.0'
     //noinspection GradleCompatible
