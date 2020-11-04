@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.android.gms.tasks.OnFailureListener;
 
@@ -123,6 +124,7 @@ FireStoreHelper {
 
     /**
      * used to add a valid book to the firestore
+     * @param book
      * */
     public void addBook(final Book book){
         db = FirebaseFirestore.getInstance();
@@ -159,8 +161,6 @@ FireStoreHelper {
                         bookHash.put("ownerName",book.getOwnerName());
                         bookHash.put("title",book.getTitle());
                         final RequestHandler r=book.getRequests();
-
-
                         try{
                             db.collection("Book").document(book.getISBN()).set(r);
                             db.collection("Book").document(book.getISBN()).update(bookHash)
@@ -275,6 +275,135 @@ FireStoreHelper {
                     document(user.getUid()).update("username",username,"number",contactIfo);
 
         }
+
+    }
+
+    /**
+     * update the book info on the firestore
+     * @param old_isbn
+     * @param i
+     * @param a
+     * @param d
+     * @param o
+     * @param t
+     * @throws IOException
+     */
+    public void update_book_info(String old_isbn,String i,String a,String d,String o,String t) throws IOException {
+        db = FirebaseFirestore.getInstance();
+        mstore= FirebaseStorage.getInstance().getReference();
+        if (i.equals(old_isbn)){//if user did not update isbn we can just update corrsponding fields in fireStore
+            db.collection("Book").document(i)
+                    .update("author",a,
+                            "description",d,
+                            "ownerName",o,
+                            "title",t)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error updating document", e);
+                        }
+                    });
+
+        }
+        else{
+            Log.d(TAG,old_isbn);
+            db.collection("Book").document(old_isbn)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            Map<String,Object> m=document.getData();
+                            m.put("ISBN",i);
+                            db.collection("Book").document(i)
+                                    .set(m)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("afafffa", "DocumentSnapshot successfully written!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("afafffa", "Error writing document", e);
+                                        }
+                                    });
+                            db.collection("Book").document(old_isbn)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error deleting document", e);
+                                        }
+                                    });
+
+
+                        } else {
+                            Log.d(TAG, "No such documentfd");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+            StorageReference listRef=mstore.child("book_images/"+old_isbn+"/"+"image1.jpg");
+            File f = File.createTempFile("image", "jpg");
+            listRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    StorageReference listRef2=mstore.child("book_images/"+i+"/"+"image1.jpg");
+                    UploadTask uploadTask = listRef2.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                            // ...
+                        }
+                    });
+
+
+                }
+            });
+            StorageReference ref=mstore.child("book_images/"+old_isbn+"/image1.jpg");
+            ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Uh-oh, an error occurred!
+                }
+            });
+
+
+        }
+
 
     }
     public void image_update(Uri u){

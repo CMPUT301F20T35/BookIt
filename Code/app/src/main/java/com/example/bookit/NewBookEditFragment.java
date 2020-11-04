@@ -97,6 +97,9 @@ public class NewBookEditFragment extends Fragment {
                     db.book_image_add(MediaUri,book);//add the image array to the firebase storage
                     getActivity().onBackPressed();
                 }
+                else{
+                    Toast.makeText(getContext(), "wrong input please check your input!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -111,10 +114,7 @@ public class NewBookEditFragment extends Fragment {
         if (book.getAuthor().isEmpty() || book.getISBN().isEmpty() || book.getTitle().isEmpty()) {
             return false;
         }
-        // for isbn format validation
-//        else if (!matcher.matches()) {
-//            return  false;
-//        }
+
         return true;
     }
 
