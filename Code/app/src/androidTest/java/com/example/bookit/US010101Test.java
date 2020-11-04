@@ -7,6 +7,7 @@ import com.robotium.solo.Solo;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,5 +59,10 @@ public class US010101Test {
         assertEquals("testAuthor", solo.getText("testAuthor").getText().toString());
         assertEquals("testUS010101", solo.getText("testUS010101").getText().toString());
         assertEquals("testDescription", solo.getText("testDescription").getText().toString());
+    }
+
+    @After
+    public void tearDown() {
+        solo.finishOpenedActivities();
     }
 }
