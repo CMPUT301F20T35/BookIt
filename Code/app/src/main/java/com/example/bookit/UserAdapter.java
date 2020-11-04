@@ -15,6 +15,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
     private Context mContext;
     private ArrayList<User> userData = new ArrayList<>();
 
+    /**
+     * This constructor takes in two parameters
+     * @param context context of environment
+     * @param userData ArrayList contains user data
+     */
     public UserAdapter(Context context, ArrayList<User> userData){
         this.mContext = context;
         this.userData = userData;
