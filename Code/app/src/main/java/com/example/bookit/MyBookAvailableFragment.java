@@ -79,6 +79,7 @@ public class MyBookAvailableFragment extends Fragment {
             }
         });
 
+
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
@@ -91,6 +92,8 @@ public class MyBookAvailableFragment extends Fragment {
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //bAdapter.notifyDataSetChanged();
+
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
@@ -100,6 +103,21 @@ public class MyBookAvailableFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Book bookCliced=testList.get(pos);
+                String isbn=bookCliced.getISBN();
+                String des=bookCliced.getDescription();
+                String title=bookCliced.getTitle();
+                String author=bookCliced.getAuthor();
+                String owner=bookCliced.getOwnerName();
+
+                Bundle bundle=new Bundle();
+                bundle.putString("isbn",isbn);
+                bundle.putString("description",des);
+                bundle.putString("title",title);
+                bundle.putString("author",author);
+                bundle.putString("owner",owner);
+
+                Navigation.findNavController(view).navigate(R.id.action_mybook_available_to_mybook_detail,bundle);
             }
 
 
@@ -113,15 +131,12 @@ public class MyBookAvailableFragment extends Fragment {
                         String author=map.get("author").toString();
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
-                        //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         testList.add(b);
                         bAdapter.notifyDataSetChanged();
 
                     }
                 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
 
         );
 

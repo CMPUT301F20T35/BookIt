@@ -94,8 +94,11 @@ public class NewBookEditFragment extends Fragment {
                 Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
                 if (bookInfoValidator(book)) {
                     db.addBook(book);
-                    db.book_image_add(imgArrayList,book);//add the image array to the firebase storage
+                    db.book_image_add(MediaUri,book);//add the image array to the firebase storage
                     getActivity().onBackPressed();
+                }
+                else{
+                    Toast.makeText(getContext(), "wrong input please check your input!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -111,10 +114,7 @@ public class NewBookEditFragment extends Fragment {
         if (book.getAuthor().isEmpty() || book.getISBN().isEmpty() || book.getTitle().isEmpty()) {
             return false;
         }
-        // for isbn format validation
-//        else if (!matcher.matches()) {
-//            return  false;
-//        }
+
         return true;
     }
 
@@ -135,8 +135,7 @@ public class NewBookEditFragment extends Fragment {
             }
             else {
                 MediaUri = data.getData();
-                imgArrayList.add(MediaUri);
-                bookImgAdapter = new BookImageAdapter(getContext(),imgArrayList);
+                bookImgAdapter = new BookImageAdapter(getContext(),MediaUri);
                 bookPager.setAdapter(bookImgAdapter);
                 bookPager.setPadding(100, 0, 100, 0);
                 Toast.makeText(getActivity(), "upload image successfully", Toast.LENGTH_LONG).show();

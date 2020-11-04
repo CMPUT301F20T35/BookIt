@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class MyBookRequestedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
+    //FireStoreHelper fs;
 
     @Override
     /**
@@ -40,6 +42,8 @@ public class MyBookRequestedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_requested, container, false);
+        //fs=new FireStoreHelper(getContext());
+        //ArrayList<Object> a=fs.getBook();
         // get view of four buttons
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
@@ -114,6 +118,7 @@ public class MyBookRequestedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+
         fs.fetch_MyBook("REQUESTED", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -130,11 +135,8 @@ public class MyBookRequestedFragment extends Fragment {
                     }
                 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
 
         );
-
-
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
