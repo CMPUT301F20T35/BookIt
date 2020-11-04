@@ -39,7 +39,7 @@ public class MyBookAcceptedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-    private ImageButton scanBtn;
+
 
     @Override
     /**
@@ -87,13 +87,7 @@ public class MyBookAcceptedFragment extends Fragment {
             }
         });
 
-        scanBtn = view.findViewById(R.id.ownerScanBtn);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scan();
-            }
-        });
+
 
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
@@ -146,48 +140,6 @@ public class MyBookAcceptedFragment extends Fragment {
         }
     }
 
-    private void scan() {
-        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(MyBookAcceptedFragment.this);
-        integrator.setCaptureActivity(CodeCapture.class);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
-        integrator.setOrientationLocked(true);
-        integrator.setPrompt("Scanning");
-        integrator.initiateScan();
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println(123);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(result.getContents());
-                builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        scan();
-                    }
-                });
-                builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        getActivity().onBackPressed();
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            } else {
-                Toast.makeText(getActivity(), "No Result", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-    }
 
     private void enableSwipeToDeleteAndUndo(){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
