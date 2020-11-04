@@ -1,6 +1,7 @@
 package com.example.bookit;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,19 +12,30 @@ import androidx.navigation.Navigation;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.squareup.okhttp.Protocol;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +55,8 @@ public class NewBookEditFragment extends Fragment {
     private Button addImage;
     AlertDialog dialog;
     FireStoreHelper db;
+
+    private ImageButton scanBtn;
 
     @Override
     /**
@@ -78,7 +92,13 @@ public class NewBookEditFragment extends Fragment {
         dialog = builder.create();
         db=new FireStoreHelper(getContext());
 
-
+        scanBtn = view.findViewById(R.id.ownerScanBtn);
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scan();
+            }
+        });
 
         addNewBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +146,44 @@ public class NewBookEditFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), PICK_IMAGE);
     }
 
+    private void scan() {
+
+        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(NewBookEditFragment.this);
+        integrator.setCaptureActivity(CodeCapture.class);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
+        integrator.setOrientationLocked(true);
+        integrator.setPrompt("Scanning");
+        integrator.initiateScan();
+
+    }
+
+    private void fetchBook(dbCallback callback, String ISBN) {
+        String queryString = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + ISBN;
+        try {
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(queryString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(5000); // 5 seconds
+                connection.setConnectTimeout(5000); // 5 seconds
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            int responseCode = connection.getResponseCode();
+//            if (responseCode != 200) {
+//                Toast.makeText(getActivity(), "google api fail", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+        } catch (Error e) {
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,6 +198,38 @@ public class NewBookEditFragment extends Fragment {
                 bookPager.setAdapter(bookImgAdapter);
                 bookPager.setPadding(100, 0, 100, 0);
                 Toast.makeText(getActivity(), "upload image successfully", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (result != null) {
+                if (result.getContents() != null) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+                    fetchBook(new dbCallback() {
+                        @Override
+                        public void onCallback(Map map) {
+
+                        }
+                    }, result.getContents());
+                    builder.setMessage(result.getContents());
+                    builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            scan();
+                        }
+                    });
+                    builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+//                        getActivity().onBackPressed();
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    android.app.AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    Toast.makeText(getActivity(), "No Result", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
