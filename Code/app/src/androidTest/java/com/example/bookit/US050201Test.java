@@ -12,7 +12,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class US020301Test {
+public class US050201Test {
+
     private Solo solo;
 
     @Rule
@@ -40,10 +41,9 @@ public class US020301Test {
         solo.clickOnButton("Requested");
         solo.waitForFragmentByTag("MyBookRequestedFragment", 2000);
         solo.clickInRecyclerView(0);
+        solo.waitForFragmentByTag("fragment_requestList", 2000);
 
-        // check a user's profile by user ID
-        solo.clickOnView(solo.getView(R.id.owner_name));
-        solo.waitForFragmentByTag("OwnerDetailFragment", 4000);
+        // test if owner can deny a request of the book
     }
 
     @After

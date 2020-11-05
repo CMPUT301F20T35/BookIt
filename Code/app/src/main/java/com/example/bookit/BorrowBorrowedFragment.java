@@ -19,12 +19,14 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BorrowBorrowedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button requestedButton;
     private RecyclerView rv;
+    FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 
@@ -42,7 +44,7 @@ public class BorrowBorrowedFragment extends Fragment {
         availableButton = view.findViewById(R.id.button_available);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-
+        fs=new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +95,21 @@ public class BorrowBorrowedFragment extends Fragment {
 
         });
         rv.setAdapter(bAdapter);
+        fs.fetch_BorrowedBook( new dbCallback(){
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                //System.out.println(title);
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                testList.add(b);
+                bAdapter.notifyDataSetChanged();
+
+            }
+        });
 
         //set search button function
         searchButton.setOnClickListener(new View.OnClickListener() {
