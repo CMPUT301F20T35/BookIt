@@ -25,6 +25,7 @@ public class BorrowAvailableFragment extends Fragment {
     private Button borrowedButton;
     private Button requestedButton;
     private RecyclerView rv;
+
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 
