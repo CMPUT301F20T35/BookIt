@@ -39,7 +39,6 @@ public class MyBookAcceptedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-    private AlertDialog dialog;
 
 
     @Override
@@ -110,10 +109,6 @@ public class MyBookAcceptedFragment extends Fragment {
         });
         rv.setAdapter(bAdapter);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(container.getContext());
-        builder.setCancelable(true);
-        builder.setView(inflater.inflate(R.layout.loading_dialog, null));
-        dialog = builder.create();
 
         fs.fetch_MyBook("ACCEPTED", new dbCallback() {
                     @Override
@@ -129,7 +124,7 @@ public class MyBookAcceptedFragment extends Fragment {
                         bAdapter.notifyDataSetChanged();
                     }
                 }
-        , dialog);
+        );
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();

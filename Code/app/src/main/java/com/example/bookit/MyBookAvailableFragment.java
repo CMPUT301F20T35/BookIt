@@ -32,7 +32,6 @@ public class MyBookAvailableFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-    private AlertDialog dialog;
 
     @Override
     /**
@@ -117,11 +116,6 @@ public class MyBookAvailableFragment extends Fragment {
         });
         rv.setAdapter(bAdapter);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(container.getContext());
-        builder.setCancelable(true);
-        builder.setView(inflater.inflate(R.layout.loading_dialog, null));
-        dialog = builder.create();
-
         fs.fetch_MyBook("AVAILABLE", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -133,10 +127,9 @@ public class MyBookAvailableFragment extends Fragment {
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
                     }
                 }
-        ,dialog);
+        );
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo(fs);

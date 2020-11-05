@@ -254,9 +254,11 @@ FireStoreHelper {
 
                         callback.onCallback(returnMap);
                     } else {
+                        dialog.dismiss();
                         Log.d(TAG, "No such document");
                     }
                 } else {
+                    dialog.dismiss();
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
@@ -531,8 +533,7 @@ FireStoreHelper {
     }
 
 
-    public void fetch_MyBook(String which ,final dbCallback callback, AlertDialog dialog){
-        dialog.show();
+    public void fetch_MyBook(String which ,final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
