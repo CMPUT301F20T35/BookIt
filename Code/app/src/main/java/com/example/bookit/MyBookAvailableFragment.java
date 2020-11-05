@@ -132,7 +132,7 @@ public class MyBookAvailableFragment extends Fragment {
         );
 
         //set swipe delete function
-        enableSwipeToDeleteAndUndo();
+        enableSwipeToDeleteAndUndo(fs);
         return view;
     }
 
@@ -147,7 +147,7 @@ public class MyBookAvailableFragment extends Fragment {
     }
 
 
-    private void enableSwipeToDeleteAndUndo(){
+    private void enableSwipeToDeleteAndUndo(FireStoreHelper fs){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -156,7 +156,7 @@ public class MyBookAvailableFragment extends Fragment {
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
+                fs.removeBook(item);
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);

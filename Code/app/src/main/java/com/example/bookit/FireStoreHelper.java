@@ -278,6 +278,27 @@ FireStoreHelper {
 
     }
 
+    public void removeBook(Book book) {
+        String isbn = book.getISBN();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book").document(isbn)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        delete_book_image(isbn);
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error occurs", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     /**
      * update the book info on the firestore
      * @param old_isbn
@@ -453,6 +474,7 @@ FireStoreHelper {
             @Override
             public void onSuccess(Void aVoid) {
                 // File deleted successfully
+                Toast.makeText(context, "Remove Successfully", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
