@@ -96,6 +96,7 @@ public class MyBookBorrowedFragment extends Fragment {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_return);
             }
+
         });
         rv.setAdapter(bAdapter);
 
