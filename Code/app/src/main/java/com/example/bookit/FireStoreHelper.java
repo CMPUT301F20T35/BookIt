@@ -531,7 +531,8 @@ FireStoreHelper {
     }
 
 
-    public void fetch_MyBook(String which ,final dbCallback callback){
+    public void fetch_MyBook(String which ,final dbCallback callback, AlertDialog dialog){
+        dialog.show();
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
