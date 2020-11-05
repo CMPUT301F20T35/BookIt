@@ -3,6 +3,7 @@ package com.example.bookit;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +23,8 @@ public class fragment_requestList extends Fragment {
 
     RecyclerView rv;
     UserAdapter uAdapter;
-
+    private ImageView backButton;
+    private TextView ownerDetail;
 
     @Override
     /**
@@ -34,7 +38,8 @@ public class fragment_requestList extends Fragment {
 
 
         rv = view.findViewById(R.id.requestList);
-
+        ownerDetail = (TextView)view.findViewById(R.id.owner_name);
+        backButton = view.findViewById(R.id.bt_back2);
         //initilize test array and adapter
 
         final ArrayList<User> testList = new ArrayList<User>();
@@ -43,6 +48,22 @@ public class fragment_requestList extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv.setLayoutManager(manager);
+
+        //back to last page
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
+        //see owner detail
+        ownerDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_requestList_to_owner_detail);
+            }
+        });
+
 
 //        setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.HORIZONTAL);

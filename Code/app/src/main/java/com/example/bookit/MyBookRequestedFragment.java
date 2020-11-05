@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class MyBookRequestedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
+    //FireStoreHelper fs;
 
     @Override
     /**
@@ -40,6 +42,8 @@ public class MyBookRequestedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_requested, container, false);
+        //fs=new FireStoreHelper(getContext());
+        //ArrayList<Object> a=fs.getBook();
         // get view of four buttons
         acceptedButton = view.findViewById(R.id.button_accepted);
         availableButton = view.findViewById(R.id.button_available);
@@ -76,14 +80,10 @@ public class MyBookRequestedFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
         final ArrayList<Book> testList = new ArrayList<Book>();
-
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
@@ -108,12 +108,10 @@ public class MyBookRequestedFragment extends Fragment {
                 //on item click listener
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).navigate(R.id.action_mybook_toRequestList);
-
             }
-
-
         });
         rv.setAdapter(bAdapter);
+
         fs.fetch_MyBook("REQUESTED", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -129,12 +127,7 @@ public class MyBookRequestedFragment extends Fragment {
 
                     }
                 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
-
         );
-
-
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
@@ -157,11 +150,9 @@ public class MyBookRequestedFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);

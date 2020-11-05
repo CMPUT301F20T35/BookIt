@@ -64,7 +64,6 @@ public class ProfileFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(container.getContext());
         builder.setCancelable(true);
         builder.setView(inflater.inflate(R.layout.loading_dialog, null));
-
         dialog = builder.create();
 
         fs=new FireStoreHelper(getActivity());

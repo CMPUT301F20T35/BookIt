@@ -56,8 +56,14 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    // intent testing
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
     apply plugin: "androidx.navigation.safeargs"
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:1.2.0'
     //noinspection GradleCompatible
@@ -65,6 +71,4 @@ dependencies {
 
     // Barcode scan
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
-
-
 }
