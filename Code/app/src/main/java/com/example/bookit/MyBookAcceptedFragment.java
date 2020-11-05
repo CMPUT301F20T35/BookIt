@@ -1,6 +1,6 @@
 package com.example.bookit;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -108,6 +108,7 @@ public class MyBookAcceptedFragment extends Fragment {
             }
         });
         rv.setAdapter(bAdapter);
+
 
         fs.fetch_MyBook("ACCEPTED", new dbCallback() {
                     @Override
