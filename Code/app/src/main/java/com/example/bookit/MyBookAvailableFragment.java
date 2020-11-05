@@ -4,6 +4,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -126,13 +127,12 @@ public class MyBookAvailableFragment extends Fragment {
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
-
                     }
                 }
         );
 
         //set swipe delete function
-        enableSwipeToDeleteAndUndo();
+        enableSwipeToDeleteAndUndo(fs);
         return view;
     }
 
@@ -147,7 +147,7 @@ public class MyBookAvailableFragment extends Fragment {
     }
 
 
-    private void enableSwipeToDeleteAndUndo(){
+    private void enableSwipeToDeleteAndUndo(FireStoreHelper fs){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -156,7 +156,7 @@ public class MyBookAvailableFragment extends Fragment {
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
+                fs.removeBook(item);
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
