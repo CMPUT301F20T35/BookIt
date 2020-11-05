@@ -70,7 +70,9 @@ public class BorrowLocationFragment extends Fragment {
         ownerDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_fragment_borrow_location_to_owner_detail2);
+                Bundle b=new Bundle();
+                b.putString("username","lil-xiu");
+                Navigation.findNavController(view).navigate(R.id.action_fragment_borrow_location_to_owner_detail2,b);
             }
         });
 

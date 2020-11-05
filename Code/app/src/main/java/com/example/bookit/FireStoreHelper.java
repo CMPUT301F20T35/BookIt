@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageMetadata;
@@ -66,6 +67,8 @@ import org.w3c.dom.Document;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.security.auth.callback.Callback;
 
 import static android.content.ContentValues.TAG;
 
@@ -406,9 +409,9 @@ FireStoreHelper {
 
 
     }
+
     public void image_update(Uri u){
         //ImageView image=v.findViewById(R.id.imageView5);
-        fAuth = FirebaseAuth.getInstance();
         mstore= FirebaseStorage.getInstance().getReference();
         FirebaseUser user = fAuth.getCurrentUser();
         String name="current";
@@ -416,8 +419,26 @@ FireStoreHelper {
         storageReference.putFile(u);
     }
 
+    public void location_update(GeoPoint g,String isbn){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book").document(isbn)
+                .update("state.location",g)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+
     public void book_image_update(Uri u,String isbn){
-        fAuth = FirebaseAuth.getInstance();
         mstore= FirebaseStorage.getInstance().getReference();
         StorageReference storageReference=mstore.child("book_images/"+isbn+"/"+"image1.jpg");
         storageReference.putFile(u);
@@ -479,6 +500,55 @@ FireStoreHelper {
         }
     }
 
+    public void fetch_user_withUsername(String username, final dbCallback callback){
+        db = FirebaseFirestore.getInstance();
+        db.collection("User").whereEqualTo("username",username)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                        if(task1.isSuccessful()){
+                            for (QueryDocumentSnapshot document:task1.getResult()){
+                                Map<String, String> returnMap = new HashMap<>();
+                                String email = document.getData().get("email").toString();
+                                String number = document.getData().get("number").toString();
+                                String id = document.getData().get("id").toString();
+                                returnMap.put("email", email);
+                                returnMap.put("number", number);
+                                returnMap.put("id", id);
+                                callback.onCallback(returnMap);
+                            }
+                        }else{}
+
+                    }
+                });
+
+    }
+    public void load_image_with_id(String id,final dbCallback callback) throws IOException {
+
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name = "current";
+        StorageReference storageReference=mstore.getReferenceFromUrl("gs://bookit-fc94f.appspot.com/").child("images/"+id+"/"+name+".jpg");
+
+        final File f = File.createTempFile("image", "jpg");
+        storageReference.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] by = baos.toByteArray();
+                String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                Map<String, String> returnMap = new HashMap<>();
+                returnMap.put("userimg", imageEncoded);
+                callback.onCallback(returnMap);
+
+            }
+        });
+
+    }
 
 
 

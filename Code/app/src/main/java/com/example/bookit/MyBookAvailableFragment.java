@@ -83,27 +83,20 @@ public class MyBookAvailableFragment extends Fragment {
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
-
         //initilize test array and adapter
-
-        final ArrayList<Book> testList = new ArrayList<Book>();
-
+        final ArrayList<Book> dataList = new ArrayList<Book>();
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //bAdapter.notifyDataSetChanged();
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
         //adapter operation
-        bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
-                Book bookCliced=testList.get(pos);
+                Book bookCliced=dataList.get(pos);
                 String isbn=bookCliced.getISBN();
                 String des=bookCliced.getDescription();
                 String title=bookCliced.getTitle();
@@ -119,10 +112,9 @@ public class MyBookAvailableFragment extends Fragment {
 
                 Navigation.findNavController(view).navigate(R.id.action_mybook_available_to_mybook_detail,bundle);
             }
-
-
         });
         rv.setAdapter(bAdapter);
+
         fs.fetch_MyBook("AVAILABLE", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -132,12 +124,11 @@ public class MyBookAvailableFragment extends Fragment {
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
-                        testList.add(b);
+                        dataList.add(b);
                         bAdapter.notifyDataSetChanged();
 
                     }
                 }
-
         );
 
         //set swipe delete function

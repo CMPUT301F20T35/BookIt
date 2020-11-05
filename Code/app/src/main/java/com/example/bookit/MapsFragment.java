@@ -24,13 +24,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 
 public class MapsFragment extends Fragment {
     private LatLng latLng1;
     ImageButton confirm;
     ImageButton myLocation;
-    Location location;
+    GeoPoint geopoint;
     public MapsFragment(){
     }
 
@@ -103,13 +104,15 @@ public class MapsFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_maps, container, false);
         confirm=v.findViewById(R.id.confirm);
         myLocation=v.findViewById(R.id.current);
+        FireStoreHelper db=new FireStoreHelper(getContext());
 
         //create a new location object after confirm
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                location=new Location(latLng1.latitude,latLng1.longitude);
-                Log.d("asddssa", Double.toString(location.getLongitude()));
+                geopoint=new GeoPoint(latLng1.latitude,latLng1.longitude);
+                //update location in the fireStore
+                db.location_update(geopoint,"111");
                 getActivity().onBackPressed();
             }
         });
