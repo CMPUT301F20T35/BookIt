@@ -17,7 +17,17 @@ public class BorrowLocationFragment extends Fragment {
     private Button borrowButton;
     private ImageView backButton;
     private TextView ownerDetail;
-
+    FireStoreHelper fs;
+    private String isbn;
+    private String title;
+    private String description;
+    private String owner;
+    private String author;
+    private TextView titleView;
+    private TextView ownerView;
+    private TextView isbnView;
+    private TextView descriptionView;
+    //private TextView authorView;
     @Override
     /**
      * fragment used for borrower confirming location of the hand off
@@ -28,11 +38,28 @@ public class BorrowLocationFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow_location, container, false);
         // find view by ids
+        fs=new FireStoreHelper(getActivity());
+        titleView=view.findViewById(R.id.tv_book_title);
+        ownerView=view.findViewById(R.id.tv_owner_name);
+        isbnView=view.findViewById(R.id.tv_IBSN_number);
+        descriptionView=view.findViewById(R.id.tv_description);
+        //authorView=view.findViewById(R.id.author_text);
         locationButton = view.findViewById(R.id.bt_location);
         borrowButton = view.findViewById(R.id.bt_borrow);
         backButton = view.findViewById(R.id.bt_back);
-        ownerDetail = view.findViewById(R.id.tv_owner_name);
-
+        //ownerDetail = view.findViewById(R.id.tv_owner_name);
+        Bundle b=getArguments();
+        isbn=b.getString("isbn");
+        title=b.getString("title");
+        description=b.getString("description");
+        owner=b.getString("owner");
+        isbn=b.getString("isbn");
+        author=b.getString("author");
+        titleView.setText(title);
+        ownerView.setText(owner);
+        isbnView.setText(isbn);
+        descriptionView.setText(description);
+        //authorView.setText(author);
         // set listener for back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +74,7 @@ public class BorrowLocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // scan code functionality need to be implemented here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                fs.To_borrowed(isbn);
             }
         });
 
@@ -67,7 +95,7 @@ public class BorrowLocationFragment extends Fragment {
         });
 
         // see owner detail
-        ownerDetail.setOnClickListener(new View.OnClickListener() {
+        ownerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle b=new Bundle();
