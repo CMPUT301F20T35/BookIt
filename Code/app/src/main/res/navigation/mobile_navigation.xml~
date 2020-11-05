@@ -169,9 +169,6 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_requested_to_borrow_search"
             app:destination="@id/navigation_borrow_search" />
-        <action
-            android:id="@+id/action_navigation_borrow_requested_to_borrowerRequestDetail3"
-            app:destination="@id/borrowerRequestDetail3" />
     </fragment>
     <fragment
         android:id="@+id/navigation_borrow_accepted"
@@ -288,7 +285,7 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/borrowerRequestDetail3"
         android:name="com.example.bookit.BorrowerRequestDetail"
-        tools:layout="@layout/fragment_borrow_requestdetail" />
+        android:label="BorrowerRequestDetail" />
 
 
 </navigation>

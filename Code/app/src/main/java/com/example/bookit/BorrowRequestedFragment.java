@@ -91,6 +91,22 @@ public class BorrowRequestedFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Book bookCliced=testList.get(pos);
+                String isbn=bookCliced.getISBN();
+                String des=bookCliced.getDescription();
+                String title=bookCliced.getTitle();
+                String author=bookCliced.getAuthor();
+                String owner=bookCliced.getOwnerName();
+
+                Bundle bundle=new Bundle();
+                bundle.putString("isbn",isbn);
+                bundle.putString("description",des);
+                bundle.putString("title",title);
+                bundle.putString("author",author);
+                bundle.putString("owner",owner);
+
+                Navigation.findNavController(view).navigate(R.id.action_navigation_borrow_requested_to_borrowerRequestDetail3,bundle);
             }
 
 

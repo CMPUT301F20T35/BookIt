@@ -11,29 +11,14 @@
         android:id="@+id/title"
         android:layout_width="387dp"
         android:layout_height="49dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="248dp"
         android:gravity="center"
         android:text="title"
         android:textColor="@color/colorAccent"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editimage2" />
-
-    <ImageButton
-        android:id="@+id/editimage2"
-        style="@android:style/Widget.DeviceDefault.ImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
-        android:layout_marginEnd="24dp"
-        android:background="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/Ownername"
@@ -77,18 +62,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Ownername" />
 
-    <ImageButton
-        android:id="@+id/editbookinfo"
-        style="@android:style/Widget.DeviceDefault.ImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="480dp"
-        android:layout_marginEnd="76dp"
-        android:background="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
-
     <TextView
         android:id="@+id/description"
         android:layout_width="104dp"
@@ -103,10 +76,10 @@
         android:id="@+id/Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="finish"
+        android:layout_marginTop="44dp"
+        android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -119,20 +92,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:src="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/deleteButton"
-        style="@android:style/Widget.DeviceDefault.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="88dp"
-        android:background="@null"
-        android:src="@drawable/ic_baseline_delete_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.441"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView13"
@@ -151,10 +110,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
-        android:textColor="@color/dialogColor"
-
         android:layout_marginTop="24dp"
+
         android:text="ISBN"
+        android:textColor="@color/dialogColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 

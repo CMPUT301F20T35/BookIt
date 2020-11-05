@@ -30,10 +30,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class BookDetail extends Fragment {
+public class BorrowerRequestDetail extends Fragment {
 
     boolean alertReady;
-
     private static final int PICK_IMAGE = 1;
     private Uri MediaUri;
     private ArrayList<Uri> imgArrayList;
@@ -43,16 +42,14 @@ public class BookDetail extends Fragment {
     private ImageButton editImage;
     private ImageButton delete;
     private ImageButton editInfo;
-    private Button finish;
+    private Button Back;
     private TextView titleView;
     private TextView ownerView;
     private TextView isbnView;
     private TextView descriptionView;
     private TextView authorView;
-
     protected ImageView imageView;
     FireStoreHelper db;
-
     private String isbn;
     private String title;
     private String description;
@@ -63,16 +60,12 @@ public class BookDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_book_detail, container, false);
-        editImage=v.findViewById(R.id.editimage2);
-        delete=v.findViewById(R.id.deleteButton);
+        View v= inflater.inflate(R.layout.fragment_borrow_requestdetail, container, false);
         titleView=v.findViewById(R.id.title);
         ownerView=v.findViewById(R.id.Ownername);
         isbnView=v.findViewById(R.id.isbn_text);
         descriptionView=v.findViewById(R.id.description);
         authorView=v.findViewById(R.id.author_text);
-        editInfo=v.findViewById(R.id.editbookinfo);
-
         Bundle b=getArguments();
         isbn=b.getString("isbn");
         title=b.getString("title");
@@ -114,99 +107,13 @@ public class BookDetail extends Fragment {
             e.printStackTrace();
         }
 
-        editImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showImageChooser();
-            }
-        });
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.delete_book_image(isbn);
-                imageView.setImageResource(R.drawable.add_img);
-            }
-        });
-        editInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Update your Book");
-                View v = LayoutInflater.from(getContext()).inflate(R.layout.edit_book_alertdialog, null, false);
-                builder.setView(v);
-                EditText editTitle=v.findViewById(R.id.edit_title);
-                EditText editAuthor=v.findViewById(R.id.edit_author);
-                EditText editOwner=v.findViewById(R.id.edit_owner);
-                EditText editDes=v.findViewById(R.id.edit_des);
-                EditText editIsbn=v.findViewById(R.id.edit_isbn);
-
-                editAuthor.setText(authorView.getText());
-                editDes.setText(descriptionView.getText());
-                editIsbn.setText(isbnView.getText());
-                editOwner.setText(ownerView.getText());
-                editTitle.setText(titleView.getText());
-
-                builder.setPositiveButton("update", null);
-                builder.setNegativeButton("cancel", null);
-
-                final AlertDialog alertDialog = builder.create();
-                alertReady = false;
-
-                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialogInterface) {
-                        if (!alertReady){
-                            Button buttonPositive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                            buttonPositive.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    String a=editAuthor.getText().toString().trim();
-                                    String d=editDes.getText().toString().trim();
-                                    String i=editIsbn.getText().toString().trim();
-                                    String o=editOwner.getText().toString().trim();
-                                    String t=editTitle.getText().toString().trim();
-                                    Book book=new Book(t,a,i,d,o,null);
-                                    Boolean isValid=bookInfoValidator(book);
-                                    if (!isValid){
-                                        Toast.makeText(getContext(), "wrong input please check!", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        try {
-                                            db.update_book_info(isbn,i,a,d,o,t);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        authorView.setText(a);
-                                        descriptionView.setText(d);
-                                        isbnView.setText(i);
-                                        ownerView.setText(o);
-                                        titleView.setText(t);
-                                        alertReady=true;
-
-                                    }
-                                    if(alertReady){
-                                        dialogInterface.dismiss();
-                                    }
-                                }
-                            });
-                            Button buttonNegative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                            buttonNegative.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialogInterface.dismiss();
-                                }
-                            });
-                        }
-                    }
-                });
-                alertDialog.show();
-
-            }
-        });
 
 
-        finish=v.findViewById(R.id.Back);
-        finish.setOnClickListener(new View.OnClickListener() {
+
+
+
+        Back=v.findViewById(R.id.Back);
+        Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //add image to firestore if the image list is changed
