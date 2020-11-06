@@ -268,6 +268,48 @@ FireStoreHelper {
         });
     }
 
+
+
+    public void fetchUser(String userName, final dbCallback callback){
+        //FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        db.collection("User")
+                .whereEqualTo("username", userName)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, String> returnMap = new HashMap<>();
+                        String id = document.getData().get("id").toString();
+                        String email = document.getData().get("email").toString();
+                        String number = document.getData().get("number").toString();
+                        String username = document.getData().get("username").toString();
+                        String name;
+                        try{
+                            name = document.getData().get("name").toString();
+                        }catch (NullPointerException e){
+                            name = "";
+                        }
+
+                        returnMap.put("id", id);
+                        returnMap.put("email", email);
+                        returnMap.put("name", name);
+                        returnMap.put("number", number);
+                        returnMap.put("username", username);
+                        callback.onCallback(returnMap);
+                    }
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+
+
+
     public void update(String username,String contactIfo){
         db = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
@@ -284,7 +326,6 @@ FireStoreHelper {
     }
 
 
-
     public void updateRequestor(String acceptor,String ISBN){
         db = FirebaseFirestore.getInstance();
         db.collection("Book").document(ISBN)
@@ -298,7 +339,6 @@ FireStoreHelper {
                 .update("requestors", list
                 );
     }
-
 
     public void removeBook(Book book) {
         String isbn = book.getISBN();
@@ -319,6 +359,7 @@ FireStoreHelper {
                         Toast.makeText(context, "Error occurs", Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 
     /**
@@ -653,6 +694,7 @@ FireStoreHelper {
                                                 String ISBN = document.getData().get("ISBN").toString();
                                                 String description = document.getData().get("description").toString();
                                                 String ownerName = document.getData().get("ownerName").toString();
+
                                                 a.add(new Book(title,author,ISBN,description,ownerName,null));
                                                 returnMap.put("title", title);
                                                 returnMap.put("author", author);
@@ -853,6 +895,7 @@ FireStoreHelper {
 
 
 
+
     public void fetch_MyBookRequest(String title ,final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         //FirebaseUser user = fAuth.getCurrentUser();
@@ -908,11 +951,7 @@ FireStoreHelper {
     }
 
 
-
-
-
-
-
+    
     public void To_borrowed(String isbn){
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -920,6 +959,7 @@ FireStoreHelper {
                 .document(isbn);
         bookReference.update("state.bookStatus","BORROWED");
     }
+
 
     //public void update(){}
 
