@@ -58,6 +58,8 @@ public class OwnerDetailFragment extends Fragment {
         db.fetch_user_withUsername(username, new dbCallback() {
             @Override
             public void onCallback(Map map) {
+
+
                 String e=map.get("email").toString();
                 String number=map.get("number").toString();
                 id=map.get("id").toString();
