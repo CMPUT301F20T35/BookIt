@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class MapsFragment extends Fragment {
     ImageButton confirm;
     ImageButton myLocation;
     GeoPoint geopoint;
+    String isbn;
     public MapsFragment(){
     }
 
@@ -55,6 +57,7 @@ public class MapsFragment extends Fragment {
             final Double lon;
             lat=bundle.getDouble("lat");
             lon=bundle.getDouble("long");
+            isbn=bundle.getString("isbn");
             latLng1=new LatLng(lat,lon);
             MarkerOptions markerOptions=new MarkerOptions();
             markerOptions.position(latLng1);
@@ -112,8 +115,9 @@ public class MapsFragment extends Fragment {
             public void onClick(View view) {
                 geopoint=new GeoPoint(latLng1.latitude,latLng1.longitude);
                 //update location in the fireStore
-                db.location_update(geopoint,"111");
-                getActivity().onBackPressed();
+                db.location_update(geopoint,isbn);
+                Navigation.findNavController(getView()).navigate(R.id.action_location_to_mybook_requested);
+
             }
         });
 
