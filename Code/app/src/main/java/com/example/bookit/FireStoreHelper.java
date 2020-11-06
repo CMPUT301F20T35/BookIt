@@ -475,6 +475,7 @@ FireStoreHelper {
         listRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
                 Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 b.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -678,7 +679,6 @@ FireStoreHelper {
                         db.collection("Book")
                                 .whereArrayContains("requestors",name)
                                 .whereEqualTo("acceptedRequestor","")
-                                //.whereEqualTo("state.bookStatus",which)//
                                 .get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
@@ -734,7 +734,7 @@ FireStoreHelper {
                         String name= document.get("username").toString();
                         db.collection("Book")
                                 .whereEqualTo("acceptedRequestor",name)
-                                .whereEqualTo("state.bookStatus","AVAILABLE")
+                                .whereEqualTo("state.bookStatus","ACCEPTED")
                                 .whereArrayContains("requestors",name)
                                 //.whereEqualTo("state.bookStatus",which)//
                                 .get()
