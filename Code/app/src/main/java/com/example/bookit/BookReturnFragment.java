@@ -12,7 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 public class BookReturnFragment extends Fragment {
+    private TextView isbn;
+    private TextView description;
+    private TextView title;
+    private TextView author;
     private TextView ownerDetail;
+
     private Button returnBook;
     private ImageView backButton;
 
@@ -40,6 +45,7 @@ public class BookReturnFragment extends Fragment {
         ownerDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Navigation.findNavController(view).navigate(R.id.action_book_detail_to_owner_detail);
             }
         });
