@@ -288,7 +288,11 @@ app:startDestination="@+id/navigation_home">
     <fragment
         android:id="@+id/borrowerRequestDetail3"
         android:name="com.example.bookit.BorrowerRequestDetail"
-        tools:layout="@layout/fragment_borrow_requestdetail" />
+        tools:layout="@layout/fragment_borrow_requestdetail" >
+        <action
+            android:id="@+id/action_borrowerRequestDetail3_to_navigation_owner_detail"
+            app:destination="@id/navigation_owner_detail" />
+    </fragment>
 
 
 </navigation>
