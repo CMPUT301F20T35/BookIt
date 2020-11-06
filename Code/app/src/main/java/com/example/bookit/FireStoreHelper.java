@@ -406,6 +406,10 @@ FireStoreHelper {
                         if (document.exists()) {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             Map<String,Object> m=document.getData();
+                            m.put("author",a);
+                            m.put("ownerName",o);
+                            m.put("title",t);
+                            m.put("description",d);
                             m.put("ISBN",i);
                             db.collection("Book").document(i)
                                     .set(m)
