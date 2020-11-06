@@ -44,22 +44,25 @@ public class US010601Test {
         // edit book
         solo.clickInRecyclerView(0);
         solo.clickOnView(solo.getView(R.id.editbookinfo));
-        solo.enterText((EditText) solo.getView(R.id.edit_title), "1");
-        solo.waitForText("testTitle1", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.edit_author), "1");
-        solo.waitForText("testAuthor1", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.edit_isbn), "test");
-        solo.waitForText("testUS010601test", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.edit_des), "1");
-        solo.waitForText("testDescription1", 1, 2000);
+        solo.clearEditText((EditText) solo.getView(R.id.edit_isbn));
+        solo.enterText((EditText) solo.getView(R.id.edit_isbn), "testUS010601");
+        solo.waitForText("testUS010601", 1, 2000);
+        solo.clickOnButton("update");
+        solo.clickOnButton("finish");
+        solo.clickInRecyclerView(0);
+        solo.clickOnView(solo.getView(R.id.editbookinfo));
+        solo.clearEditText((EditText) solo.getView(R.id.edit_title));
+        solo.enterText((EditText) solo.getView(R.id.edit_title), "US010601");
+        solo.waitForText("US010601", 1, 2000);
+        solo.clearEditText((EditText) solo.getView(R.id.edit_des));
+        solo.enterText((EditText) solo.getView(R.id.edit_des), "testDescriptionSuccess");
+        solo.waitForText("testDescriptionSuccess", 1, 2000);
         solo.clickOnButton("update");
         solo.clickOnButton("finish");
         //compare edit is success
         solo.clickInRecyclerView(0);
-        assertEquals("testTitle1", solo.getText("testTitle1").getText().toString());
-        assertEquals("testAuthor1", solo.getText("testAuthor1").getText().toString());
-        assertEquals("testUS010101test", solo.getText("testUS010101test").getText().toString());
-        assertEquals("testDescription1", solo.getText("testDescription1").getText().toString());
+        assertEquals("US010601", solo.getText("US010601").getText().toString());
+        assertEquals("testDescriptionSuccess", solo.getText("testDescriptionSuccess").getText().toString());
 
     }
     @After
