@@ -896,7 +896,6 @@ FireStoreHelper {
 
 
 
-
     public void fetch_MyBookRequest(String title ,final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         //FirebaseUser user = fAuth.getCurrentUser();
@@ -953,7 +952,6 @@ FireStoreHelper {
 
 
 
-
     public void To_borrowed(String isbn){
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -968,6 +966,7 @@ FireStoreHelper {
     public FirebaseAuth getfAuth(){
         return fAuth;
     }
+
 
     public void setfAuth(FirebaseAuth fAuth) {
         this.fAuth = fAuth;
