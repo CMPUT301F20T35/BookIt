@@ -2,12 +2,10 @@ package com.example.bookit;
 
 import androidx.constraintlayout.solver.state.State;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RequestHandler implements Serializable {
+public class RequestHandler {
 
-    private static final long serialVersionUID = 1L;
     private BookState state;
     private ArrayList<String> requestors;
     private String acceptedRequestor;
