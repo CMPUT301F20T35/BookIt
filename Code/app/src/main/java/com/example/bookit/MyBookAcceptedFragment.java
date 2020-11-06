@@ -1,6 +1,6 @@
 package com.example.bookit;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -39,7 +39,7 @@ public class MyBookAcceptedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-    private ImageButton scanBtn;
+
 
     @Override
     /**
@@ -87,39 +87,29 @@ public class MyBookAcceptedFragment extends Fragment {
             }
         });
 
-        scanBtn = view.findViewById(R.id.ownerScanBtn);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scan();
-            }
-        });
+
 
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
-        final ArrayList<Book> testList = new ArrayList<Book>();
-
+        final ArrayList<Book> dataList = new ArrayList<>();
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
         //adapter operation
-        bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
             }
-
-
         });
         rv.setAdapter(bAdapter);
+
+
         fs.fetch_MyBook("ACCEPTED", new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
@@ -130,12 +120,10 @@ public class MyBookAcceptedFragment extends Fragment {
                         String ownerName=map.get("ownerName").toString();
                         //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
-                        testList.add(b);
+                        dataList.add(b);
                         bAdapter.notifyDataSetChanged();
-
                     }
                 }
-
         );
 
         //set swipe delete function
@@ -154,61 +142,14 @@ public class MyBookAcceptedFragment extends Fragment {
     }
 
 
-    private void scan() {
-
-        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(MyBookAcceptedFragment.this);
-        integrator.setCaptureActivity(CodeCapture.class);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
-        integrator.setOrientationLocked(true);
-        integrator.setPrompt("Scanning");
-        integrator.initiateScan();
-
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println(123);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(result.getContents());
-                builder.setPositiveButton("scan again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        scan();
-                    }
-                });
-                builder.setNegativeButton("finish", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        getActivity().onBackPressed();
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            } else {
-                Toast.makeText(getActivity(), "No Result", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-    }
-
     private void enableSwipeToDeleteAndUndo(){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
 
 //                Snackbar snackbar = Snackbar
 //                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
@@ -216,7 +157,6 @@ public class MyBookAcceptedFragment extends Fragment {
 //
 //                snackbar.setActionTextColor(Color.YELLOW);
 //                snackbar.show();
-
             }
         };
 

@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/avator" />
+        app:srcCompat="@drawable/default_profile" />
 
     <TextView
         android:id="@+id/owner_name"
@@ -40,9 +40,9 @@
         android:layout_marginStart="92dp"
         android:layout_marginTop="59dp"
         android:layout_marginEnd="92dp"
-        android:text="CONTACT INF"
-        android:textStyle="bold"
+        android:text="CONTACT INFO"
         android:textSize="36sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/owner_name" />
@@ -75,7 +75,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="56dp"
-        android:text="xxx@gmail.com"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -86,7 +85,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:layout_marginTop="30dp"
-        android:text="21321321423"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -96,6 +94,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="612dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
