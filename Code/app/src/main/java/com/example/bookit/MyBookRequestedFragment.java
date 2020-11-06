@@ -32,7 +32,6 @@ public class MyBookRequestedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-
     //FireStoreHelper fs;
 
     @Override
@@ -109,33 +108,7 @@ public class MyBookRequestedFragment extends Fragment {
             public void onClick(int pos) {
                 //on item click listener
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
-                Book bookGet = bAdapter.getBookObject(pos);
-                String isbn=bookGet.getISBN();
-                String des=bookGet.getDescription();
-                String title=bookGet.getTitle();
-                String owner=bookGet.getOwnerName();
-                String author = bookGet.getAuthor();
-                RequestHandler rh = new RequestHandler();
-                Bundle bundle=new Bundle();
-
-                fs.fetch_MyBookRequest(title, new dbCallback() {
-                    @Override
-                    public void onCallback(Map map) {
-                        final RequestHandler rh = (RequestHandler) map.get("requestHandler");
-                        bundle.putSerializable("rh",rh);
-                        bundle.putString("isbn",isbn);
-                        bundle.putString("description",des);
-                        bundle.putString("title",title);
-                        bundle.putString("author",author);
-                        bundle.putString("owner",owner);
-                        bundle.putSerializable("rh", rh);
-                        Navigation.findNavController(view).navigate(R.id.action_mybook_toRequestList,bundle);
-                    }
-                });
-
-
-
-
+                Navigation.findNavController(view).navigate(R.id.action_mybook_toRequestList);
             }
         });
         rv.setAdapter(bAdapter);
@@ -149,14 +122,12 @@ public class MyBookRequestedFragment extends Fragment {
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
                         //System.out.println(title);
-
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         testList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }
                 }
         );
-
 
 
         return view;
