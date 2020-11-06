@@ -12,7 +12,13 @@ app:startDestination="@+id/navigation_home">
 <fragment
     android:id="@+id/chooseLocation"
     android:name="com.example.bookit.MapsFragment"
-    tools:layout="@layout/fragment_maps" />
+    tools:layout="@layout/fragment_maps">
+    <action
+        android:id="@+id/action_location_to_mybook_requested"
+        app:destination="@id/navigation_mybook_requested" />
+</fragment>
+
+
 <fragment
     android:id="@+id/navigation_profile"
     android:name="com.example.bookit.ProfileFragment"
@@ -37,6 +43,8 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_from_mybook_to_mybook_nav"
         app:destination="@+id/chooseLocation"/>
+
+
 </fragment>
 
 <fragment
@@ -267,6 +275,10 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_fragment_requestList_to_owner_detail"
             app:destination="@id/navigation_owner_detail" />
+        <action
+            android:id="@+id/action_requestList_to_choose_location"
+            app:destination="@id/chooseLocation"
+            />
     </fragment>
 
     <fragment
