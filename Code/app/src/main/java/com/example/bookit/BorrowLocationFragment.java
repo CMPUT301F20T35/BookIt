@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -116,15 +118,21 @@ public class BorrowLocationFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Location location=new Location(-113.525995,53.523454);//hard coded edmonton location
-                if(location!=null){
-                    Bundle bundle = new Bundle();
-                    Log.d("faedfa",Double.toString(location.getLatitude()));
-                    bundle.putDouble("lat",location.getLatitude());
-                    bundle.putDouble("long",location.getLongitude());
-                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
+                fs.fetch_location(isbn, new dbCallback() {
+                            @Override
+                            public void onCallback(Map map) {
+                                GeoPoint location= (GeoPoint) map.get("location");
+                                if(location!=null){
+                                    Bundle bundle = new Bundle();
+                                    bundle.putDouble("lat",location.getLatitude());
+                                    bundle.putDouble("long",location.getLongitude());
+                                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
 
-                }
+                                }
+                            }
+                        }
+             );
+
             }
         });
 
