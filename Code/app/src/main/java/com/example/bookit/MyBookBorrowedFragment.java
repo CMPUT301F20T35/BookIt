@@ -108,15 +108,11 @@ public class MyBookBorrowedFragment extends Fragment {
                         String author=map.get("author").toString();
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
-                        //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }
                 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
-
         );
         return view;
     }

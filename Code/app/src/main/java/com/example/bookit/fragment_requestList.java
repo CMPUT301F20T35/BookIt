@@ -60,7 +60,10 @@ public class fragment_requestList extends Fragment {
         ownerDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragment_requestList_to_owner_detail);
+                String username="lil-xiu";
+                Bundle b=new Bundle();
+                b.putString("username",username);
+                Navigation.findNavController(view).navigate(R.id.action_fragment_requestList_to_owner_detail,b);
             }
         });
 
