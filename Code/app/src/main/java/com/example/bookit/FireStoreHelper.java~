@@ -972,10 +972,15 @@ FireStoreHelper {
                                     public void onComplete(@NonNull Task<QuerySnapshot> task1) {
 
                                         if(task1.isSuccessful()){
+                                            Log.d("asafdasdf","11111111111111111111111111111111111111111111");
                                             for (QueryDocumentSnapshot document:task1.getResult()){
+                                                Log.d("sdas","22222222222222222222222222222222222");
                                                 Map<String, GeoPoint> returnMap = new HashMap<>();
+                                                Log.d("asafdasdfadasdf","333333333333333333333333333333333");
                                                 Map m = (Map)document.getData().get("state");
                                                 GeoPoint g = (GeoPoint) m.get("location");
+                                                Log.d("asafdasdafsdf","4444444444444444444444444444");
+                                                Log.d("aaasb",Double.toString(g.getLatitude()));
                                                 returnMap.put("location", g);
                                                 callback.onCallback(returnMap);
                                             }
