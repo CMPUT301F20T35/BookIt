@@ -44,6 +44,13 @@ public class US050201Test {
         solo.waitForFragmentByTag("fragment_requestList", 2000);
 
         // test if owner can deny a request of the book
+        solo.clickOnView(solo.getView(R.id.navigation_my_book));
+        solo.clickOnButton("Requested");
+        solo.waitForFragmentByTag("MyBookRequestedFragment", 2000);
+        solo.clickInRecyclerView(1);
+        solo.waitForFragmentByTag("fragment_requestList", 5000);
+        // can press accept button to deny the request, here skip it because it is hard to test using robotium
+//        solo.clickOnButton("Deny");
     }
 
     @After
