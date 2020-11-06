@@ -13,6 +13,13 @@ import androidx.navigation.Navigation;
 
 public class BookReturnFragment extends Fragment {
     private TextView ownerDetail;
+
+
+    private TextView isbn;
+    private TextView description;
+    private TextView owner;
+    private TextView title;
+    private TextView ownerDetail;
     private Button returnBook;
     private ImageView backButton;
 
