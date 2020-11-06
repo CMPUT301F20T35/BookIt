@@ -1,6 +1,11 @@
 package com.example.bookit;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +16,11 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import com.google.firebase.firestore.GeoPoint;
+
+import java.io.IOException;
+import java.util.Map;
 
 public class BorrowLocationFragment extends Fragment {
     private Button locationButton;
@@ -23,6 +33,7 @@ public class BorrowLocationFragment extends Fragment {
     private String description;
     private String owner;
     private String author;
+    private ImageView im;
     private TextView titleView;
     private TextView ownerView;
     private TextView isbnView;
@@ -47,6 +58,7 @@ public class BorrowLocationFragment extends Fragment {
         locationButton = view.findViewById(R.id.bt_location);
         borrowButton = view.findViewById(R.id.bt_borrow);
         backButton = view.findViewById(R.id.bt_back);
+        im=view.findViewById(R.id.iv_book);
         //ownerDetail = view.findViewById(R.id.tv_owner_name);
         Bundle b=getArguments();
         isbn=b.getString("isbn");
@@ -60,6 +72,30 @@ public class BorrowLocationFragment extends Fragment {
         isbnView.setText(isbn);
         descriptionView.setText(description);
         //authorView.setText(author);
+        try {
+            fs.load_book_image(isbn, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("bookimage");
+                    SharedPreferences.Editor prefEditor = getContext().
+                            getSharedPreferences("Book", Context.MODE_PRIVATE).edit();
+
+                    prefEditor.putString("bookimg", imageEncoded);
+                    prefEditor.commit();
+
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+
+                    im.setImageBitmap(img);
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // set listener for back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,15 +118,21 @@ public class BorrowLocationFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Location location=new Location(-113.525995,53.523454);//hard coded edmonton location
-                if(location!=null){
-                    Bundle bundle = new Bundle();
-                    Log.d("faedfa",Double.toString(location.getLatitude()));
-                    bundle.putDouble("lat",location.getLatitude());
-                    bundle.putDouble("long",location.getLongitude());
-                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
+                fs.fetch_location(isbn, new dbCallback() {
+                            @Override
+                            public void onCallback(Map map) {
+                                GeoPoint location= (GeoPoint) map.get("location");
+                                if(location!=null){
+                                    Bundle bundle = new Bundle();
+                                    bundle.putDouble("lat",location.getLatitude());
+                                    bundle.putDouble("long",location.getLongitude());
+                                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
 
-                }
+                                }
+                            }
+                        }
+             );
+
             }
         });
 
@@ -99,7 +141,9 @@ public class BorrowLocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle b=new Bundle();
-                b.putString("username","lil-xiu");
+
+                b.putString("username",owner);
+
                 Navigation.findNavController(view).navigate(R.id.action_fragment_borrow_location_to_owner_detail2,b);
             }
         });

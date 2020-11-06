@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -120,9 +121,20 @@ public class BorrowerRequestDetail extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+        ownerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b=new Bundle();
+
+                b.putString("username",owner);
+
+                Navigation.findNavController(v).navigate(R.id.action_borrowerRequestDetail3_to_navigation_owner_detail,b);
+            }
+        });
         return v;
 
     }
+
 
     /**
      * update the info format checker

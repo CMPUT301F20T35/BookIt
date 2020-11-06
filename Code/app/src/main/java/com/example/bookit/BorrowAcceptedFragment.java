@@ -1,5 +1,9 @@
 package com.example.bookit;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
 
@@ -11,14 +15,17 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -30,6 +37,7 @@ public class BorrowAcceptedFragment extends Fragment {
     FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
+
     private TextView booktitle;
     private TextView ownername;
     private TextView ISBNnumber;
@@ -49,6 +57,7 @@ public class BorrowAcceptedFragment extends Fragment {
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
         fs=new FireStoreHelper(getActivity());
+
         availableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,17 +89,19 @@ public class BorrowAcceptedFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
         final ArrayList<Book> testList = new ArrayList<Book>();
+
         // hard code, only for testing purpose !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Book bookCliced=testList.get(pos);
                 String isbn=bookCliced.getISBN();
                 String des=bookCliced.getDescription();
                 String title=bookCliced.getTitle();
                 String author=bookCliced.getAuthor();
                 String owner=bookCliced.getOwnerName();
+
+
 
                 Bundle bundle=new Bundle();
                 bundle.putString("isbn",isbn);
@@ -100,10 +111,12 @@ public class BorrowAcceptedFragment extends Fragment {
                 bundle.putString("owner",owner);
                 Navigation.findNavController(view).navigate(R.id.action_borrow_accepted_to_borrow_location,bundle);
 
+
             }
 
 
         });
+
         rv.setAdapter(bAdapter);
         fs.fetch_AcceptedBook( new dbCallback(){
             @Override
@@ -156,14 +169,6 @@ public class BorrowAcceptedFragment extends Fragment {
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
-
-//                Snackbar snackbar = Snackbar
-//                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-//
-//
-//                snackbar.setActionTextColor(Color.YELLOW);
-//                snackbar.show();
 
             }
         };

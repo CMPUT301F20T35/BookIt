@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class US040101Test {
+public class US040201Test {
 
     private Solo solo;
 
@@ -37,7 +37,10 @@ public class US040101Test {
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
-        // test if borrower can request a book
+        // view a list of books borrower have requested
+        solo.clickOnView(solo.getView(R.id.navigation_borrow_book));
+        solo.clickOnButton("Requested");
+        solo.waitForFragmentByTag("BorrowRequestedFragment", 4000);
     }
 
     @After

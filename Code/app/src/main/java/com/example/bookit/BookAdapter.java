@@ -13,11 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHolder> {
     private Context mContext;
     private ArrayList<Book> bookData = new ArrayList<>();
     private OnItemClickListener mlistener;
+    FireStoreHelper fs;
 
     /**
      * This constructor takes in three parameters
@@ -30,6 +32,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
         this.bookData = bookData;
         //implement interface on the click
         this.mlistener = listener;
+
     }
 
 
@@ -44,7 +47,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     public void onBindViewHolder(@NonNull BookAdapter.LinearViewHolder holder, final int position) {
         holder.bookName.setText(bookData.get(position).getTitle());
         holder.authorName.setText(bookData.get(position).getAuthor());
-        holder.state.setText("Test state");
+        //holder.state.setText(bookData.get(position).getISBN());
+        fs=new FireStoreHelper(mContext);
+        fs.fetch_MyBookState(bookData.get(position).getISBN(), new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                String state = map.get("state").toString();
+                holder.state.setText(state);
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +77,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
         notifyItemRemoved(position);
     }
 
+    public String getTitle(int position){
+        return bookData.get(position).getTitle();
+    }
+
     public ArrayList<Book> getBookData() {
         return bookData;
+    }
+
+    public Book getBookObject(int pos){
+        return bookData.get(pos);
     }
 
     //inherit viewholder

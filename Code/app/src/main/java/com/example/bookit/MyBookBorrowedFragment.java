@@ -94,7 +94,30 @@ public class MyBookBorrowedFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_return);
+                Book bookGet = bAdapter.getBookObject(pos);
+                String isbn=bookGet.getISBN();
+                String des=bookGet.getDescription();
+                String title=bookGet.getTitle();
+                String owner=bookGet.getOwnerName();
+                String author = bookGet.getAuthor();
+                RequestHandler rh = new RequestHandler();
+                Bundle bundle=new Bundle();
+
+                fs.fetch_MyBookRequest(title, new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        final RequestHandler rh = (RequestHandler) map.get("requestHandler");
+                        bundle.putSerializable("rh",rh);
+                        bundle.putString("isbn",isbn);
+                        bundle.putString("description",des);
+                        bundle.putString("title",title);
+                        bundle.putString("author",author);
+                        bundle.putString("owner",owner);
+                        bundle.putSerializable("rh", rh);
+                        Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_return,bundle);
+                    }
+                });
+
             }
 
         });
@@ -108,15 +131,11 @@ public class MyBookBorrowedFragment extends Fragment {
                         String author=map.get("author").toString();
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
-                        //System.out.println(title);
                         Book b= new Book(title,author,ISBN,description,ownerName,null);
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }
                 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////b
-
         );
         return view;
     }

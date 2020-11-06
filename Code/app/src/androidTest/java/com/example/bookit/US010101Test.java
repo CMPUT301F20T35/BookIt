@@ -43,8 +43,8 @@ public class US010101Test {
         solo.clickOnView(solo.getView(R.id.button_add));
 
         // input book information
-        solo.enterText((EditText) solo.getView(R.id.newBookTitle), "testTitle");
-        solo.waitForText("testTitle", 1, 2000);
+        solo.enterText((EditText) solo.getView(R.id.newBookTitle), "US010101");
+        solo.waitForText("US010101", 1, 2000);
         solo.enterText((EditText) solo.getView(R.id.newBookAuthor), "testAuthor");
         solo.waitForText("testAuthor", 1, 2000);
         solo.enterText((EditText) solo.getView(R.id.newBookISBN), "testUS010101");
@@ -55,7 +55,7 @@ public class US010101Test {
 
         solo.waitForFragmentByTag("MyBookAvailableFragment", 5000);
         solo.clickInRecyclerView(0);
-        assertEquals("testTitle", solo.getText("testTitle").getText().toString());
+        assertEquals("US010101", solo.getText("US010101").getText().toString());
         assertEquals("testAuthor", solo.getText("testAuthor").getText().toString());
         assertEquals("testUS010101", solo.getText("testUS010101").getText().toString());
         assertEquals("testDescription", solo.getText("testDescription").getText().toString());

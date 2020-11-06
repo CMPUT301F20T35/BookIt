@@ -18,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="200dp"
         android:text="Owner:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,14 +35,13 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
         android:shadowColor="#15BACF"
-        android:text="XU"
         android:textColor="#15BACF"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/owner" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/isbn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -53,33 +52,31 @@
         app:layout_constraintTop_toBottomOf="@+id/owner_name" />
 
     <TextView
-        android:id="@+id/IBSN"
+        android:id="@+id/isbn_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
-        android:text="231213124"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/isbn" />
 
     <TextView
         android:id="@+id/Description"
-        android:layout_width="293dp"
-        android:layout_height="106dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="10dp"
-        android:text="this book is about xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        android:layout_width="302dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionName" />
 
     <Button
         android:id="@+id/button_return"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="162dp"
         android:text="return"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,15 +85,15 @@
         app:layout_constraintTop_toBottomOf="@+id/Description" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/descriptionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
         android:text="Description:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IBSN" />
+        app:layout_constraintTop_toBottomOf="@+id/bookAuthor_name" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -112,16 +109,34 @@
         app:srcCompat="@drawable/timg" />
 
     <TextView
-        android:id="@+id/book"
+        android:id="@+id/bookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="173dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="180dp"
-        android:text="CMPUT 301"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/bookAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="12dp"
+        android:text="Author"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/isbn_name" />
+
+    <TextView
+        android:id="@+id/bookAuthor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookAuthor" />
 
     <ImageView
         android:id="@+id/bt_back"

@@ -268,6 +268,48 @@ FireStoreHelper {
         });
     }
 
+
+
+    public void fetchUser(String userName, final dbCallback callback){
+        //FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        db.collection("User")
+                .whereEqualTo("username", userName)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, String> returnMap = new HashMap<>();
+                        String id = document.getData().get("id").toString();
+                        String email = document.getData().get("email").toString();
+                        String number = document.getData().get("number").toString();
+                        String username = document.getData().get("username").toString();
+                        String name;
+                        try{
+                            name = document.getData().get("name").toString();
+                        }catch (NullPointerException e){
+                            name = "";
+                        }
+
+                        returnMap.put("id", id);
+                        returnMap.put("email", email);
+                        returnMap.put("name", name);
+                        returnMap.put("number", number);
+                        returnMap.put("username", username);
+                        callback.onCallback(returnMap);
+                    }
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+
+
+
     public void update(String username,String contactIfo){
         db = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
@@ -281,6 +323,21 @@ FireStoreHelper {
 
         }
 
+    }
+
+
+    public void updateRequestor(String acceptor,String ISBN){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book").document(ISBN)
+                .update("acceptedRequestor",acceptor
+                        );
+    }
+
+    public void updateRequestors(String ISBN, ArrayList<String> list) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book").document(ISBN)
+                .update("requestors", list
+                );
     }
 
     public void removeBook(Book book) {
@@ -302,6 +359,7 @@ FireStoreHelper {
                         Toast.makeText(context, "Error occurs", Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 
     /**
@@ -458,6 +516,20 @@ FireStoreHelper {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
+        db.collection("Book").document(isbn)
+                .update("state.bookStatus","ACCEPTED")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
     }
 
 
@@ -475,6 +547,7 @@ FireStoreHelper {
         listRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
                 Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 b.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -635,6 +708,7 @@ FireStoreHelper {
                                                 String ISBN = document.getData().get("ISBN").toString();
                                                 String description = document.getData().get("description").toString();
                                                 String ownerName = document.getData().get("ownerName").toString();
+
                                                 a.add(new Book(title,author,ISBN,description,ownerName,null));
                                                 returnMap.put("title", title);
                                                 returnMap.put("author", author);
@@ -678,7 +752,6 @@ FireStoreHelper {
                         db.collection("Book")
                                 .whereArrayContains("requestors",name)
                                 .whereEqualTo("acceptedRequestor","")
-                                //.whereEqualTo("state.bookStatus",which)//
                                 .get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
@@ -734,7 +807,7 @@ FireStoreHelper {
                         String name= document.get("username").toString();
                         db.collection("Book")
                                 .whereEqualTo("acceptedRequestor",name)
-                                .whereEqualTo("state.bookStatus","AVAILABLE")
+                                .whereEqualTo("state.bookStatus","ACCEPTED")
                                 .whereArrayContains("requestors",name)
                                 //.whereEqualTo("state.bookStatus",which)//
                                 .get()
@@ -775,7 +848,122 @@ FireStoreHelper {
 
 
     }
-    public void fetch_BorrowedBook(final dbCallback callback){
+    public void fetch_BorrowedBook(final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        //ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name = document.get("username").toString();
+                        db.collection("Book")
+                                .whereEqualTo("acceptedRequestor", name)
+                                .whereEqualTo("state.bookStatus", "BORROWED")
+                                .whereArrayContains("requestors", name)
+                                //.whereEqualTo("state.bookStatus",which)//
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task1.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                //a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                        }
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+
+
+
+
+    public void fetch_MyBookRequest(String title ,final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        //FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book")
+                .whereEqualTo("title", title)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                if (task1.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task1.getResult()) {
+                        //YBS's editing
+                        Object object = document.getData().get("requestors");
+                        ArrayList<String> requestors = (ArrayList<String>) object;
+                        String acceptedRequestor = document.getData().get("acceptedRequestor").toString();
+                        String state = document.getData().get("state").toString();
+                        BookState bookstate = new BookState(state, null, null);
+                        RequestHandler rh = new RequestHandler(bookstate, requestors, acceptedRequestor);
+
+                        Map<String, RequestHandler> returnRequestMap = new HashMap<>();
+                        returnRequestMap.put("requestHandler", rh);
+                        callback.onCallback(returnRequestMap);
+                    }
+                } else {
+                }
+
+            }
+        });
+
+    }
+
+    public void fetch_MyBookState(String ISBN ,final dbCallback callback) {
+        //FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book")
+                .whereEqualTo("ISBN", ISBN)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                if (task1.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task1.getResult()) {
+                        //YBS's editing
+                        Map state = (Map) document.getData().get("state");
+                        String temp = state.get("bookStatus").toString();
+                        Map<String, String> returnStateMap = new HashMap<>();
+                        returnStateMap.put("state", temp);
+                        callback.onCallback(returnStateMap);
+                    }
+                } else {
+                }
+
+            }
+        });
+
+    }
+    public void fetch_location(String ISBN ,final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -791,30 +979,18 @@ FireStoreHelper {
 
                         String name= document.get("username").toString();
                         db.collection("Book")
-                                .whereEqualTo("acceptedRequestor",name)
-                                .whereEqualTo("state.bookStatus","BORROWED")
-                                .whereArrayContains("requestors",name)
-                                //.whereEqualTo("state.bookStatus",which)//
+                                .whereEqualTo("ISBN",ISBN)
                                 .get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+
                                         if(task1.isSuccessful()){
                                             for (QueryDocumentSnapshot document:task1.getResult()){
-                                                Map<String, String> returnMap = new HashMap<>();
-
-                                                //do something here
-                                                String title = document.getData().get("title").toString();
-                                                String author = document.getData().get("author").toString();
-                                                String ISBN = document.getData().get("ISBN").toString();
-                                                String description = document.getData().get("description").toString();
-                                                String ownerName = document.getData().get("ownerName").toString();
-                                                //a.add(new Book(title,author,ISBN,description,ownerName,null));
-                                                returnMap.put("title", title);
-                                                returnMap.put("author", author);
-                                                returnMap.put("ISBN", ISBN);
-                                                returnMap.put("description", description);
-                                                returnMap.put("ownerName", ownerName);
+                                                Map<String, GeoPoint> returnMap = new HashMap<>();
+                                                Map m = (Map)document.getData().get("state");
+                                                GeoPoint g = (GeoPoint) m.get("location");
+                                                returnMap.put("location", g);
                                                 callback.onCallback(returnMap);
                                             }
                                         }else{}
@@ -831,8 +1007,10 @@ FireStoreHelper {
             }
         });
 
-
     }
+
+
+
     public void To_borrowed(String isbn){
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -841,11 +1019,13 @@ FireStoreHelper {
         bookReference.update("state.bookStatus","BORROWED");
     }
 
+
     //public void update(){}
 
     public FirebaseAuth getfAuth(){
         return fAuth;
     }
+
 
     public void setfAuth(FirebaseAuth fAuth) {
         this.fAuth = fAuth;
