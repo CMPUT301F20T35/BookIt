@@ -109,7 +109,6 @@ public class BookDetail extends Fragment {
                     imageView.setImageBitmap(img);
                 }
             });
-
         } catch (IOException e) {
             e.printStackTrace();
         }
