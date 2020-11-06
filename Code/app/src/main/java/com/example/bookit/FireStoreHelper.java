@@ -936,10 +936,10 @@ FireStoreHelper {
                 if (task1.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task1.getResult()) {
                         //YBS's editing
-                        String state = document.getData().get("state").toString();
-
+                        Map state = (Map) document.getData().get("state");
+                        String temp = state.get("bookStatus").toString();
                         Map<String, String> returnStateMap = new HashMap<>();
-                        returnStateMap.put("state", state);
+                        returnStateMap.put("state", temp);
                         callback.onCallback(returnStateMap);
                     }
                 } else {
