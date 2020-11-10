@@ -340,6 +340,62 @@ FireStoreHelper {
                 );
     }
 
+    public void addNotification(Notification noti){
+        String isbn=noti.getISBN();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Notifications").document(isbn).set(noti);
+
+    }
+
+    public void deleteNotification(String isbn){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Notifications").document(isbn).update("acceptedUser","");
+    }
+    public void fetchBorrowerNotification(final dbCallback callback){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db.collection("User").document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                                db.collection("Notifications")
+                                        .whereEqualTo("acceptedUser", document.getData().get("username"))
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+                                                String isbn=document.getData().get("isbn").toString();
+                                                String owner=document.getData().get("ownerName").toString();
+                                                String title=document.getData().get("title").toString();
+                                                returnMap.put("isbn", isbn);
+                                                returnMap.put("owner", owner);
+                                                returnMap.put("title",title);
+                                                callback.onCallback(returnMap);
+                                            }
+
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+    }
     public void removeBook(Book book) {
         String isbn = book.getISBN();
         db = FirebaseFirestore.getInstance();
