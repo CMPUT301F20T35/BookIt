@@ -174,9 +174,13 @@ public class fragment_requestList extends Fragment {
                 User accpetRequestor = testList.get(p);
                 String acceptName = testList.get(p).getUserName();
                 fs.updateRequestor(acceptName,isbn);
+
                 ArrayList<String> list = new ArrayList<String>();
                 list.add(acceptName);
                 fs.updateRequestors(isbn,list);
+                Notification n=new Notification(title,isbn,owner,new ArrayList<String>(),acceptName,"REQUEST_ACCEPTED");
+                fs.addNotification(n);
+
                 testList.clear();
                 testList.add(accpetRequestor);
                 uAdapter.notifyDataSetChanged();
