@@ -81,12 +81,22 @@ FireStoreHelper {
     private StorageReference mstore;
     private String username;
     int i;
+
+    /**
+     * first constructor
+     * @param profileFragment
+     */
     public FireStoreHelper(ProfileFragment profileFragment) {
     }
 
+    /**
+     * second constructor
+     * @param context
+     */
     public FireStoreHelper( Context context) {
         this.context =context;
     }
+
     /**
      * used to authenticate the email and password
      * @param email,password,progressBar
@@ -112,7 +122,8 @@ FireStoreHelper {
                 isSuccessful=false;
             }
         }
-    });return isSuccessful;
+    });
+        return isSuccessful;
     }
 
     /**
@@ -233,7 +244,11 @@ FireStoreHelper {
 
     }
 
-
+    /**
+     * fetch the current user information
+     * @param callback
+     * @param dialog
+     */
     public void Fetch(final dbCallback callback, AlertDialog dialog){
         dialog.show();
         fAuth = FirebaseAuth.getInstance();
@@ -269,7 +284,11 @@ FireStoreHelper {
     }
 
 
-
+    /**
+     * fetch user info according to the username
+     * @param userName
+     * @param callback
+     */
     public void fetchUser(String userName, final dbCallback callback){
         //FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -291,7 +310,6 @@ FireStoreHelper {
                         }catch (NullPointerException e){
                             name = "";
                         }
-
                         returnMap.put("id", id);
                         returnMap.put("email", email);
                         returnMap.put("name", name);
@@ -308,8 +326,11 @@ FireStoreHelper {
     }
 
 
-
-
+    /**
+     * update the info of the user
+     * @param username
+     * @param contactIfo
+     */
     public void update(String username,String contactIfo){
         db = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
@@ -325,6 +346,11 @@ FireStoreHelper {
 
     }
 
+    /**
+     * update requestor with acceptor name
+     * @param acceptor
+     * @param ISBN
+     */
 
     public void updateRequestor(String acceptor,String ISBN){
         db = FirebaseFirestore.getInstance();
@@ -333,6 +359,11 @@ FireStoreHelper {
                         );
     }
 
+    /**
+     * update the requestor with isbn
+     * @param ISBN
+     * @param list
+     */
     public void updateRequestors(String ISBN, ArrayList<String> list) {
         db = FirebaseFirestore.getInstance();
         db.collection("Book").document(ISBN)
@@ -340,6 +371,10 @@ FireStoreHelper {
                 );
     }
 
+    /**
+     * add a new Notification object to the firestore.
+     * @param noti
+     */
     public void addNotification(Notification noti){
         String isbn=noti.getISBN();
         db = FirebaseFirestore.getInstance();
@@ -347,10 +382,19 @@ FireStoreHelper {
 
     }
 
+    /**
+     *delete the notification associated with the provided isbn
+     * @param isbn
+     */
     public void deleteNotification(String isbn){
         db = FirebaseFirestore.getInstance();
         db.collection("Notifications").document(isbn).update("acceptedUser","");
     }
+
+    /**
+     * retrieve the notification after owner accepted the request of the borrower
+     * @param callback
+     */
     public void fetchBorrowerNotification(final dbCallback callback){
         db = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
@@ -380,7 +424,6 @@ FireStoreHelper {
                                                 returnMap.put("title",title);
                                                 callback.onCallback(returnMap);
                                             }
-
                                         } else {
                                             Log.d(TAG, "Error getting documents: ", task.getException());
                                         }

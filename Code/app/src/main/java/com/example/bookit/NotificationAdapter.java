@@ -29,7 +29,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationAdapter(Context context, ArrayList<Notification> data){
         this.mContext = context;
         this.data = data;
-        //implement interface on the click
 
     }
 
@@ -72,9 +71,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
 
-
-
-    //inherit viewholder
     class LinearViewHolder extends RecyclerView.ViewHolder {
 
         private TextView notification;

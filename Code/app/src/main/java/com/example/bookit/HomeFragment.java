@@ -34,8 +34,6 @@ public class HomeFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         rv = root.findViewById(R.id.rv_1);
-        //initilize test array and adapter
-        String noti="@xiu accepted your request on the book <<haha>>";
         dataList = new ArrayList<Notification>();
         fs=new FireStoreHelper(getContext());
 
@@ -61,6 +59,11 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+    /**
+     * enable the user to swipe delete a certain notification
+     * @param fs
+     */
     private void enableSwipeToDeleteAndUndo(FireStoreHelper fs){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
