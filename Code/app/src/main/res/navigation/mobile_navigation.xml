@@ -237,6 +237,9 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_borrow_available_to_borrow_search"
             app:destination="@id/navigation_borrow_search" />
+        <action
+            android:id="@+id/action_borrow_available_to_book_request"
+            app:destination="@id/navigation_book_request" />
     </fragment>
     <fragment
         android:id="@+id/navigation_book_return"

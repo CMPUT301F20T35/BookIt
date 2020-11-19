@@ -24,8 +24,8 @@ public class BorrowAvailableFragment extends Fragment {
     private Button acceptedButton;
     private Button borrowedButton;
     private Button requestedButton;
+    FireStoreHelper fs;
     private RecyclerView rv;
-
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 
@@ -44,7 +44,7 @@ public class BorrowAvailableFragment extends Fragment {
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-
+        fs = new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,17 +69,22 @@ public class BorrowAvailableFragment extends Fragment {
             }
         });
 
-// Inflate the layout for this fragment
+        //set search button function
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // switch to BorrowSearchFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_borrow_search);
+            }
+        });
+
+        // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
         final ArrayList<Book> testList = new ArrayList<Book>();
-
+        testList.add(new Book("title", "author", "ISBN", "descr", "owner", null));
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
@@ -89,19 +94,29 @@ public class BorrowAvailableFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+
+                // get current clicked book info
+                Book bookGet = bAdapter.getBookObject(pos);
+                String isbn = bookGet.getISBN();
+                String des = bookGet.getDescription();
+                String title = bookGet.getTitle();
+                String owner = bookGet.getOwnerName();
+                String author = bookGet.getAuthor();
+                RequestHandler rh = new RequestHandler();
+
+                // put info into bundle
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("rh",rh);
+                bundle.putString("isbn",isbn);
+                bundle.putString("description",des);
+                bundle.putString("title",title);
+                bundle.putString("author",author);
+                bundle.putString("owner",owner);
+
+                Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_book_request, bundle);
             }
-
-
         });
         rv.setAdapter(bAdapter);
-
-        //set search button function
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // switch to BorrowSearchFragment
-                Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_borrow_search);
-            }
-        });
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
