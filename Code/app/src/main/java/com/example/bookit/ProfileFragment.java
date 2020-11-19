@@ -1,5 +1,6 @@
 package com.example.bookit;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+//import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +48,7 @@ public class ProfileFragment extends Fragment {
     public static final int PICK_IMAGE = 1;
     protected ImageView image;
     private Uri MediaUri;
-    private AlertDialog dialog;
+    private android.app.AlertDialog dialog;
     @SuppressLint("WrongThread")
     @Override
     /**
