@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -1285,6 +1286,43 @@ FireStoreHelper {
         DocumentReference bookReference = db.collection("Book")
                 .document(isbn);
         bookReference.update("state.bookStatus","BORROWED");
+    }
+
+
+    /**
+     * responsible for updating book status when borrower request a certain book
+     * @param ISBN isbn of the book which I want to update its info
+     */
+    public void borrowerRequestBook(String ISBN){
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+
+        // get user name of current user
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String name = document.get("username").toString();
+                        // update requestors
+                        db.collection("Book")
+                                .document(ISBN)
+                                .update("requestors", FieldValue.arrayUnion(name));
+                        // update book status
+                        db.collection("Book")
+                                .document(ISBN)
+                                .update("state.bookStatus", "REQUESTED");
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
 
