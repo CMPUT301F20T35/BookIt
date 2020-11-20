@@ -26,9 +26,9 @@ public class BorrowAvailableFragment extends Fragment {
     private Button borrowedButton;
     private Button requestedButton;
     private RecyclerView rv;
+    FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
-    FireStoreHelper fs;
   
     @Override
     /**
@@ -44,7 +44,7 @@ public class BorrowAvailableFragment extends Fragment {
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-        fs = new FireStoreHelper(getActivity());
+        fs=new FireStoreHelper(getActivity());
 
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +116,8 @@ public class BorrowAvailableFragment extends Fragment {
 
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_book_request, bundle);
             }
-        }
+        });
 
-                                   
         fs.fetch_AvailableBook( new dbCallback(){
             @Override
             public void onCallback(Map map) {
