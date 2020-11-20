@@ -26,6 +26,8 @@ public class BookRequestFragment extends Fragment {
     private String author;
     private RequestHandler rh;
 
+    FireStoreHelper fs;
+
     @Override
     /**
      * fragment used for requesting book
@@ -58,6 +60,8 @@ public class BookRequestFragment extends Fragment {
         bookISBN.setText(isbn);
         bookDescription.setText(des);
 
+        fs = new FireStoreHelper(getActivity());
+
         // set listener for back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +85,9 @@ public class BookRequestFragment extends Fragment {
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // request functionality need to be implemented here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // borrower request a book
+                fs.borrowerRequestBook(bookISBN.getText().toString());
+
                 getActivity().onBackPressed();
             }
         });

@@ -24,7 +24,6 @@ public class BorrowAvailableFragment extends Fragment {
     private Button acceptedButton;
     private Button borrowedButton;
     private Button requestedButton;
-    FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
@@ -44,7 +43,6 @@ public class BorrowAvailableFragment extends Fragment {
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-        fs = new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +80,7 @@ public class BorrowAvailableFragment extends Fragment {
         rv = view.findViewById(R.id.rv_1);
         //initilize test array and adapter
         final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(new Book("title", "author", "ISBN", "descr", "owner", null));
+        testList.add(new Book("title", "author", "ISBN", "descr", "ybs", null));
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         //setting the separate line
