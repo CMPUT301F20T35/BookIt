@@ -26,17 +26,9 @@ public class BorrowAvailableFragment extends Fragment {
     private Button borrowedButton;
     private Button requestedButton;
     private RecyclerView rv;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
     FireStoreHelper fs;
->>>>>>> 3ba17e6d4f67a00164ac021968293f79ba5c0c10
-=======
->>>>>>> 3c135067c0578cf02c221f99d8f97ef545da3bdd
     private BookAdapter bAdapter;
     private ImageButton searchButton;
-    FireStoreHelper fs;
   
     @Override
     /**
@@ -52,16 +44,8 @@ public class BorrowAvailableFragment extends Fragment {
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         fs=new FireStoreHelper(getActivity());
 
->>>>>>> 3ba17e6d4f67a00164ac021968293f79ba5c0c10
-=======
-        fs = new FireStoreHelper(getActivity());
-
->>>>>>> 3c135067c0578cf02c221f99d8f97ef545da3bdd
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,10 +96,6 @@ public class BorrowAvailableFragment extends Fragment {
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3c135067c0578cf02c221f99d8f97ef545da3bdd
                 // get current clicked book info
                 Book bookGet = bAdapter.getBookObject(pos);
                 String isbn = bookGet.getISBN();
@@ -135,14 +115,9 @@ public class BorrowAvailableFragment extends Fragment {
                 bundle.putString("owner",owner);
 
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_book_request, bundle);
-<<<<<<< HEAD
-=======
-=======
             }
-        }
+        });
 
-                                   
->>>>>>> 3c135067c0578cf02c221f99d8f97ef545da3bdd
         fs.fetch_AvailableBook( new dbCallback(){
             @Override
             public void onCallback(Map map) {
@@ -201,10 +176,6 @@ public class BorrowAvailableFragment extends Fragment {
             public void onClick(View v) {
                 // switch to BorrowSearchFragment
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_borrow_search);
-<<<<<<< HEAD
->>>>>>> 3ba17e6d4f67a00164ac021968293f79ba5c0c10
-=======
->>>>>>> 3c135067c0578cf02c221f99d8f97ef545da3bdd
             }
         });
         rv.setAdapter(bAdapter);
