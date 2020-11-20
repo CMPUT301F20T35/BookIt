@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BorrowAvailableFragment extends Fragment {
     private Button acceptedButton;
@@ -27,8 +28,8 @@ public class BorrowAvailableFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
-
-
+    FireStoreHelper fs;
+  
     @Override
     /**
      * fragment used for displaying books being available and borrower wants to borrow
@@ -43,6 +44,8 @@ public class BorrowAvailableFragment extends Fragment {
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
+        fs = new FireStoreHelper(getActivity());
+
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,8 +116,72 @@ public class BorrowAvailableFragment extends Fragment {
 
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_book_request, bundle);
             }
+        }
+
+                                   
+        fs.fetch_AvailableBook( new dbCallback(){
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                //System.out.println(title);
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                testList.add(b);
+                bAdapter.notifyDataSetChanged();
+
+            }
+        });
+
+        fs.fetch_RequestBorrowedBook( new dbCallback(){
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                //System.out.println(title);
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                testList.add(b);
+                bAdapter.notifyDataSetChanged();
+
+            }
+        });
+
+        fs.fetch_RequestRequestedBook(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                //System.out.println(title);
+                //Book b= new Book(title,author,ISBN,description,ownerName,null);
+                for(int i=0;i<testList.size();i++){
+                    if (testList.get(i).getISBN() == ISBN){
+                        testList.remove(0);
+                        bAdapter.notifyDataSetChanged();
+                    }
+                }
+                //testList.remove(b);
+
+            }
+        });
+
+        //set search button function
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // switch to BorrowSearchFragment
+                Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_borrow_search);
+            }
         });
         rv.setAdapter(bAdapter);
+
+
 
         //set swipe delete function
         enableSwipeToDeleteAndUndo();
