@@ -83,7 +83,7 @@ public class BorrowAvailableFragment extends Fragment {
         rv = view.findViewById(R.id.rv_1);
         //initilize test array and adapter
         final ArrayList<Book> testList = new ArrayList<Book>();
-        testList.add(new Book("title", "author", "ISBN", "descr", "ybs", null));
+        //testList.add(new Book("title", "author", "ISBN", "descr", "ybs", null));
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         //setting the separate line
@@ -117,6 +117,7 @@ public class BorrowAvailableFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_book_request, bundle);
             }
         });
+        rv.setAdapter(bAdapter);
 
         fs.fetch_AvailableBook( new dbCallback(){
             @Override
@@ -162,7 +163,7 @@ public class BorrowAvailableFragment extends Fragment {
                 //Book b= new Book(title,author,ISBN,description,ownerName,null);
                 for(int i=0;i<testList.size();i++){
                     if (testList.get(i).getISBN() == ISBN){
-                        testList.remove(0);
+                        testList.remove(i);
                         bAdapter.notifyDataSetChanged();
                     }
                 }
@@ -178,7 +179,7 @@ public class BorrowAvailableFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_borrow_available_to_borrow_search);
             }
         });
-        rv.setAdapter(bAdapter);
+
 
 
 
