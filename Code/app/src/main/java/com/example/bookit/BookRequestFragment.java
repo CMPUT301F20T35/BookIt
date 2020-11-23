@@ -11,6 +11,11 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+
 public class BookRequestFragment extends Fragment {
     private Button requestButton;
     private ImageView backButton;
@@ -87,7 +92,7 @@ public class BookRequestFragment extends Fragment {
             public void onClick(View v) {
                 // borrower request a book
                 fs.borrowerRequestBook(bookISBN.getText().toString());
-
+                
                 getActivity().onBackPressed();
             }
         });
