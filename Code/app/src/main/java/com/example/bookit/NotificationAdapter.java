@@ -54,7 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
         else {
             holder.notification.setText("@"+data.get(position).getOwnerName()+" request your book <<"+data.get(position).getTitle()+">>");
-            holder.notification.setTextColor(Color.parseColor("#43A047"));
+            holder.notification.setTextColor(Color.parseColor("#0000FF"));
             //owner notification for 高玉振
         }
     }
