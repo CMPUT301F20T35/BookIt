@@ -421,9 +421,11 @@ FireStoreHelper {
                                                 String isbn=document.getData().get("isbn").toString();
                                                 String owner=document.getData().get("ownerName").toString();
                                                 String title=document.getData().get("title").toString();
+                                                String Type=document.getData().get("notificationType").toString();
                                                 returnMap.put("isbn", isbn);
                                                 returnMap.put("owner", owner);
                                                 returnMap.put("title",title);
+                                                returnMap.put("Type",Type);
                                                 callback.onCallback(returnMap);
                                             }
                                         } else {
@@ -1295,7 +1297,7 @@ FireStoreHelper {
      * responsible for updating book status when borrower request a certain book
      * @param ISBN isbn of the book which I want to update its info
      */
-    public void borrowerRequestBook(String ISBN){
+    public void borrowerRequestBook(String ISBN,String title,String ownerName,Notification n){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -1317,6 +1319,28 @@ FireStoreHelper {
                         db.collection("Book")
                                 .document(ISBN)
                                 .update("state.bookStatus", "REQUESTED");
+
+                        db.collection("Notifications").document(ISBN).set(n);
+
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("acceptedUser",ownerName);
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("isbn",ISBN);
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("notificationType","REQUEST_SENT");
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("ownerName",name);
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("requesters", FieldValue.arrayUnion(name));
+                        db.collection("Notifications")
+                                .document(ISBN)
+                                .update("title", title);
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
