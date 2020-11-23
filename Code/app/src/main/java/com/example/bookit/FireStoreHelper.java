@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageMetadata;
@@ -440,6 +441,7 @@ FireStoreHelper {
                 });
 
     }
+
     public void removeBook(Book book) {
         String isbn = book.getISBN();
         db = FirebaseFirestore.getInstance();
@@ -1325,7 +1327,52 @@ FireStoreHelper {
         });
     }
 
+    public void fetch_Ownernotify(final dbCallback callback){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db.collection("User").document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
+                                db.collection("Notifications")
+                                        .whereEqualTo("ownerName", document.getData().get("username"))
+                                        .whereEqualTo("notificationType","REQUEST_SENT")
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+                                                String isbn=document.getData().get("isbn").toString();
+                                                String owner=document.getData().get("ownerName").toString();
+                                                String title=document.getData().get("title").toString();
+                                                returnMap.put("isbn", isbn);
+                                                returnMap.put("owner", owner);
+                                                returnMap.put("title",title);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+
+    }
     //public void update(){}
 
     public FirebaseAuth getfAuth(){
