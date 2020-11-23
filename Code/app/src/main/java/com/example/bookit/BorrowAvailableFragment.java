@@ -131,9 +131,8 @@ public class BorrowAvailableFragment extends Fragment {
                 Book b= new Book(title,author,ISBN,description,ownerName,null);
                 testList.add(b);
                 bAdapter.notifyDataSetChanged();
-
             }
-        });
+        }, null);
 
         fs.fetch_RequestBorrowedBook( new dbCallback(){
             @Override
