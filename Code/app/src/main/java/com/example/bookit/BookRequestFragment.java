@@ -54,7 +54,7 @@ public class BookRequestFragment extends Fragment {
         Bundle b = getArguments();
         isbn = b.getString("isbn");
         des = b.getString("des");
-        title = b.getString("des");
+        title = b.getString("title");
         owner = b.getString("owner");
         author = b.getString("author");
         rh = (RequestHandler) b.getSerializable("rh");
@@ -91,8 +91,8 @@ public class BookRequestFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // borrower request a book
-                fs.borrowerRequestBook(bookISBN.getText().toString());
-                
+                Notification n=new Notification(title,isbn,owner,new ArrayList<String>(),"","REQUEST_ACCEPTED");
+                fs.borrowerRequestBook(bookISBN.getText().toString(),bookTitle.getText().toString(),ownerName.getText().toString(),n);
                 getActivity().onBackPressed();
             }
         });

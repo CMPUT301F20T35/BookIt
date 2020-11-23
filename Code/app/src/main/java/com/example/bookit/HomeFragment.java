@@ -43,7 +43,8 @@ public class HomeFragment extends Fragment {
                 String isbn=map.get("isbn").toString();
                 String title=map.get("title").toString();
                 String owner=map.get("owner").toString();
-                Notification n=new Notification(title,isbn,owner,new ArrayList<String>(),"","REQUEST_ACCEPTED");
+                String Type = map.get("Type").toString();
+                Notification n=new Notification(title,isbn,owner,new ArrayList<String>(),"",Type);
                 dataList.add(n);
                 //set up manager and adapter to contain data
                 rv.setLayoutManager(new LinearLayoutManager(getActivity()));
