@@ -157,14 +157,6 @@ public class MyBookAvailableFragment extends Fragment {
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
                 fs.removeBook(item);
-
-//                Snackbar snackbar = Snackbar
-//                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-//
-//
-//                snackbar.setActionTextColor(Color.YELLOW);
-//                snackbar.show();
-
             }
         };
 

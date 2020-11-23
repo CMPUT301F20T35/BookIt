@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class US010101Test {
+public class US010601Test {
     private Solo solo;
 
     @Rule
@@ -40,27 +40,31 @@ public class US010101Test {
 
         solo.clickOnView(solo.getView(R.id.navigation_my_book));
         solo.clickOnButton("Available");
-        solo.clickOnView(solo.getView(R.id.button_add));
-
-        // input book information
-        solo.enterText((EditText) solo.getView(R.id.newBookTitle), "US010101");
-        solo.waitForText("US010101", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.newBookAuthor), "testAuthor");
-        solo.waitForText("testAuthor", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.newBookISBN), "testUS010101");
-        solo.waitForText("testUS010101", 1, 2000);
-        solo.enterText((EditText) solo.getView(R.id.newBookDescription), "testDescription");
-        solo.waitForText("testDescription", 1, 2000);
-        solo.clickOnView(solo.getView(R.id.addNewBookBtn));
-
         solo.waitForFragmentByTag("MyBookAvailableFragment", 5000);
+        // edit book
         solo.clickInRecyclerView(0);
-        assertEquals("US010101", solo.getText("US010101").getText().toString());
-        assertEquals("testAuthor", solo.getText("testAuthor").getText().toString());
-        assertEquals("testUS010101", solo.getText("testUS010101").getText().toString());
-        assertEquals("testDescription", solo.getText("testDescription").getText().toString());
-    }
+        solo.clickOnView(solo.getView(R.id.editbookinfo));
+        solo.clearEditText((EditText) solo.getView(R.id.edit_isbn));
+        solo.enterText((EditText) solo.getView(R.id.edit_isbn), "testUS010601");
+        solo.waitForText("testUS010601", 1, 2000);
+        solo.clickOnButton("update");
+        solo.clickOnButton("finish");
+        solo.clickInRecyclerView(0);
+        solo.clickOnView(solo.getView(R.id.editbookinfo));
+        solo.clearEditText((EditText) solo.getView(R.id.edit_title));
+        solo.enterText((EditText) solo.getView(R.id.edit_title), "US010601");
+        solo.waitForText("US010601", 1, 2000);
+        solo.clearEditText((EditText) solo.getView(R.id.edit_des));
+        solo.enterText((EditText) solo.getView(R.id.edit_des), "testDescriptionSuccess");
+        solo.waitForText("testDescriptionSuccess", 1, 2000);
+        solo.clickOnButton("update");
+        solo.clickOnButton("finish");
+        //compare edit is success
+        solo.clickInRecyclerView(0);
+        assertEquals("US010601", solo.getText("US010601").getText().toString());
+        assertEquals("testDescriptionSuccess", solo.getText("testDescriptionSuccess").getText().toString());
 
+    }
     @After
     public void tearDown() {
         solo.finishOpenedActivities();

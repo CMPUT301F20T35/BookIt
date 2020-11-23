@@ -1,6 +1,7 @@
 package com.example.bookit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -81,12 +82,22 @@ FireStoreHelper {
     private StorageReference mstore;
     private String username;
     int i;
+
+    /**
+     * first constructor
+     * @param profileFragment
+     */
     public FireStoreHelper(ProfileFragment profileFragment) {
     }
 
+    /**
+     * second constructor
+     * @param context
+     */
     public FireStoreHelper( Context context) {
         this.context =context;
     }
+
     /**
      * used to authenticate the email and password
      * @param email,password,progressBar
@@ -112,7 +123,8 @@ FireStoreHelper {
                 isSuccessful=false;
             }
         }
-    });return isSuccessful;
+    });
+        return isSuccessful;
     }
 
     /**
@@ -233,7 +245,11 @@ FireStoreHelper {
 
     }
 
-
+    /**
+     * fetch the current user information
+     * @param callback
+     * @param dialog
+     */
     public void Fetch(final dbCallback callback, AlertDialog dialog){
         dialog.show();
         fAuth = FirebaseAuth.getInstance();
@@ -269,7 +285,11 @@ FireStoreHelper {
     }
 
 
-
+    /**
+     * fetch user info according to the username
+     * @param userName
+     * @param callback
+     */
     public void fetchUser(String userName, final dbCallback callback){
         //FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -291,7 +311,6 @@ FireStoreHelper {
                         }catch (NullPointerException e){
                             name = "";
                         }
-
                         returnMap.put("id", id);
                         returnMap.put("email", email);
                         returnMap.put("name", name);
@@ -308,8 +327,11 @@ FireStoreHelper {
     }
 
 
-
-
+    /**
+     * update the info of the user
+     * @param username
+     * @param contactIfo
+     */
     public void update(String username,String contactIfo){
         db = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
@@ -325,6 +347,11 @@ FireStoreHelper {
 
     }
 
+    /**
+     * update requestor with acceptor name
+     * @param acceptor
+     * @param ISBN
+     */
 
     public void updateRequestor(String acceptor,String ISBN){
         db = FirebaseFirestore.getInstance();
@@ -333,6 +360,11 @@ FireStoreHelper {
                         );
     }
 
+    /**
+     * update the requestor with isbn
+     * @param ISBN
+     * @param list
+     */
     public void updateRequestors(String ISBN, ArrayList<String> list) {
         db = FirebaseFirestore.getInstance();
         db.collection("Book").document(ISBN)
@@ -340,6 +372,74 @@ FireStoreHelper {
                 );
     }
 
+    /**
+     * add a new Notification object to the firestore.
+     * @param noti
+     */
+    public void addNotification(Notification noti){
+        String isbn=noti.getISBN();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Notifications").document(isbn).set(noti);
+
+    }
+
+    /**
+     *delete the notification associated with the provided isbn
+     * @param isbn
+     */
+    public void deleteNotification(String isbn){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Notifications").document(isbn).update("acceptedUser","");
+    }
+
+    /**
+     * retrieve the notification after owner accepted the request of the borrower
+     * @param callback
+     */
+    public void fetchBorrowerNotification(final dbCallback callback){
+        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db.collection("User").document(user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                                db.collection("Notifications")
+                                        .whereEqualTo("acceptedUser", document.getData().get("username"))
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+                                                String isbn=document.getData().get("isbn").toString();
+                                                String owner=document.getData().get("ownerName").toString();
+                                                String title=document.getData().get("title").toString();
+                                                returnMap.put("isbn", isbn);
+                                                returnMap.put("owner", owner);
+                                                returnMap.put("title",title);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+    }
     public void removeBook(Book book) {
         String isbn = book.getISBN();
         db = FirebaseFirestore.getInstance();
@@ -406,6 +506,10 @@ FireStoreHelper {
                         if (document.exists()) {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             Map<String,Object> m=document.getData();
+                            m.put("author",a);
+                            m.put("ownerName",o);
+                            m.put("title",t);
+                            m.put("description",d);
                             m.put("ISBN",i);
                             db.collection("Book").document(i)
                                     .set(m)
@@ -504,6 +608,20 @@ FireStoreHelper {
         db = FirebaseFirestore.getInstance();
         db.collection("Book").document(isbn)
                 .update("state.location",g)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+        db.collection("Book").document(isbn)
+                .update("state.bookStatus","ACCEPTED")
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -891,9 +1009,174 @@ FireStoreHelper {
             }
         });
     }
+    public void fetch_AvailableBook(final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        //ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
 
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
+                        String name = document.get("username").toString();
+                        db.collection("Book")
+                                //.whereEqualTo("acceptedRequestor", name)
+                                .whereEqualTo("state.bookStatus", "AVAILABLE")
+                                //.whereArrayContains("requestors", name)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task1.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
 
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                //a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                        }
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    public void fetch_RequestBorrowedBook(final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        //ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name = document.get("username").toString();
+                        db.collection("Book")
+                                //.whereEqualTo("acceptedRequestor", name)
+                                .whereEqualTo("state.bookStatus", "REQUESTED")
+                                //.whereArrayContains("requestors", name)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task1.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                //a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                        }
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    public void fetch_RequestRequestedBook(final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        //ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name = document.get("username").toString();
+                        db.collection("Book")
+                                //.whereEqualTo("acceptedRequestor", name)
+                                //.whereEqualTo("state.bookStatus", "REQUESTED")
+                                .whereArrayContains("requestors", name)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task1.getResult()) {
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+                                                //a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        } else {
+                                        }
+
+                                    }
+                                });
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
 
     public void fetch_MyBookRequest(String title ,final dbCallback callback) {
@@ -1003,6 +1286,43 @@ FireStoreHelper {
         DocumentReference bookReference = db.collection("Book")
                 .document(isbn);
         bookReference.update("state.bookStatus","BORROWED");
+    }
+
+
+    /**
+     * responsible for updating book status when borrower request a certain book
+     * @param ISBN isbn of the book which I want to update its info
+     */
+    public void borrowerRequestBook(String ISBN){
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+
+        // get user name of current user
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String name = document.get("username").toString();
+                        // update requestors
+                        db.collection("Book")
+                                .document(ISBN)
+                                .update("requestors", FieldValue.arrayUnion(name));
+                        // update book status
+                        db.collection("Book")
+                                .document(ISBN)
+                                .update("state.bookStatus", "REQUESTED");
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
 

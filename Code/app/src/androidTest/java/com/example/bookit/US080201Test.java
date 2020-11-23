@@ -2,18 +2,20 @@ package com.example.bookit;
 
 import android.widget.EditText;
 
+import com.robotium.solo.Solo;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-
-import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class US050201Test {
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertThat;
 
+public class US080201Test {
     private Solo solo;
 
     @Rule
@@ -38,19 +40,13 @@ public class US050201Test {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         solo.clickOnView(solo.getView(R.id.navigation_my_book));
-        solo.clickOnButton("Requested");
-        solo.waitForFragmentByTag("MyBookRequestedFragment", 2000);
+        solo.clickOnButton("Available");
+        solo.waitForFragmentByTag("MyBookAvailableFragment", 5000);
+        // delete book image
         solo.clickInRecyclerView(0);
-        solo.waitForFragmentByTag("fragment_requestList", 2000);
+        solo.waitForFragmentByTag("BookDetail", 5000);
+        solo.clickOnView(solo.getView(R.id.deleteButton));
 
-        // test if owner can deny a request of the book
-        solo.clickOnView(solo.getView(R.id.navigation_my_book));
-        solo.clickOnButton("Requested");
-        solo.waitForFragmentByTag("MyBookRequestedFragment", 2000);
-        solo.clickInRecyclerView(1);
-        solo.waitForFragmentByTag("fragment_requestList", 5000);
-        // can press accept button to deny the request, here skip it because it is hard to test using robotium
-//        solo.clickOnButton("Deny");
     }
 
     @After
