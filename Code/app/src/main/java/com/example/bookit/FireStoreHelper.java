@@ -1013,7 +1013,8 @@ FireStoreHelper {
             }
         });
     }
-    public void fetch_AvailableBook(final dbCallback callback) {
+    public void fetch_AvailableBook(final dbCallback callback, ProgressBar pb) {
+        if (pb != null) { pb.setVisibility(View.VISIBLE); }
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -1054,16 +1055,17 @@ FireStoreHelper {
                                                 returnMap.put("ownerName", ownerName);
                                                 callback.onCallback(returnMap);
                                             }
-                                        } else {
                                         }
-
+                                        if (pb != null) { pb.setVisibility(View.GONE); }
                                     }
                                 });
 
                     } else {
+                        if (pb != null) { pb.setVisibility(View.GONE); }
                         Log.d(TAG, "No such document");
                     }
                 } else {
+                    if (pb != null) { pb.setVisibility(View.GONE); }
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
