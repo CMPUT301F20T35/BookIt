@@ -116,8 +116,9 @@ public class MapsFragment extends Fragment {
                 geopoint=new GeoPoint(latLng1.latitude,latLng1.longitude);
                 //update location in the fireStore
                 db.location_update(geopoint,isbn);
-                Navigation.findNavController(getView()).navigate(R.id.action_location_to_mybook_requested);
-
+//                Navigation.findNavController(getView()).navigate(R.id.action_location_to_mybook_requested);
+                getActivity().onBackPressed();
+                getActivity().onBackPressed();
             }
         });
 

@@ -109,6 +109,9 @@ app:startDestination="@+id/navigation_home">
     <action
         android:id="@+id/action_mybook_to_newbook"
         app:destination="@+id/navigation_addbook"/>
+    <action
+        android:id="@+id/action_mybook_accepted_to_confirm"
+        app:destination="@+id/owner_confirm"/>
 </fragment>
 
 <fragment
@@ -153,6 +156,11 @@ app:startDestination="@+id/navigation_home">
         app:destination="@+id/book_detail"/>
 </fragment>
 
+    <fragment
+        android:id="@+id/owner_confirm"
+        android:name="com.example.bookit.OwnerHandOverFragment"
+        tools:layout="@layout/fragment_owner_hand_over">
+    </fragment>
 
     <fragment
         android:id="@+id/book_detail"

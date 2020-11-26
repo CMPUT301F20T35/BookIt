@@ -4,6 +4,7 @@ import androidx.constraintlayout.solver.state.State;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RequestHandler implements Serializable {
 
@@ -11,13 +12,15 @@ public class RequestHandler implements Serializable {
     private BookState state;
     private ArrayList<String> requestors;
     private String acceptedRequestor;
+    private Boolean borrowProcess;
+    private Boolean returnProcess;
 
     public RequestHandler() {
-        this(new BookState(),new ArrayList<String>(), "");
+        this(new BookState(),new ArrayList<String>(), "", false, false);
     }
 
     public RequestHandler(BookState state) {
-        this(state,new ArrayList<String>(), "");
+        this(state,new ArrayList<String>(), "", false, false);
 
     }
     /**
@@ -26,10 +29,12 @@ public class RequestHandler implements Serializable {
      * @param pendingRequestors: list of pending requesters username
      * @param acceptedRequestor: the requester's username that is accepted
      */
-    public RequestHandler(BookState state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
+    public RequestHandler(BookState state, ArrayList<String> pendingRequestors, String acceptedRequestor, Boolean borrowProcess, Boolean returnProcess) {
         this.state = state;
         this.requestors = pendingRequestors;
         this.acceptedRequestor = acceptedRequestor;
+        this.borrowProcess = borrowProcess;
+        this.returnProcess = returnProcess;
     }
 
     /**
@@ -81,4 +86,20 @@ public class RequestHandler implements Serializable {
         this.acceptedRequestor = acceptedRequestor;
     }
 
+
+    public Boolean getBorrowProcess() {
+        return borrowProcess;
+    }
+
+    public void setBorrowProcess(Boolean borrowProcess) {
+        this.borrowProcess = borrowProcess;
+    }
+
+    public Boolean getReturnProcess() {
+        return returnProcess;
+    }
+
+    public void setReturnProcess(Boolean returnProcess) {
+        this.returnProcess = returnProcess;
+    }
 }

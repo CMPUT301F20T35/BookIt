@@ -39,6 +39,7 @@ public class MyBookAcceptedFragment extends Fragment {
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
+    private Book BookToScan;
 
 
     @Override
@@ -104,7 +105,22 @@ public class MyBookAcceptedFragment extends Fragment {
         bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Book bookCliced=dataList.get(pos);
+                String isbn=bookCliced.getISBN();
+                String des=bookCliced.getDescription();
+                String title=bookCliced.getTitle();
+                String author=bookCliced.getAuthor();
+                String owner=bookCliced.getOwnerName();
+
+
+
+                Bundle bundle=new Bundle();
+                bundle.putString("isbn",isbn);
+                bundle.putString("description",des);
+                bundle.putString("title",title);
+                bundle.putString("author",author);
+                bundle.putString("owner",owner);
+                Navigation.findNavController(view).navigate(R.id.action_mybook_accepted_to_confirm,bundle);
             }
         });
         rv.setAdapter(bAdapter);
@@ -163,4 +179,5 @@ public class MyBookAcceptedFragment extends Fragment {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(rv);
     }
+
 }
