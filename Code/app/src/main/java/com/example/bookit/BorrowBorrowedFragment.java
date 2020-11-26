@@ -108,6 +108,7 @@ public class BorrowBorrowedFragment extends Fragment {
                         bundle.putString("author",author);
                         bundle.putString("owner",owner);
                         bundle.putSerializable("rh", rh);
+                        bundle.putString("is_borrowed","true");
                         Navigation.findNavController(view).navigate(R.id.action_borrow_borrowed_to_book_return,bundle);
                     }
                 });
@@ -125,6 +126,7 @@ public class BorrowBorrowedFragment extends Fragment {
                 String author=map.get("author").toString();
                 String description=map.get("description").toString();
                 String ownerName=map.get("ownerName").toString();
+
                 //System.out.println(title);
                 Book b= new Book(title,author,ISBN,description,ownerName,null);
                 testList.add(b);

@@ -99,6 +99,7 @@ public class MyBookBorrowedFragment extends Fragment {
                 String title=bookGet.getTitle();
                 String owner=bookGet.getOwnerName();
                 String author = bookGet.getAuthor();
+                String aceepted=bookGet.getRequests().getAcceptedRequestor();
                 RequestHandler rh = new RequestHandler();
                 Bundle bundle=new Bundle();
 
@@ -111,8 +112,11 @@ public class MyBookBorrowedFragment extends Fragment {
                         bundle.putString("description",des);
                         bundle.putString("title",title);
                         bundle.putString("author",author);
+                        bundle.putString("borrower",aceepted);
                         bundle.putString("owner",owner);
                         bundle.putSerializable("rh", rh);
+                        bundle.putString("is_borrowed","false");
+
                         Navigation.findNavController(view).navigate(R.id.action_mybook_borrowed_to_book_return,bundle);
                     }
                 });
@@ -130,7 +134,9 @@ public class MyBookBorrowedFragment extends Fragment {
                         String author=map.get("author").toString();
                         String description=map.get("description").toString();
                         String ownerName=map.get("ownerName").toString();
-                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        String borrower=map.get("acceptedRequestor").toString();
+
+                        Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(),borrower));
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }

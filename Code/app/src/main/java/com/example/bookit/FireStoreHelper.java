@@ -816,6 +816,7 @@ FireStoreHelper {
                                                 String ISBN = document.getData().get("ISBN").toString();
                                                 String description = document.getData().get("description").toString();
                                                 String ownerName = document.getData().get("ownerName").toString();
+                                                String acceptedUser=document.getData().get("acceptedRequestor").toString();
 
                                                 a.add(new Book(title,author,ISBN,description,ownerName,null));
                                                 returnMap.put("title", title);
@@ -823,6 +824,7 @@ FireStoreHelper {
                                                 returnMap.put("ISBN", ISBN);
                                                 returnMap.put("description", description);
                                                 returnMap.put("ownerName", ownerName);
+                                                returnMap.put("acceptedRequestor",acceptedUser);
                                                 callback.onCallback(returnMap);
                                             }
                                         }else{}
