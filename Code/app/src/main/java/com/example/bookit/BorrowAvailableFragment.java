@@ -146,30 +146,9 @@ public class BorrowAvailableFragment extends Fragment {
                 Book b= new Book(title,author,ISBN,description,ownerName,null);
                 testList.add(b);
                 bAdapter.notifyDataSetChanged();
-
             }
-        });
+        }, null);
 
-        fs.fetch_RequestRequestedBook(new dbCallback() {
-            @Override
-            public void onCallback(Map map) {
-                String title=map.get("title").toString();
-                String ISBN=map.get("ISBN").toString();
-                String author=map.get("author").toString();
-                String description=map.get("description").toString();
-                String ownerName=map.get("ownerName").toString();
-                //System.out.println(title);
-                //Book b= new Book(title,author,ISBN,description,ownerName,null);
-                for(int i=0;i<testList.size();i++){
-                    if (testList.get(i).getISBN() == ISBN){
-                        testList.remove(i);
-                        bAdapter.notifyDataSetChanged();
-                    }
-                }
-                //testList.remove(b);
-
-            }
-        });
 
         //set search button function
         searchButton.setOnClickListener(new View.OnClickListener() {

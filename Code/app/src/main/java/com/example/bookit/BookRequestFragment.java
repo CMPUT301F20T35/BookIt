@@ -53,7 +53,7 @@ public class BookRequestFragment extends Fragment {
         // get current book info from bundle
         Bundle b = getArguments();
         isbn = b.getString("isbn");
-        des = b.getString("des");
+        des = b.getString("description");
         title = b.getString("title");
         owner = b.getString("owner");
         author = b.getString("author");

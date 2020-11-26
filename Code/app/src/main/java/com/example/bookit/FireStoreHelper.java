@@ -1050,6 +1050,9 @@ FireStoreHelper {
                                                 String description = document.getData().get("description").toString();
                                                 String ownerName = document.getData().get("ownerName").toString();
                                                 //a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                if (name.equals(ownerName)) {
+                                                    continue;
+                                                }
                                                 returnMap.put("title", title);
                                                 returnMap.put("author", author);
                                                 returnMap.put("ISBN", ISBN);
@@ -1073,7 +1076,8 @@ FireStoreHelper {
             }
         });
     }
-    public void fetch_RequestBorrowedBook(final dbCallback callback) {
+    public void fetch_RequestBorrowedBook(final dbCallback callback, ProgressBar pb) {
+        if (pb != null) { pb.setVisibility(View.VISIBLE); }
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -1106,6 +1110,12 @@ FireStoreHelper {
                                                 String ISBN = document.getData().get("ISBN").toString();
                                                 String description = document.getData().get("description").toString();
                                                 String ownerName = document.getData().get("ownerName").toString();
+                                                ArrayList<String> requestors = (ArrayList<String>) document.getData().get("requestors");
+                                                System.out.println(ownerName);
+
+                                                if (requestors.contains(name) || name.equals(ownerName)) {
+                                                    continue;
+                                                }
                                                 //a.add(new Book(title,author,ISBN,description,ownerName,null));
                                                 returnMap.put("title", title);
                                                 returnMap.put("author", author);
@@ -1113,8 +1123,10 @@ FireStoreHelper {
                                                 returnMap.put("description", description);
                                                 returnMap.put("ownerName", ownerName);
                                                 callback.onCallback(returnMap);
+                                                if (pb != null) { pb.setVisibility(View.GONE); }
                                             }
                                         } else {
+                                            if (pb != null) { pb.setVisibility(View.GONE); }
                                         }
 
                                     }
@@ -1122,9 +1134,11 @@ FireStoreHelper {
 
                     } else {
                         Log.d(TAG, "No such document");
+                        if (pb != null) { pb.setVisibility(View.GONE); }
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    if (pb != null) { pb.setVisibility(View.GONE); }
                 }
             }
         });
