@@ -20,6 +20,8 @@ public class BookReturnFragment extends Fragment {
     private TextView isbn;
     private TextView author;
     private TextView description;
+    private TextView borrower;
+    private TextView textView5;
     private Button returnBook;
     private ImageView backButton;
 
@@ -38,12 +40,18 @@ public class BookReturnFragment extends Fragment {
         owner = view.findViewById(R.id.owner_name);
         author = view.findViewById(R.id.bookAuthor_name);
         description = view.findViewById(R.id.Description);
+        borrower=view.findViewById(R.id.borrower);
+        textView5=view.findViewById(R.id.textView5);
 
         isbn.setText(bundle.getString("isbn"));
         description.setText(bundle.getString("description"));
         title.setText(bundle.getString("title"));
         author.setText(bundle.getString("author"));
         owner.setText(bundle.getString("owner"));
+        borrower.setText(bundle.getString("borrower"));
+        if (bundle.getString("is_borrowed").equals("true")){
+            textView5.setText("");
+        }
 
         returnBook = view.findViewById(R.id.button_return);
         returnBook.setOnClickListener(new View.OnClickListener() {
