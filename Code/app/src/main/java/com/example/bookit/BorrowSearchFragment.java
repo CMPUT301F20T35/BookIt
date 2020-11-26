@@ -133,5 +133,25 @@ public class BorrowSearchFragment extends Fragment {
                 }
             }
         }, pb);
+
+        fs.fetch_RequestBorrowedBook(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+
+                if (title.toLowerCase().contains(keyword.toLowerCase())
+                        || author.toLowerCase().contains(keyword.toLowerCase())
+                        || description.toLowerCase().contains(keyword.toLowerCase())
+                        || ISBN.toLowerCase().contains(keyword.toLowerCase())) {
+                    Book b= new Book(title,author,ISBN,description,ownerName,null);
+                    testList.add(b);
+                    bAdapter.notifyDataSetChanged();
+                }
+            }
+        }, pb);
     }
 }
