@@ -2,6 +2,10 @@ package com.example.bookit;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Map;
 
-public class BookReturnFragment extends Fragment {
-    private TextView ownerDetail;
-
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class BookReturnOwner extends Fragment {
 
     private TextView title;
     private TextView owner;
@@ -36,14 +39,12 @@ public class BookReturnFragment extends Fragment {
     FireStoreHelper fs;
 
     @Override
-    /**
-     * fragment used for returning book
-     * @see fragment corresponding to layout file fragment_book_return
-     * @return view of the fragment
-     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_book_return, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_book_return_owner, container, false);
+
+
         fs=new FireStoreHelper(getActivity());
         Bundle bundle = getArguments();
         title = view.findViewById(R.id.bookTitle);
@@ -70,8 +71,16 @@ public class BookReturnFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // borrower return scan function
-                scan();
-
+                fs.checkReturnProcess(ISBN, new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        if ((Boolean) map.get("returnProcess")) {
+                            scan();
+                        } else {
+                            Toast.makeText(getActivity(), "Borrower has not handed yet", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 
@@ -92,12 +101,11 @@ public class BookReturnFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-
         return view;
     }
 
     private void scan() {
-        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(BookReturnFragment.this);
+        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(BookReturnOwner.this);
         integrator.setCaptureActivity(CodeCapture.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
         integrator.setOrientationLocked(true);
@@ -123,7 +131,7 @@ public class BookReturnFragment extends Fragment {
     private void checkISBN(String ISBNtoCheck) {
         fs=new FireStoreHelper(getActivity());
         if(ISBNtoCheck.equals(ISBN)) {
-            fs.updateReturnProcess("borrower", ISBNtoCheck, new dbCallback() {
+            fs.updateReturnProcess("owner", ISBNtoCheck, new dbCallback() {
                 @Override
                 public void onCallback(Map map) {
                     getActivity().onBackPressed();
@@ -133,5 +141,4 @@ public class BookReturnFragment extends Fragment {
             Toast.makeText(getActivity(), "Wrong book", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

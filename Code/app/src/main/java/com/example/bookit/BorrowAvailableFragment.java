@@ -150,6 +150,21 @@ public class BorrowAvailableFragment extends Fragment {
         }, null);
 
 
+        fs.fetch_borrower_confirmed_book(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                testList.add(b);
+                bAdapter.notifyDataSetChanged();
+            }
+        });
+
+
         //set search button function
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

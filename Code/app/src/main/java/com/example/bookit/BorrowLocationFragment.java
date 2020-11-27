@@ -113,7 +113,7 @@ public class BorrowLocationFragment extends Fragment {
         borrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // scan code functionality need to be implemented here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // scan code functionality
 //                fs.To_borrowed(isbn);
                 fs.checkHandProcess(isbn, new dbCallback() {
                     @Override

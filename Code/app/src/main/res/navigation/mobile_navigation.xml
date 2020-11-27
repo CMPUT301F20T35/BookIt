@@ -128,8 +128,8 @@ app:startDestination="@+id/navigation_home">
         android:id="@+id/action_mybook_borrowed_to_mybook_available"
         app:destination="@id/navigation_mybook_available" />
     <action
-        android:id="@+id/action_mybook_borrowed_to_book_return"
-        app:destination="@id/navigation_book_return" />
+        android:id="@+id/action_mybook_borrowed_to_book_return_owner"
+        app:destination="@id/navigation_book_return_owner" />
     <action
         android:id="@+id/action_mybook_to_newbook"
         app:destination="@+id/navigation_addbook"/>
@@ -256,6 +256,11 @@ app:startDestination="@+id/navigation_home">
         <action
             android:id="@+id/action_book_detail_to_owner_detail"
             app:destination="@id/navigation_owner_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_book_return_owner"
+        android:name="com.example.bookit.BookReturnOwner"
+        tools:layout="@layout/fragment_book_return_owner">
     </fragment>
     <fragment
         android:id="@+id/navigation_owner_detail"
