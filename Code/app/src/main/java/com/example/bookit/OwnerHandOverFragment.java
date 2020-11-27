@@ -142,7 +142,14 @@ public class OwnerHandOverFragment extends Fragment {
     private void checkISBN(String ISBNtoCheck) {
         fs=new FireStoreHelper(getActivity());
         if(ISBNtoCheck.equals(isbn)) {
-            fs.updateBorrowProcess("owner", ISBNtoCheck);
+            fs.updateBorrowProcess("owner", ISBNtoCheck, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    getActivity().onBackPressed();
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "Wrong book", Toast.LENGTH_SHORT).show();
         }
     }
 

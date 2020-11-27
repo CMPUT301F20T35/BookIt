@@ -1359,16 +1359,6 @@ FireStoreHelper {
     }
 
 
-
-    public void To_borrowed(String isbn){
-        fAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        DocumentReference bookReference = db.collection("Book")
-                .document(isbn);
-        bookReference.update("state.bookStatus","BORROWED");
-    }
-
-
     /**
      * responsible for updating book status when borrower request a certain book
      * @param ISBN isbn of the book which I want to update its info
@@ -1474,7 +1464,7 @@ FireStoreHelper {
 
     }
 
-    public void updateBorrowProcess(String person, String ISBN) {
+    public void updateBorrowProcess(String person, String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
         if (person.equals("owner")) {
             db.collection("Book")
@@ -1485,6 +1475,7 @@ FireStoreHelper {
                         public void onSuccess(Void aVoid) {
                             Map<String, String> returnMap = new HashMap<>();
                             Toast.makeText(context, "Book hand over confirmed", Toast.LENGTH_SHORT).show();
+                            callback.onCallback(returnMap);
                         }
                     });
         } else {
@@ -1504,10 +1495,32 @@ FireStoreHelper {
                         public void onSuccess(Void aVoid) {
                             Map<String, String> returnMap = new HashMap<>();
                             Toast.makeText(context, "Book received confirmed", Toast.LENGTH_SHORT).show();
+                            callback.onCallback(returnMap);
                         }
                     });
         }
 
+    }
+
+    public void checkHandProcess(String ISBN, dbCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book")
+                .document(ISBN)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Boolean borrowProcess = document.getBoolean("borrowProcess");
+                                Map<String, Boolean> returnMap = new HashMap<>();
+                                returnMap.put("borrowProcess", borrowProcess);
+                                callback.onCallback(returnMap);
+                            }
+                        }
+                    }
+                });
     }
 
     //public void update(){}

@@ -136,7 +136,7 @@ public class MyBookBorrowedFragment extends Fragment {
                         String ownerName=map.get("ownerName").toString();
                         String borrower=map.get("acceptedRequestor").toString();
 
-                        Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(),borrower));
+                        Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(),borrower, false, false));
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }

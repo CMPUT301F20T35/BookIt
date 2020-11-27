@@ -101,8 +101,6 @@ public class BorrowAcceptedFragment extends Fragment {
                 String author=bookCliced.getAuthor();
                 String owner=bookCliced.getOwnerName();
 
-
-
                 Bundle bundle=new Bundle();
                 bundle.putString("isbn",isbn);
                 bundle.putString("description",des);
@@ -110,8 +108,6 @@ public class BorrowAcceptedFragment extends Fragment {
                 bundle.putString("author",author);
                 bundle.putString("owner",owner);
                 Navigation.findNavController(view).navigate(R.id.action_borrow_accepted_to_borrow_location,bundle);
-
-
             }
 
 
