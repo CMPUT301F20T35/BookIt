@@ -89,7 +89,7 @@ public class BookReturnOwner extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", owner.getText().toString());
-                Navigation.findNavController(view).navigate(R.id.action_book_detail_to_owner_detail, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_book_return_owner_to_navigation_owner_detail, bundle);
 
             }
         });
