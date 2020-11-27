@@ -1,6 +1,10 @@
 package com.example.bookit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHolder> {
     private Context mContext;
     private ArrayList<User> userData = new ArrayList<>();
     public MyClickListener myClickListener;
+    FireStoreHelper fs;
 
     /**
      * This constructor takes in two parameters
@@ -61,6 +68,26 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
     //here we set the information and click functionality for each row of list
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.LinearViewHolder holder, final int position) {
+        fs = new FireStoreHelper(mContext);
+        try {
+            fs.load_image_with_id(userData.get(position).getUserID(), new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("userimg");
+                    SharedPreferences.Editor prefEditor = mContext.
+                            getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
+                    prefEditor.putString("profileimg", imageEncoded);
+                    prefEditor.commit();
+
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+                    holder.photo.setImageBitmap(img);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         holder.email.setText(userData.get(position).getEmail());
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
