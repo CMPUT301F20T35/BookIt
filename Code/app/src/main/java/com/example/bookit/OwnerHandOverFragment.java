@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,66 +18,58 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
-import com.google.firebase.firestore.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class BorrowLocationFragment extends Fragment {
-    private Button locationButton;
-    private Button borrowButton;
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class OwnerHandOverFragment extends Fragment {
+    private Button handOverBtn;
     private ImageView backButton;
-    private TextView ownerDetail;
+    private TextView authorView;
     FireStoreHelper fs;
     private String isbn;
     private String title;
     private String description;
-    private String owner;
     private String author;
     private ImageView im;
     private TextView titleView;
-    private TextView ownerView;
     private TextView isbnView;
     private TextView descriptionView;
-    //private TextView authorView;
     @Override
-    /**
-     * fragment used for borrower confirming location of the hand off
-     * @return view of the fragment
-     * @see fragment corresponding to layout file fragment_borrow_location
-     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_borrow_location, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_owner_hand_over, container, false);
         // find view by ids
         fs=new FireStoreHelper(getActivity());
+        backButton = view.findViewById(R.id.bt_back);
         titleView=view.findViewById(R.id.tv_book_title);
-        ownerView=view.findViewById(R.id.tv_owner_name);
         isbnView=view.findViewById(R.id.tv_IBSN_number);
         descriptionView=view.findViewById(R.id.tv_description);
         //authorView=view.findViewById(R.id.author_text);
-        locationButton = view.findViewById(R.id.bt_location);
-        borrowButton = view.findViewById(R.id.bt_borrow);
-        backButton = view.findViewById(R.id.bt_back);
+        handOverBtn = view.findViewById(R.id.confirm);
         im=view.findViewById(R.id.iv_book);
-        //ownerDetail = view.findViewById(R.id.tv_owner_name);
+        authorView = view.findViewById(R.id.authorName);
         Bundle b=getArguments();
         isbn=b.getString("isbn");
         title=b.getString("title");
         description=b.getString("description");
-        owner=b.getString("owner");
         isbn=b.getString("isbn");
         author=b.getString("author");
         titleView.setText(title);
-        ownerView.setText(owner);
         isbnView.setText(isbn);
         descriptionView.setText(description);
-        //authorView.setText(author);
+        authorView.setText(author);
+
+
         try {
             fs.load_book_image(isbn, new dbCallback() {
                 @Override
@@ -100,73 +94,27 @@ public class BorrowLocationFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         // set listener for back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 // back to previous fragment
                 getActivity().onBackPressed();
             }
         });
 
-        // set listener for borrow button
-        borrowButton.setOnClickListener(new View.OnClickListener() {
+        handOverBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // scan code functionality need to be implemented here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                fs.To_borrowed(isbn);
-                fs.checkHandProcess(isbn, new dbCallback() {
-                    @Override
-                    public void onCallback(Map map) {
-                        if ((Boolean) map.get("borrowProcess")) {
-                            scan();
-                        } else {
-                            Toast.makeText(getActivity(), "Owner has not handed yet", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                scan();
             }
         });
-
-        // set listener for location button
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fs.fetch_location(isbn, new dbCallback() {
-                            @Override
-                            public void onCallback(Map map) {
-                                GeoPoint location= (GeoPoint) map.get("location");
-                                if(location!=null){
-                                    Bundle bundle = new Bundle();
-                                    bundle.putDouble("lat",location.getLatitude());
-                                    bundle.putDouble("long",location.getLongitude());
-                                    Navigation.findNavController(v).navigate(R.id.fragment_borrow_location_to_view_map_fragment,bundle);
-
-                                }
-                            }
-                        }
-             );
-
-            }
-        });
-
-        // see owner detail
-        ownerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle b=new Bundle();
-
-                b.putString("username",owner);
-
-                Navigation.findNavController(view).navigate(R.id.action_fragment_borrow_location_to_owner_detail2,b);
-            }
-        });
-
         return view;
     }
 
     private void scan() {
-        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(BorrowLocationFragment.this);
+        IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(OwnerHandOverFragment.this);
         integrator.setCaptureActivity(CodeCapture.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13);
         integrator.setOrientationLocked(true);
@@ -194,7 +142,7 @@ public class BorrowLocationFragment extends Fragment {
     private void checkISBN(String ISBNtoCheck) {
         fs=new FireStoreHelper(getActivity());
         if(ISBNtoCheck.equals(isbn)) {
-            fs.updateBorrowProcess("borrower", ISBNtoCheck, new dbCallback() {
+            fs.updateBorrowProcess("owner", ISBNtoCheck, new dbCallback() {
                 @Override
                 public void onCallback(Map map) {
                     getActivity().onBackPressed();

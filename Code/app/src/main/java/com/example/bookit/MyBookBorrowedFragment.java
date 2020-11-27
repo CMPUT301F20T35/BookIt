@@ -136,12 +136,27 @@ public class MyBookBorrowedFragment extends Fragment {
                         String ownerName=map.get("ownerName").toString();
                         String borrower=map.get("acceptedRequestor").toString();
 
-                        Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(),borrower));
+                        Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(),borrower, false, false));
                         dataList.add(b);
                         bAdapter.notifyDataSetChanged();
                     }
                 }
         );
+
+        fs.fetch_owner_confirmed_book(new dbCallback() {
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                dataList.add(b);
+                bAdapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 
