@@ -793,6 +793,32 @@ FireStoreHelper {
 
     }
 
+    public void load_Requestimage(final dbCallback callback) throws IOException {
+
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseStorage mstore = FirebaseStorage.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        String name = "current";
+        StorageReference storageReference=mstore.getReferenceFromUrl("gs://bookit-fc94f.appspot.com/").child("images/"+user.getUid()+"/"+name+".jpg");
+
+        final File f = File.createTempFile("image", "jpg");
+        storageReference.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] by = baos.toByteArray();
+                String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
+                Map<String, String> returnMap = new HashMap<>();
+                returnMap.put("userimg", imageEncoded);
+                callback.onCallback(returnMap);
+
+            }
+        });
+
+    }
+
 
     public void fetch_MyBook(String which ,final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();

@@ -2,6 +2,8 @@ package com.example.bookit;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import android.widget.ImageView;
@@ -206,6 +209,24 @@ public class fragment_requestList extends Fragment {
                 fs.updateRequestors(isbn, finalRequestorTemp);
                 uAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(),"Succesfully denied the request"+p, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onClickPhoto(int p) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Requestor Detail: ");
+                View v = LayoutInflater.from(getContext()).inflate(R.layout.request_detail_alertdialog, null, false);
+                builder.setView(v);
+                final TextView username=v.findViewById(R.id.name);
+                final TextView email=v.findViewById(R.id.email);
+                final TextView phoneNumber=v.findViewById(R.id.phonenumber);
+
+                username.setText(testList.get(p).getUserName());
+                email.setText(testList.get(p).getEmail());
+                phoneNumber.setText(testList.get(p).getContactInfo());
+                builder.setPositiveButton("Gotcha", null);
+                builder.show();
+                Toast.makeText(getActivity(),"Photo"+p, Toast.LENGTH_LONG).show();
             }
         });
         rv.setAdapter(uAdapter);

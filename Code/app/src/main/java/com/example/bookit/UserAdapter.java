@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
             @Override
             public void onDeny(int p) {
             }
+
+            @Override
+            public void onClickPhoto(int p) {
+
+            }
+
         });
         return holder;
     }
@@ -65,6 +72,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
             @Override
             public void onClick(View v) {
                 myClickListener.onDeny(position);
+            }
+        });
+
+        holder.photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClickListener.onClickPhoto(position);
             }
         });
     }
@@ -92,12 +106,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
         private TextView email;
         public Button acceptButton;
         public Button denyButton;
+        public ImageView photo;
         public LinearViewHolder(View itemView, MyClickListener listener){
             super(itemView);
             email = itemView.findViewById(R.id.user_email);
             acceptButton = itemView.findViewById(R.id.accpet);
             denyButton = itemView.findViewById(R.id.deny);
-
+            photo = itemView.findViewById(R.id.image);
             this.listener = listener;
 
             acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +127,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
                 @Override
                 public void onClick(View v) {
                     myClickListener.onDeny(getAdapterPosition());
+                }
+            });
+
+            photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myClickListener.onClickPhoto(getAdapterPosition());
                 }
             });
         }
@@ -135,6 +157,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
     public interface MyClickListener{
         void onAccept(int p);
         void onDeny(int p);
+        void onClickPhoto(int p);
     }
 }
 
