@@ -126,9 +126,10 @@ public class NewBookEditFragment extends Fragment {
                             db.book_image_add(MediaUri, book, new dbCallback() {
                                 @Override
                                 public void onCallback(Map map) {
-                                    getActivity().onBackPressed();
                                 }
                             });//add the image array to the firebase storage
+                            Toast.makeText(getContext(), "finish", Toast.LENGTH_SHORT).show();
+                            getActivity().onBackPressed();
                         }
                     });
 
