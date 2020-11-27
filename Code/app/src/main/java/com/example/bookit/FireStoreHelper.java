@@ -177,7 +177,8 @@ FireStoreHelper {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                        Map<String, String> returnMap = new HashMap<>();
+                                                        callback.onCallback(returnMap);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -186,8 +187,6 @@ FireStoreHelper {
                                                         Log.w(TAG, "Error updating document", e);
                                                     }
                                                 });
-                                        Map<String, String> returnMap = new HashMap<>();
-                                        callback.onCallback(returnMap);
                                     }catch (IllegalArgumentException e){
                                         Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
                                                 .LENGTH_SHORT).show();
@@ -708,6 +707,7 @@ FireStoreHelper {
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if (task.isSuccessful()) {
                                 Map<String, String> returnMap = new HashMap<>();
+                                Toast.makeText(context, "finish", Toast.LENGTH_SHORT).show();
                                 callback.onCallback(returnMap);
                             }
                         }
