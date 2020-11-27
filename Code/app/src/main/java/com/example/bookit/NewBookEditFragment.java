@@ -120,9 +120,18 @@ public class NewBookEditFragment extends Fragment {
                 RequestHandler requestHandler=new RequestHandler();
                 Book book= new Book(title,author,ISBN,desc,owner,requestHandler);
                 if (bookInfoValidator(book)) {
-                    db.addBook(book);
-                    db.book_image_add(MediaUri,book);//add the image array to the firebase storage
-                    getActivity().onBackPressed();
+                    db.addBook(book, new dbCallback() {
+                        @Override
+                        public void onCallback(Map map) {
+                            db.book_image_add(MediaUri, book, new dbCallback() {
+                                @Override
+                                public void onCallback(Map map) {
+                                    getActivity().onBackPressed();
+                                }
+                            });//add the image array to the firebase storage
+                        }
+                    });
+
                 }
                 else{
                     Toast.makeText(getContext(), "wrong input please check your input!", Toast.LENGTH_SHORT).show();

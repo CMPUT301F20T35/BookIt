@@ -94,20 +94,16 @@ public class BorrowBorrowedFragment extends Fragment {
                 String title=bookGet.getTitle();
                 String owner=bookGet.getOwnerName();
                 String author = bookGet.getAuthor();
-                RequestHandler rh = new RequestHandler();
                 Bundle bundle=new Bundle();
 
                 fs.fetch_MyBookRequest(title, new dbCallback() {
                     @Override
                     public void onCallback(Map map) {
-                        final RequestHandler rh = (RequestHandler) map.get("requestHandler");
-                        bundle.putSerializable("rh",rh);
                         bundle.putString("isbn",isbn);
                         bundle.putString("description",des);
                         bundle.putString("title",title);
                         bundle.putString("author",author);
                         bundle.putString("owner",owner);
-                        bundle.putSerializable("rh", rh);
                         bundle.putString("is_borrowed","true");
                         Navigation.findNavController(view).navigate(R.id.action_borrow_borrowed_to_book_return,bundle);
                     }

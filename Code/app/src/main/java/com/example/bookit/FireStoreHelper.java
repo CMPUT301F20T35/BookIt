@@ -143,7 +143,7 @@ FireStoreHelper {
      * used to add a valid book to the firestore
      * @param book
      * */
-    public void addBook(final Book book){
+    public void addBook(final Book book, dbCallback callback){
         db = FirebaseFirestore.getInstance();
         final String stateId;
         fAuth = FirebaseAuth.getInstance();
@@ -156,56 +156,55 @@ FireStoreHelper {
                 DocumentSnapshot d = task.getResult();
                 if (d.exists()) {
                     book.setOwnerName(d.get("username").toString());
+
+                    DocumentReference bookReference = db.collection("Book")
+                            .document(book.getISBN());
+                    bookReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (! task.getResult().exists()) {
+                                    Map<String, Object> bookHash = new HashMap<>();
+                                    bookHash.put("author",book.getAuthor());
+                                    bookHash.put("ISBN",book.getISBN());
+                                    bookHash.put("description",book.getDescription());
+                                    bookHash.put("ownerName",book.getOwnerName());
+                                    bookHash.put("title",book.getTitle());
+                                    final RequestHandler r=book.getRequests();
+                                    try{
+                                        db.collection("Book").document(book.getISBN()).set(r);
+                                        db.collection("Book").document(book.getISBN()).update(bookHash)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document", e);
+                                                    }
+                                                });
+                                        Map<String, String> returnMap = new HashMap<>();
+                                        callback.onCallback(returnMap);
+                                    }catch (IllegalArgumentException e){
+                                        Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
+                                                .LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(context.getApplicationContext(),"this book already existed, change a book",Toast
+                                            .LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
                 } else {
                     Toast.makeText(context.getApplicationContext(),task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        DocumentReference bookReference = db.collection("Book")
-                .document(book.getISBN());
-
-        bookReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (! task.getResult().exists()) {
-                        Map<String, Object> bookHash = new HashMap<>();
-                        bookHash.put("author",book.getAuthor());
-                        bookHash.put("ISBN",book.getISBN());
-                        bookHash.put("description",book.getDescription());
-                        bookHash.put("ownerName",book.getOwnerName());
-                        bookHash.put("title",book.getTitle());
-                        final RequestHandler r=book.getRequests();
-                        try{
-                            db.collection("Book").document(book.getISBN()).set(r);
-                            db.collection("Book").document(book.getISBN()).update(bookHash)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error updating document", e);
-                                        }
-                                    });
-                        }catch (IllegalArgumentException e){
-                            Toast.makeText(context.getApplicationContext(),"invalid argument,fail to add new book",Toast
-                                    .LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(context.getApplicationContext(),"this book already existed, change a book",Toast
-                                .LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-
 
     }
 
@@ -697,12 +696,22 @@ FireStoreHelper {
      * for adding images to the firebase
      * @param u,book
      */
-    public void book_image_add(Uri u,Book book) {
+    public void book_image_add(Uri u,Book book, dbCallback callback) {
         if (u!= null){
             mstore= FirebaseStorage.getInstance().getReference();
             StorageReference storageReference;
             storageReference=mstore.child("book_images/"+book.getISBN()+"/image1"+".jpg");
-            storageReference.putFile(u);
+            storageReference
+                    .putFile(u)
+                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Map<String, String> returnMap = new HashMap<>();
+                                callback.onCallback(returnMap);
+                            }
+                        }
+                    });
         }
     }
 
@@ -902,6 +911,63 @@ FireStoreHelper {
             }
         });
     }
+
+
+    public void fetch_borrower_confirmed_book(final dbCallback callback) {
+        fAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = fAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        ArrayList<Book> a= new ArrayList<>();
+        DocumentReference docRef = db.collection("User").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String name= document.get("username").toString();
+                        db.collection("Book")
+                                .whereEqualTo("acceptedRequestor",name)
+                                .whereEqualTo("state.bookStatus", "BORROWED")
+                                .whereEqualTo("returnProcess", true)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                        if(task1.isSuccessful()){
+                                            for (QueryDocumentSnapshot document:task1.getResult()){
+                                                Map<String, String> returnMap = new HashMap<>();
+
+                                                //do something here
+                                                String title = document.getData().get("title").toString();
+                                                String author = document.getData().get("author").toString();
+                                                String ISBN = document.getData().get("ISBN").toString();
+                                                String description = document.getData().get("description").toString();
+                                                String ownerName = document.getData().get("ownerName").toString();
+
+                                                a.add(new Book(title,author,ISBN,description,ownerName,null));
+                                                returnMap.put("title", title);
+                                                returnMap.put("author", author);
+                                                returnMap.put("ISBN", ISBN);
+                                                returnMap.put("description", description);
+                                                returnMap.put("ownerName", ownerName);
+                                                callback.onCallback(returnMap);
+                                            }
+                                        }else{}
+
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
 ////////////////////////////////////
     public void fetch_RequestBook(final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
@@ -1035,6 +1101,7 @@ FireStoreHelper {
                         db.collection("Book")
                                 .whereEqualTo("acceptedRequestor", name)
                                 .whereEqualTo("state.bookStatus", "BORROWED")
+                                .whereEqualTo("returnProcess", false)
                                 .whereArrayContains("requestors", name)
                                 //.whereEqualTo("state.bookStatus",which)//
                                 .get()
@@ -1499,8 +1566,47 @@ FireStoreHelper {
                         }
                     });
         }
-
     }
+
+    public void updateReturnProcess(String person, String ISBN, dbCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        if (person.equals("borrower")) {
+            db.collection("Book")
+                    .document(ISBN)
+                    .update("returnProcess", true)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Map<String, String> returnMap = new HashMap<>();
+                            Toast.makeText(context, "Book return confirmed", Toast.LENGTH_SHORT).show();
+                            callback.onCallback(returnMap);
+                        }
+                    });
+        } else {
+            BookState state = new BookState();
+
+            db.collection("Book")
+                    .document(ISBN)
+                    .update(
+                            "acceptedRequestor", "",
+                            "requestors", new ArrayList<String>(),
+                            "state", state,
+                            "returnProcess", false
+                            )
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Map<String, String> returnMap = new HashMap<>();
+                                Toast.makeText(context, "Book received confirmed", Toast.LENGTH_SHORT).show();
+                                callback.onCallback(returnMap);
+                            }
+                        }
+                    });
+        }
+    }
+
+
 
     public void checkHandProcess(String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
@@ -1516,6 +1622,27 @@ FireStoreHelper {
                                 Boolean borrowProcess = document.getBoolean("borrowProcess");
                                 Map<String, Boolean> returnMap = new HashMap<>();
                                 returnMap.put("borrowProcess", borrowProcess);
+                                callback.onCallback(returnMap);
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void checkReturnProcess(String ISBN, dbCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Book")
+                .document(ISBN)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Boolean returnProcess = document.getBoolean("returnProcess");
+                                Map<String, Boolean> returnMap = new HashMap<>();
+                                returnMap.put("returnProcess", returnProcess);
                                 callback.onCallback(returnMap);
                             }
                         }
