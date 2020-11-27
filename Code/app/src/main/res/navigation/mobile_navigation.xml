@@ -261,6 +261,9 @@ app:startDestination="@+id/navigation_home">
         android:id="@+id/navigation_book_return_owner"
         android:name="com.example.bookit.BookReturnOwner"
         tools:layout="@layout/fragment_book_return_owner">
+        <action
+            android:id="@+id/action_book_return_owner_to_navigation_owner_detail"
+            app:destination="@id/navigation_owner_detail" />
     </fragment>
     <fragment
         android:id="@+id/navigation_owner_detail"
