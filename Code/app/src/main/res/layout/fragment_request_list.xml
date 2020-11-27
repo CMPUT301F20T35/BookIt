@@ -45,7 +45,6 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
         android:shadowColor="#15BACF"
-        android:text="XU"
         android:textColor="#15BACF"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:text="231213124"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -77,7 +75,6 @@
         android:layout_width="273dp"
         android:layout_height="51dp"
         android:layout_marginStart="56dp"
-        android:text="this book is about xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
