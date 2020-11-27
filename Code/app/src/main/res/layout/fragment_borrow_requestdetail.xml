@@ -27,7 +27,6 @@
         android:layout_marginTop="72dp"
         android:background="#F6F6F6"
         android:backgroundTint="#FFFFFF"
-        android:text="owner"
         android:textColor="#CD3F3F"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.548"
