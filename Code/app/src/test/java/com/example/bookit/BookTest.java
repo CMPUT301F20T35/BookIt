@@ -95,7 +95,7 @@ public class BookTest {
     public void testSetRequestHandler() {
         Book book = this.mockBook();
         assertNull(book.getOwnerName());
-        RequestHandler requestHandler = new RequestHandler(null, null, null);
+        RequestHandler requestHandler = new RequestHandler(null, null, null, null, null);
         book.setRequests(requestHandler);
         assertEquals(requestHandler, book.getRequests());
     }
