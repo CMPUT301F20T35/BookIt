@@ -11,7 +11,7 @@ public class RequestHandlerTest {
 
     // mock RequestHandler object
     private RequestHandler mockRequestHandler() {
-        RequestHandler requestHandler = new RequestHandler(null, null, null);
+        RequestHandler requestHandler = new RequestHandler(null, null, null, null, null);
         return requestHandler;
     }
 
