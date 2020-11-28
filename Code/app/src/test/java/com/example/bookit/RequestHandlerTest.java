@@ -61,4 +61,32 @@ public class RequestHandlerTest {
         requestHandler.setAcceptedRequestor("testAcceptedRequestor");
         assertEquals("testAcceptedRequestor", requestHandler.getAcceptedRequestor());
     }
+
+    @Test
+    public void testGetBorrowProcess() {
+        RequestHandler requestHandler = this.mockRequestHandler();
+        assertNull(requestHandler.getBorrowProcess());
+    }
+
+    @Test
+    public void testSetBorrowProcess() {
+        RequestHandler requestHandler = this.mockRequestHandler();
+        assertNull(requestHandler.getBorrowProcess());
+        requestHandler.setBorrowProcess(true);
+        assertEquals(true, requestHandler.getBorrowProcess());
+    }
+
+    @Test
+    public void testGetReturnProcess() {
+        RequestHandler requestHandler = this.mockRequestHandler();
+        assertNull(requestHandler.getReturnProcess());
+    }
+
+    @Test
+    public void testSetReturnProcess() {
+        RequestHandler requestHandler = this.mockRequestHandler();
+        assertNull(requestHandler.getReturnProcess());
+        requestHandler.setReturnProcess(true);
+        assertEquals(true, requestHandler.getReturnProcess());
+    }
 }
