@@ -91,7 +91,7 @@ public class fragment_requestList extends Fragment {
         //delete=view.findViewById(R.id.deleteButton);
         titleView=view.findViewById(R.id.title);
         ownerView=view.findViewById(R.id.owner_name);
-        isbnView=view.findViewById(R.id.IBSN);
+        isbnView=view.findViewById(R.id.ISBN);
         descriptionView=view.findViewById(R.id.Description);
         //authorView=view.findViewById(R.id.);
         //editInfo=view.findViewById(R.id.editbookinfo);

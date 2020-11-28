@@ -94,12 +94,6 @@ public class MyBookRequestedFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Book book = new Book("ybs","YBS","123","optional","ybs",null);
-//                testList.add(book);
-//                bAdapter.notifyDataSetChanged();
-
-                //this is xiu's code, the above code is used for testing, delete them later and replace with the bottom cde
                 Navigation.findNavController(view).navigate(R.id.action_mybook_to_newbook);
             }
         });
