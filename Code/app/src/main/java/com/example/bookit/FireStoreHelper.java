@@ -662,6 +662,7 @@ FireStoreHelper {
                 String imageEncoded = Base64.encodeToString(by, Base64.DEFAULT);
                 Map<String, String> returnMap = new HashMap<>();
                 returnMap.put("bookimage", imageEncoded);
+
                 callback.onCallback(returnMap);
 
             }
