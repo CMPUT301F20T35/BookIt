@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class US020301Test {
+public class US040301Test {
     private Solo solo;
 
     @Rule
@@ -36,14 +36,8 @@ public class US020301Test {
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
-        solo.clickOnView(solo.getView(R.id.navigation_my_book));
-        solo.clickOnButton("Borrowed");
-        solo.waitForFragmentByTag("MyBookBorrowedFragment", 2000);
-        solo.clickInRecyclerView(0);
-
-        // check a user's profile by user ID
-        solo.clickOnView(solo.getView(R.id.owner_name));
-        solo.waitForFragmentByTag("OwnerDetailFragment", 4000);
+        // check notification if there exist such one
+        solo.waitForFragmentByTag("HomeFragment", 5000);
     }
 
     @After
