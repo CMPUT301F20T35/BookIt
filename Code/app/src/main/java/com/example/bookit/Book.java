@@ -9,8 +9,6 @@ public class Book {
     private String description;
     private String ownerName;
     private RequestHandler requests;
-//missing image list
-
 
     /**
      * This constructor takes in six parameters

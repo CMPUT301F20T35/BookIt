@@ -42,14 +42,14 @@ public class US010601Test {
         solo.clickOnButton("Available");
         solo.waitForFragmentByTag("MyBookAvailableFragment", 5000);
         // edit book
-        solo.clickInRecyclerView(0);
+        solo.clickInRecyclerView(1);
         solo.clickOnView(solo.getView(R.id.editbookinfo));
         solo.clearEditText((EditText) solo.getView(R.id.edit_isbn));
         solo.enterText((EditText) solo.getView(R.id.edit_isbn), "testUS010601");
         solo.waitForText("testUS010601", 1, 2000);
         solo.clickOnButton("update");
         solo.clickOnButton("finish");
-        solo.clickInRecyclerView(0);
+        solo.clickInRecyclerView(1);
         solo.clickOnView(solo.getView(R.id.editbookinfo));
         solo.clearEditText((EditText) solo.getView(R.id.edit_title));
         solo.enterText((EditText) solo.getView(R.id.edit_title), "US010601");
@@ -60,7 +60,7 @@ public class US010601Test {
         solo.clickOnButton("update");
         solo.clickOnButton("finish");
         //compare edit is success
-        solo.clickInRecyclerView(0);
+        solo.clickInRecyclerView(1);
         assertEquals("US010601", solo.getText("US010601").getText().toString());
         assertEquals("testDescriptionSuccess", solo.getText("testDescriptionSuccess").getText().toString());
 

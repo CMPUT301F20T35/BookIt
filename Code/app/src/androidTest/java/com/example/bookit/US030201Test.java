@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class US020301Test {
+public class US030201Test {
     private Solo solo;
 
     @Rule
@@ -25,7 +25,7 @@ public class US020301Test {
     }
 
     @Test
-    public void Test() {
+    public void test(){
         solo.assertCurrentActivity("Wrong Activity", Login.class);
 
         // login with test account
@@ -36,14 +36,17 @@ public class US020301Test {
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
-        solo.clickOnView(solo.getView(R.id.navigation_my_book));
-        solo.clickOnButton("Borrowed");
-        solo.waitForFragmentByTag("MyBookBorrowedFragment", 2000);
-        solo.clickInRecyclerView(0);
+        // go to BorrowSearchFragment
+        solo.clickOnView(solo.getView(R.id.navigation_borrow_book));
+        solo.clickOnButton("Available");
+        solo.clickOnView(solo.getView(R.id.button_search));
+        solo.waitForFragmentByTag("BorrowSearchFragment", 2000);
 
-        // check a user's profile by user ID
-        solo.clickOnView(solo.getView(R.id.owner_name));
-        solo.waitForFragmentByTag("OwnerDetailFragment", 4000);
+        // search a book by input keyword
+        solo.enterText((EditText) solo.getView(R.id.text_search), "US030101");
+        solo.waitForText("US030101", 1, 2000);
+        solo.clickOnView(solo.getView(R.id.button_search));
+        solo.waitForFragmentByTag("BorrowSearchFragment", 5000);
     }
 
     @After

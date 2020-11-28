@@ -21,7 +21,7 @@ public class LocationTest {
     }
 
     @Test
-    public void testSetTitle() {
+    public void testSetLongitude() {
         Location location = this.mockLocation();
         assertNull(location.getLongitude());
         location.setLongitude(0.00);
