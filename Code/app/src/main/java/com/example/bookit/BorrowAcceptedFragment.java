@@ -90,7 +90,6 @@ public class BorrowAcceptedFragment extends Fragment {
         rv.addItemDecoration(divider);
         final ArrayList<Book> testList = new ArrayList<Book>();
 
-        // hard code, only for testing purpose !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {

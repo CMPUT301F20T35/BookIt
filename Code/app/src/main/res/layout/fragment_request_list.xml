@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/owner_name" />
 
     <TextView
-        android:id="@+id/IBSN"
+        android:id="@+id/ISBN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -90,7 +90,7 @@
         android:text="Description:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IBSN" />
+        app:layout_constraintTop_toBottomOf="@+id/ISBN" />
 
     <ImageView
         android:id="@+id/imageView"
