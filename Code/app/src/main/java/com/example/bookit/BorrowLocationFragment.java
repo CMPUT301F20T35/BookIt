@@ -191,6 +191,11 @@ public class BorrowLocationFragment extends Fragment {
 
     }
 
+    /**
+     * check if the book the borrower scan is the book handed by owner
+     * by checking the two ISBN codes
+     * @param ISBNtoCheck
+     */
     private void checkISBN(String ISBNtoCheck) {
         fs=new FireStoreHelper(getActivity());
         if(ISBNtoCheck.equals(isbn)) {
