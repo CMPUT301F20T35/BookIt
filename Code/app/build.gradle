@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 android {
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 29
     buildToolsVersion "30.0.2"
 
@@ -46,17 +51,24 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.7.1'
-    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.firebase:firebase-firestore:22.0.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    // intent testing
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
     apply plugin: "androidx.navigation.safeargs"
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:1.2.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0-rc01'
 
-
+    // Barcode scan
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 }

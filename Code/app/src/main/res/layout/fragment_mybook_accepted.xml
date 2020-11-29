@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -37,45 +38,49 @@
         android:id="@+id/button_requested"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="310dp"
         android:text="Requested"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_accepted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="210dp"
-        android:text="Accepted"
         android:background="#A0A0A0"
+        android:text="Accepted"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_requested"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_borrowed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="100dp"
         android:text="Borrowed"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_accepted"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_available"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="0dp"
         android:text="Available"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_borrowed"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -86,5 +91,6 @@
         android:layout_marginTop="130dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

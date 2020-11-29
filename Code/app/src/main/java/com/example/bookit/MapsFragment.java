@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 
 import android.os.Bundle;
@@ -24,13 +25,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 
 public class MapsFragment extends Fragment {
     private LatLng latLng1;
-    ImageButton confirm;
-    ImageButton myLocation;
-    Location location;
+    private ImageButton confirm;
+    private ImageButton myLocation;
+    private GeoPoint geopoint;
+    private String isbn;
     public MapsFragment(){
     }
 
@@ -54,12 +57,14 @@ public class MapsFragment extends Fragment {
             final Double lon;
             lat=bundle.getDouble("lat");
             lon=bundle.getDouble("long");
+            isbn=bundle.getString("isbn");
             latLng1=new LatLng(lat,lon);
             MarkerOptions markerOptions=new MarkerOptions();
             markerOptions.position(latLng1);
-            markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
+            markerOptions.title("my current Location");
+            markerOptions.snippet("Latitude:"+latLng1.latitude+" Longitude:"+latLng1.longitude);
             googleMap.clear();
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15));
             googleMap.addMarker(markerOptions);
             //user choose to get back to the current location
             myLocation.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +73,10 @@ public class MapsFragment extends Fragment {
                     latLng1=new LatLng(lat,lon);
                     MarkerOptions markerOptions=new MarkerOptions();
                     markerOptions.position(latLng1);
-                    markerOptions.title("my current Location: "+latLng1.latitude+":"+latLng1.longitude);
+                    markerOptions.title("my current Location:");
+                    markerOptions.snippet("Latitude:"+latLng1.latitude+" Longitude:"+latLng1.longitude);
                     googleMap.clear();
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,20));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,15));
                     googleMap.addMarker(markerOptions);
                 }
             });
@@ -82,7 +88,9 @@ public class MapsFragment extends Fragment {
                     //initialise the marker
                     MarkerOptions markerOptions=new MarkerOptions();
                     markerOptions.position(latLng);
-                    markerOptions.title("Location chose: "+latLng.latitude+":"+latLng.longitude);
+                    markerOptions.title("Location chose");
+                    markerOptions.snippet("Latitude:"+latLng.latitude+" Longitude:"+latLng.longitude);
+
                     googleMap.clear();
                     googleMap.addMarker(markerOptions);
                 }
@@ -99,13 +107,17 @@ public class MapsFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_maps, container, false);
         confirm=v.findViewById(R.id.confirm);
         myLocation=v.findViewById(R.id.current);
+        FireStoreHelper db=new FireStoreHelper(getContext());
 
         //create a new location object after confirm
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                location=new Location(latLng1.latitude,latLng1.longitude);
-                Log.d("asddssa", Double.toString(location.getLongitude()));
+                geopoint=new GeoPoint(latLng1.latitude,latLng1.longitude);
+                //update location in the fireStore
+                db.location_update(geopoint,isbn);
+//                Navigation.findNavController(getView()).navigate(R.id.action_location_to_mybook_requested);
+                getActivity().onBackPressed();
                 getActivity().onBackPressed();
             }
         });

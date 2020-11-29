@@ -22,11 +22,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
-    FireStoreHelper fs;
-    ProgressBar progressBar;
+    private FireStoreHelper fs;
+    private ProgressBar progressBar;
 
 
     @Override
+    /**
+     * activity used for user signing up
+     * @see activity corresponding to layout file activity_sign_up
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);

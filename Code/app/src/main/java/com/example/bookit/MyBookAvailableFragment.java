@@ -4,6 +4,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,17 +21,24 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MyBookAvailableFragment extends Fragment {
     private Button acceptedButton;
     private Button borrowedButton;
+    private FireStoreHelper fs;
     private Button requestedButton;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
 
     @Override
+    /**
+     * fragment used for displaying available books of the owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook_available
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook_available, container, false);
@@ -38,6 +46,7 @@ public class MyBookAvailableFragment extends Fragment {
         acceptedButton = view.findViewById(R.id.button_accepted);
         borrowedButton = view.findViewById(R.id.button_borrowed);
         requestedButton = view.findViewById(R.id.button_requested);
+        fs=new FireStoreHelper(getActivity());
 
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,35 +80,59 @@ public class MyBookAvailableFragment extends Fragment {
             }
         });
 
+
         // Inflate the layout for this fragment
         //View root = inflater.inflate(R.layout.fragment_mybook, container, false);
         rv = view.findViewById(R.id.rv_1);
-
         //initilize test array and adapter
-
-        final ArrayList<Book> testList = new ArrayList<Book>();
-
+        final ArrayList<Book> dataList = new ArrayList<Book>();
         //set up manager and adapter to contain data
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //setting the separate line
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(divider);
 
         //adapter operation
-        bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
+        bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
+                Book bookCliced=dataList.get(pos);
+                String isbn=bookCliced.getISBN();
+                String des=bookCliced.getDescription();
+                String title=bookCliced.getTitle();
+                String author=bookCliced.getAuthor();
+                String owner=bookCliced.getOwnerName();
+
+                Bundle bundle=new Bundle();
+                bundle.putString("isbn",isbn);
+                bundle.putString("description",des);
+                bundle.putString("title",title);
+                bundle.putString("author",author);
+                bundle.putString("owner",owner);
+
+                Navigation.findNavController(view).navigate(R.id.action_mybook_available_to_mybook_detail,bundle);
             }
-
-
         });
         rv.setAdapter(bAdapter);
 
+        fs.fetch_MyBook("AVAILABLE", new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        String title=map.get("title").toString();
+                        String ISBN=map.get("ISBN").toString();
+                        String author=map.get("author").toString();
+                        String description=map.get("description").toString();
+                        String ownerName=map.get("ownerName").toString();
+                        Book b= new Book(title,author,ISBN,description,ownerName,null);
+                        dataList.add(b);
+                        bAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
 
         //set swipe delete function
-        enableSwipeToDeleteAndUndo();
+        enableSwipeToDeleteAndUndo(fs);
         return view;
     }
 
@@ -114,7 +147,7 @@ public class MyBookAvailableFragment extends Fragment {
     }
 
 
-    private void enableSwipeToDeleteAndUndo(){
+    private void enableSwipeToDeleteAndUndo(FireStoreHelper fs){
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -123,15 +156,7 @@ public class MyBookAvailableFragment extends Fragment {
                 final int position = viewHolder.getAdapterPosition();
                 final Book item = bAdapter.getBookData().get(position);
                 bAdapter.removeItem(position);
-
-
-//                Snackbar snackbar = Snackbar
-//                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-//
-//
-//                snackbar.setActionTextColor(Color.YELLOW);
-//                snackbar.show();
-
+                fs.removeBook(item);
             }
         };
 

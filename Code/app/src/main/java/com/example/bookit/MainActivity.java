@@ -14,6 +14,10 @@ import androidx.navigation.ui.NavigationUI;
 public class MainActivity extends AppCompatActivity{
 
     @Override
+    /**
+     * activity used as holder of the whole program
+     * @see activity corresponding to layout file activity_main
+     */
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);

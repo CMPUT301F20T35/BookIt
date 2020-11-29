@@ -35,7 +35,6 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
         android:shadowColor="#15BACF"
-        android:text="XU"
         android:textColor="#15BACF"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
-        android:text="IBSN:"
+        android:text="ISBN:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_owner_name" />
@@ -58,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
-        android:text="231213124"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_ISBN" />
@@ -69,7 +67,6 @@
         android:layout_height="106dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
-        android:text="this book is about xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_descr" />

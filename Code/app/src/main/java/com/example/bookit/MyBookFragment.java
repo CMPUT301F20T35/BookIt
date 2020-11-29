@@ -43,11 +43,15 @@ public class MyBookFragment extends Fragment {
     private Button requestedButton;
     FusedLocationProviderClient fusedLocationProviderClient;
     LatLng latLng;
-    MyBookFragment myBook;
+    private MyBookFragment myBook;
     MapsFragment map;
 
     @Override
-
+    /**
+     * fragment used for displaying options for owner
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_mybook
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_mybook, container, false);
@@ -90,79 +94,6 @@ public class MyBookFragment extends Fragment {
         });
 
 
-        //choose a location to lend to borrower
-        Button choose = view.findViewById(R.id.location);
-        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(getActivity());
-
-        //final FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        choose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED
-                        && ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                    getLocation();
-                }
-                else{
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},100);
-                }
-
-
-
-            }
-        });
-
         return view;
     }
-    /**
-     * this function is for getting the current location(lat and long) of the device and pass it into the map fragment
-     * */
-    @SuppressLint("MissingPermission")
-    private void getLocation(){
-        LocationManager locationManage=(LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
-        if (locationManage.isProviderEnabled(LocationManager.GPS_PROVIDER)|| locationManage.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<android.location.Location>() {
-                @Override
-                public void onComplete(@NonNull Task<android.location.Location> task) {
-                    android.location.Location location=task.getResult();
-                    if(location!=null){
-                        Bundle bundle = new Bundle();
-                        bundle.putDouble("lat",location.getLatitude());
-                        bundle.putDouble("long",location.getLongitude());
-                        Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
-
-                    }else{
-                        LocationRequest locationRequest=new LocationRequest().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10000)
-                                .setFastestInterval(1000)
-                                .setNumUpdates(1);
-                        LocationCallback locationCallback=new LocationCallback(){
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                Location location=locationResult.getLastLocation();
-                                Bundle bundle = new Bundle();
-                                bundle.putDouble("lat",location.getLatitude());
-                                bundle.putDouble("long",location.getLongitude());
-                                Navigation.findNavController(getView()).navigate(R.id.action_from_mybook_to_mybook_nav,bundle);
-                            }
-                        };
-                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
-                    }
-                }
-            });
-        }else{Toast.makeText(getContext(),"please turn on the data or GPS",Toast.LENGTH_SHORT).show();}
-
-}
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults){
-        if (requestCode== 100&& grantResults.length>0&&(grantResults[0]+grantResults[1]==PackageManager.PERMISSION_GRANTED)){
-            getLocation();
-        }
-        else{
-            Toast.makeText(getContext(),"permission denied",Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
 }

@@ -19,16 +19,23 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BorrowBorrowedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button requestedButton;
     private RecyclerView rv;
+    private FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 
     @Override
+    /**
+     * fragment used for displaying books being borrowed and borrower wants to borrow
+     * @return view of the fragment
+     * @see fragment corresponding to layout file fragment_borrow_borrowed
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_borrow_borrowed, container, false);
@@ -37,7 +44,7 @@ public class BorrowBorrowedFragment extends Fragment {
         availableButton = view.findViewById(R.id.button_available);
         requestedButton = view.findViewById(R.id.button_requested);
         searchButton = view.findViewById(R.id.button_search);
-
+        fs=new FireStoreHelper(getActivity());
         acceptedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,13 +88,48 @@ public class BorrowBorrowedFragment extends Fragment {
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).navigate(R.id.action_borrow_borrowed_to_book_return);
+                Book bookGet = bAdapter.getBookObject(pos);
+                String isbn=bookGet.getISBN();
+                String des=bookGet.getDescription();
+                String title=bookGet.getTitle();
+                String owner=bookGet.getOwnerName();
+                String author = bookGet.getAuthor();
+                Bundle bundle=new Bundle();
+
+                fs.fetch_MyBookRequest(title, new dbCallback() {
+                    @Override
+                    public void onCallback(Map map) {
+                        bundle.putString("isbn",isbn);
+                        bundle.putString("description",des);
+                        bundle.putString("title",title);
+                        bundle.putString("author",author);
+                        bundle.putString("owner",owner);
+                        bundle.putString("is_borrowed","true");
+                        Navigation.findNavController(view).navigate(R.id.action_borrow_borrowed_to_book_return,bundle);
+                    }
+                });
+
             }
 
 
         });
         rv.setAdapter(bAdapter);
+        fs.fetch_BorrowedBook( new dbCallback(){
+            @Override
+            public void onCallback(Map map) {
+                String title=map.get("title").toString();
+                String ISBN=map.get("ISBN").toString();
+                String author=map.get("author").toString();
+                String description=map.get("description").toString();
+                String ownerName=map.get("ownerName").toString();
+
+                //System.out.println(title);
+                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                testList.add(b);
+                bAdapter.notifyDataSetChanged();
+
+            }
+        });
 
         //set search button function
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -97,44 +139,9 @@ public class BorrowBorrowedFragment extends Fragment {
             }
         });
 
-        //set swipe delete function
-        enableSwipeToDeleteAndUndo();
         return view;
     }
 
 
-    //decoration part for recycler view
-    class MyDecoration extends RecyclerView.ItemDecoration{
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.set(0,0,0,getResources().getDimensionPixelOffset(R.dimen.dividerHeight));
-        }
-    }
 
-
-    private void enableSwipeToDeleteAndUndo(){
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
-
-                final int position = viewHolder.getAdapterPosition();
-                final Book item = bAdapter.getBookData().get(position);
-                bAdapter.removeItem(position);
-
-
-//                Snackbar snackbar = Snackbar
-//                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-//
-//
-//                snackbar.setActionTextColor(Color.YELLOW);
-//                snackbar.show();
-
-            }
-        };
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
-        itemTouchhelper.attachToRecyclerView(rv);
-    }
 }

@@ -18,17 +18,24 @@ import java.util.ArrayList;
 
 public class BookImageAdapter extends PagerAdapter {
     private Context context;
-    private ArrayList<Uri> imgArrayList;
+    private Uri uri;
 
-    public BookImageAdapter(Context context, ArrayList<Uri> imgArrayList) {
+    public BookImageAdapter(Context context, Uri uri) {
+
+    /**
+     * This constructor takes in two parameters
+     * @param context
+     * @param imgArrayList arrayList contains Uri object
+     */
+
         this.context = context;
-        this.imgArrayList = imgArrayList;
+        this.uri=uri;
     }
 
 
     @Override
     public int getCount() {
-        return imgArrayList.size();
+        return 1;
     }
 
     @Override
@@ -43,8 +50,9 @@ public class BookImageAdapter extends PagerAdapter {
 
         ImageView bookImgView = view.findViewById(R.id.bookImgView);
 
-        final Uri img = imgArrayList.get(position);
-        bookImgView.setImageURI(img);
+
+
+        bookImgView.setImageURI(uri);
 
         container.addView(view, position);
 
@@ -52,7 +60,6 @@ public class BookImageAdapter extends PagerAdapter {
         bookImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgArrayList.remove(position);
                 container.removeViewAt(position);
                 notifyDataSetChanged();
 
