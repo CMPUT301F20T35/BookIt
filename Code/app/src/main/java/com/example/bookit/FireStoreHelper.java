@@ -603,10 +603,12 @@ FireStoreHelper {
 
 
         }
-
-
     }
 
+    /**
+     * used if the user uploads the profile image
+     * @param u, the image to be uploaded
+     */
     public void image_update(Uri u){
         //ImageView image=v.findViewById(R.id.imageView5);
         mstore= FirebaseStorage.getInstance().getReference();
@@ -616,6 +618,11 @@ FireStoreHelper {
         storageReference.putFile(u);
     }
 
+    /**
+     * used to update the location to hand over the book
+     * @param g
+     * @param isbn
+     */
     public void location_update(GeoPoint g,String isbn){
         db = FirebaseFirestore.getInstance();
         db.collection("Book").document(isbn)
@@ -648,13 +655,23 @@ FireStoreHelper {
                 });
     }
 
-
+    /**
+     * used when the owner wants to change the book image
+     * @param u
+     * @param isbn
+     */
     public void book_image_update(Uri u,String isbn){
         mstore= FirebaseStorage.getInstance().getReference();
         StorageReference storageReference=mstore.child("book_images/"+isbn+"/"+"image1.jpg");
         storageReference.putFile(u);
     }
 
+    /**
+     * used when the owner wants to upload the book image first time
+     * @param isbn, indicating what isbn is used to choose the book
+     * @param callback
+     * @throws IOException
+     */
     public void load_book_image(String isbn,final dbCallback callback)throws IOException{
         FirebaseStorage mstore = FirebaseStorage.getInstance();
         StorageReference listRef=mstore.getReference().child("book_images/"+isbn+"/image1.jpg");
@@ -725,6 +742,11 @@ FireStoreHelper {
         }
     }
 
+    /**
+     * get the user's information from firebase by the username
+     * @param username, indicating what username is used to fetch
+     * @param callback
+     */
     public void fetch_user_withUsername(String username, final dbCallback callback){
         db = FirebaseFirestore.getInstance();
         db.collection("User").whereEqualTo("username",username)
@@ -747,13 +769,18 @@ FireStoreHelper {
 
                     }
                 });
-
     }
+
+    /**
+     * get the user image by the id
+     * @param id
+     * @param callback
+     * @throws IOException
+     */
     public void load_image_with_id(String id,final dbCallback callback) throws IOException {
 
         fAuth = FirebaseAuth.getInstance();
         FirebaseStorage mstore = FirebaseStorage.getInstance();
-        FirebaseUser user = fAuth.getCurrentUser();
         String name = "current";
         StorageReference storageReference=mstore.getReferenceFromUrl("gs://bookit-fc94f.appspot.com/").child("images/"+id+"/"+name+".jpg");
 
@@ -776,7 +803,11 @@ FireStoreHelper {
     }
 
 
-
+    /**
+     * fetch the current user's image
+     * @param callback
+     * @throws IOException
+     */
     public void load_image(final dbCallback callback) throws IOException {
 
         fAuth = FirebaseAuth.getInstance();
@@ -803,7 +834,11 @@ FireStoreHelper {
 
     }
 
-    
+    /**
+     * fetch books in owner's page
+     * @param which, indicating which kind of book to fetch: requested, accepted, borrowed, available
+     * @param callback
+     */
     public void fetch_MyBook(String which ,final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -865,6 +900,10 @@ FireStoreHelper {
         });
     }
 
+    /**
+     * fetch books the owner has confirmed to hand over but not received by the borrower
+     * @param callback
+     */
     public void fetch_owner_confirmed_book(final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -924,7 +963,10 @@ FireStoreHelper {
         });
     }
 
-
+    /**
+     * fetch borrowed books the borrower has confirmed to hand over but not received by the owner
+     * @param callback
+     */
     public void fetch_borrower_confirmed_book(final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -980,7 +1022,10 @@ FireStoreHelper {
         });
     }
 
-////////////////////////////////////
+    /**
+     * fetch the books requested by the current user
+     * @param callback
+     */
     public void fetch_RequestBook(final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -1034,9 +1079,12 @@ FireStoreHelper {
                 }
             }
         });
-
-
     }
+
+    /**
+     * fetch the books whose requester is the current user
+     * @param callback
+     */
     public void fetch_AcceptedBook(final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -1092,9 +1140,12 @@ FireStoreHelper {
                 }
             }
         });
-
-
     }
+
+    /**
+     * fetch the book borrowed by the current user
+     * @param callback
+     */
     public void fetch_BorrowedBook(final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -1153,6 +1204,12 @@ FireStoreHelper {
             }
         });
     }
+
+    /**
+     * fetch the books which are available to the current user
+     * @param callback
+     * @param pb, progressbar
+     */
     public void fetch_AvailableBook(final dbCallback callback, ProgressBar pb) {
         if (pb != null) { pb.setVisibility(View.VISIBLE); }
         fAuth = FirebaseAuth.getInstance();
@@ -1214,6 +1271,12 @@ FireStoreHelper {
             }
         });
     }
+
+    /**
+     * fetch the books requested by others but available to the current usr
+     * @param callback
+     * @param pb
+     */
     public void fetch_RequestBorrowedBook(final dbCallback callback, ProgressBar pb) {
         if (pb != null) { pb.setVisibility(View.VISIBLE); }
         fAuth = FirebaseAuth.getInstance();
@@ -1336,7 +1399,11 @@ FireStoreHelper {
         });
     }
 
-
+    /**
+     * fetch the request handler of one book by title
+     * @param title
+     * @param callback
+     */
     public void fetch_MyBookRequest(String title ,final dbCallback callback) {
         fAuth = FirebaseAuth.getInstance();
         //FirebaseUser user = fAuth.getCurrentUser();
@@ -1365,9 +1432,13 @@ FireStoreHelper {
 
             }
         });
-
     }
 
+    /**
+     * fetch the book's current state
+     * @param ISBN, indicating which book to fetch
+     * @param callback
+     */
     public void fetch_MyBookState(String ISBN ,final dbCallback callback) {
         //FirebaseUser user = fAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -1389,8 +1460,13 @@ FireStoreHelper {
 
             }
         });
-
     }
+
+    /**
+     * fetch the location of one book
+     * @param ISBN, indicating which book to fetch
+     * @param callback
+     */
     public void fetch_location(String ISBN ,final dbCallback callback){
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -1543,6 +1619,12 @@ FireStoreHelper {
 
     }
 
+    /**
+     * responsible for updating borrow process status when borrower/owner scan the ISBN
+     * @param person, indicating who is scanning the book
+     * @param ISBN, indicating the book to change state
+     * @param callback
+     */
     public void updateBorrowProcess(String person, String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
         if (person.equals("owner")) {
@@ -1580,6 +1662,12 @@ FireStoreHelper {
         }
     }
 
+    /**
+     * responsible for updating return process status when borrower/owner scan the ISBN
+     * @param person, indicating who is scanning the book
+     * @param ISBN, indicating the book to change state
+     * @param callback
+     */
     public void updateReturnProcess(String person, String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
         if (person.equals("borrower")) {
@@ -1619,7 +1707,11 @@ FireStoreHelper {
     }
 
 
-
+    /**
+     * responsible for checking if one book is in borrow handing over process
+     * @param ISBN, indicating the book to change state
+     * @param callback
+     */
     public void checkHandProcess(String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
         db.collection("Book")
@@ -1641,6 +1733,11 @@ FireStoreHelper {
                 });
     }
 
+    /**
+     * responsible for checking if one book is in return handing over process
+     * @param ISBN, indicating the book to change state
+     * @param callback
+     */
     public void checkReturnProcess(String ISBN, dbCallback callback) {
         db = FirebaseFirestore.getInstance();
         db.collection("Book")
