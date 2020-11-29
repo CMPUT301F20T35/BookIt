@@ -58,7 +58,6 @@ public class BorrowSearchFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 // switch to book request fragment
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 // get current clicked book info
                 Book bookGet = bAdapter.getBookObject(pos);
                 String isbn = bookGet.getISBN();

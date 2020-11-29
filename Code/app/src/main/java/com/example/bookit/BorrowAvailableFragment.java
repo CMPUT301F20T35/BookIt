@@ -98,7 +98,6 @@ public class BorrowAvailableFragment extends Fragment {
                     Toast.makeText(getActivity(),"not finished return process yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
 
                 // get current clicked book info
                 Book bookGet = bAdapter.getBookObject(pos);
