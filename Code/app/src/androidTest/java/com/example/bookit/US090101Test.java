@@ -46,10 +46,7 @@ public class US090101Test {
         solo.waitForFragmentByTag("fragment_requestList", 5000);
         solo.clickOnView(solo.getView(R.id.accpet));
         solo.waitForFragmentByTag("fragment_maps", 5000);
-        solo.clickOnView(solo.getView(R.id.confirm));
-        solo.waitForFragmentByTag("fragment_requestList", 5000);
-        solo.clickOnButton("Accepted");
-        solo.waitForFragmentByTag("fragment_acceptedList", 5000);
+
 
 
 
