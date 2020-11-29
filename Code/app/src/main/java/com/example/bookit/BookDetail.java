@@ -135,14 +135,12 @@ public class BookDetail extends Fragment {
                 builder.setView(v);
                 EditText editTitle=v.findViewById(R.id.edit_title);
                 EditText editAuthor=v.findViewById(R.id.edit_author);
-                EditText editOwner=v.findViewById(R.id.edit_owner);
                 EditText editDes=v.findViewById(R.id.edit_des);
                 EditText editIsbn=v.findViewById(R.id.edit_isbn);
 
                 editAuthor.setText(authorView.getText());
                 editDes.setText(descriptionView.getText());
                 editIsbn.setText(isbnView.getText());
-                editOwner.setText(ownerView.getText());
                 editTitle.setText(titleView.getText());
 
                 builder.setPositiveButton("update", null);
@@ -162,7 +160,7 @@ public class BookDetail extends Fragment {
                                     String a=editAuthor.getText().toString().trim();
                                     String d=editDes.getText().toString().trim();
                                     String i=editIsbn.getText().toString().trim();
-                                    String o=editOwner.getText().toString().trim();
+                                    String o=ownerView.getText().toString().trim();
                                     String t=editTitle.getText().toString().trim();
                                     Book book=new Book(t,a,i,d,o,null);
                                     Boolean isValid=bookInfoValidator(book);
