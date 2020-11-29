@@ -370,6 +370,11 @@ FireStoreHelper {
         db.collection("Book").document(ISBN)
                 .update("requestors", list
                 );
+        if (list.size()==0){
+            db.collection("Book").document(ISBN)
+                    .update("state.bookStatus", "AVAILABLE");
+        }
+
     }
 
     /**
