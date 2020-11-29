@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.util.Map;
 
 public class OwnerDetailFragment extends Fragment {
-    Button back;
+    private Button back;
     private FireStoreHelper db;
     private String username;
-    String id;
+    private String id;
     private TextView usernameView;
     private TextView emailView;
     private TextView numberView;

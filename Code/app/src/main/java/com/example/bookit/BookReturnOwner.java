@@ -41,7 +41,7 @@ public class BookReturnOwner extends Fragment {
     private ImageView backButton;
 
     private String ISBN;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

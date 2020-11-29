@@ -30,10 +30,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class MapsFragment extends Fragment {
     private LatLng latLng1;
-    ImageButton confirm;
-    ImageButton myLocation;
-    GeoPoint geopoint;
-    String isbn;
+    private ImageButton confirm;
+    private ImageButton myLocation;
+    private GeoPoint geopoint;
+    private String isbn;
     public MapsFragment(){
     }
 

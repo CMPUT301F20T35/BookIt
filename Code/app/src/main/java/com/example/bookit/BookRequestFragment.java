@@ -37,7 +37,7 @@ public class BookRequestFragment extends Fragment {
     private String author;
     private RequestHandler rh;
 
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     @Override
     /**

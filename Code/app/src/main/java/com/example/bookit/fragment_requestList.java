@@ -57,9 +57,9 @@ public class fragment_requestList extends Fragment {
 
     private ImageView backButton;
     private TextView ownerDetail;
-    FireStoreHelper fs;
-    RequestHandler rh;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private FireStoreHelper fs;
+    private RequestHandler rh;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private ImageButton editImage;
     private ImageButton delete;

@@ -19,7 +19,7 @@ import java.util.Map;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.LinearViewHolder> {
     private Context mContext;
     private ArrayList<Notification> data = new ArrayList<>();
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     /**
      * This constructor takes in three parameters

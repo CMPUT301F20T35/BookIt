@@ -77,13 +77,13 @@ import static android.content.ContentValues.TAG;
 
 public class
 FireStoreHelper {
-    FirebaseAuth fAuth;
-    FirebaseFirestore db;
-    Context context;
-    boolean isSuccessful=false;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore db;
+    private Context context;
+    private boolean isSuccessful=false;
     private StorageReference mstore;
     private String username;
-    int i;
+    private int i;
 
     /**
      * first constructor

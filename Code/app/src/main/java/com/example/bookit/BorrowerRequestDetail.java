@@ -50,7 +50,7 @@ public class BorrowerRequestDetail extends Fragment {
     private TextView descriptionView;
     private TextView authorView;
     protected ImageView imageView;
-    FireStoreHelper db;
+    private FireStoreHelper db;
     private String isbn;
     private String title;
     private String description;

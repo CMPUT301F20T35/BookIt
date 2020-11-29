@@ -26,7 +26,7 @@ public class BorrowBorrowedFragment extends Fragment {
     private Button availableButton;
     private Button requestedButton;
     private RecyclerView rv;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 

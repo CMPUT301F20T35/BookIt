@@ -22,8 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
-    FireStoreHelper fs;
-    ProgressBar progressBar;
+    private FireStoreHelper fs;
+    private ProgressBar progressBar;
 
 
     @Override

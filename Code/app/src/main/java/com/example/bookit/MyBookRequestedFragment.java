@@ -28,7 +28,7 @@ public class MyBookRequestedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button borrowedButton;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;

@@ -35,11 +35,10 @@ public class MyBookAcceptedFragment extends Fragment {
     private Button availableButton;
     private Button borrowedButton;
     private Button requestedButton;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
-    private Book BookToScan;
 
 
     @Override

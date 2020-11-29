@@ -38,7 +38,7 @@ public class BookReturnFragment extends Fragment {
     protected ImageView imageView1;
 
     private String ISBN;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     @Override
     /**

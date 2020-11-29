@@ -34,7 +34,7 @@ public class BorrowAcceptedFragment extends Fragment {
     private Button borrowedButton;
     private Button requestedButton;
     private RecyclerView rv;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 

@@ -25,7 +25,7 @@ import java.util.Map;
 public class BorrowRequestedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private Button borrowedButton;
     private RecyclerView rv;
     private BookAdapter bAdapter;

@@ -27,7 +27,7 @@ public class BorrowSearchFragment extends Fragment {
     private EditText searchText;
     private RecyclerView rv;
     private BookAdapter bAdapter;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     ArrayList<Book> testList;
     private ProgressBar pb;
 
