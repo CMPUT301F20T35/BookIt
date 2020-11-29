@@ -6,7 +6,7 @@ public class Notification {
     private String title;
     private String ISBN;
     private String ownerName;
-    private ArrayList<String > requesters;
+    private ArrayList<String> requesters;
     private String notificationType;
     private String acceptedUser;
 

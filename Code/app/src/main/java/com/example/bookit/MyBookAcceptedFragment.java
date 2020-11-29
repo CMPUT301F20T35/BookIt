@@ -112,8 +112,6 @@ public class MyBookAcceptedFragment extends Fragment {
                 String author=bookCliced.getAuthor();
                 String owner=bookCliced.getOwnerName();
 
-
-
                 Bundle bundle=new Bundle();
                 bundle.putString("isbn",isbn);
                 bundle.putString("description",des);
@@ -141,15 +139,6 @@ public class MyBookAcceptedFragment extends Fragment {
                     }
                 }
         );
-        
-
         return view;
     }
-
-
-
-
-
-
-
 }

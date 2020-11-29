@@ -41,10 +41,6 @@ public class MyBookFragment extends Fragment {
     private Button availableButton;
     private Button borrowedButton;
     private Button requestedButton;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    LatLng latLng;
-    MyBookFragment myBook;
-    MapsFragment map;
 
     @Override
     /**

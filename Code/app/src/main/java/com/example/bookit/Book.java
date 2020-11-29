@@ -1,7 +1,5 @@
 package com.example.bookit;
 
-import android.widget.ImageView;
-
 public class Book {
     private String title;
     private String author;
@@ -31,11 +29,11 @@ public class Book {
     }
 
     /**
-     *
-     * @param title
-     * @param author
-     * @param ISBN
-     * @param description
+     * This constructor takes in six parameters
+     * @param title title of the book
+     * @param author author of the book
+     * @param ISBN ISBN of the book
+     * @param description description of the book
      */
     public Book(String title, String author, String ISBN, String description) {
         this.title = title;
