@@ -139,36 +139,9 @@ public class BorrowBorrowedFragment extends Fragment {
             }
         });
 
-        //set swipe delete function
-        enableSwipeToDeleteAndUndo();
         return view;
     }
 
 
-    //decoration part for recycler view
-    class MyDecoration extends RecyclerView.ItemDecoration{
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.set(0,0,0,getResources().getDimensionPixelOffset(R.dimen.dividerHeight));
-        }
-    }
 
-
-    private void enableSwipeToDeleteAndUndo(){
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
-
-                final int position = viewHolder.getAdapterPosition();
-                final Book item = bAdapter.getBookData().get(position);
-                bAdapter.removeItem(position);
-
-            }
-        };
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
-        itemTouchhelper.attachToRecyclerView(rv);
-    }
 }

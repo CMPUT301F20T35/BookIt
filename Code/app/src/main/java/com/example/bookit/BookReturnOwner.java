@@ -1,11 +1,14 @@
 package com.example.bookit;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -33,6 +37,7 @@ public class BookReturnOwner extends Fragment {
     private TextView borrower;
     private TextView textView5;
     private Button returnBook;
+    protected ImageView imageView;
     private ImageView backButton;
 
     private String ISBN;
@@ -54,6 +59,7 @@ public class BookReturnOwner extends Fragment {
         description = view.findViewById(R.id.Description);
         borrower=view.findViewById(R.id.borrower);
         textView5=view.findViewById(R.id.textView5);
+        imageView = view.findViewById(R.id.imageView);
 
         ISBN = bundle.getString("isbn");
         isbn.setText(ISBN);
@@ -67,6 +73,23 @@ public class BookReturnOwner extends Fragment {
         }
 
         returnBook = view.findViewById(R.id.button_return);
+
+        try {
+            fs.load_book_image(ISBN, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("bookimage");
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+                    imageView.setImageBitmap(img);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         returnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
