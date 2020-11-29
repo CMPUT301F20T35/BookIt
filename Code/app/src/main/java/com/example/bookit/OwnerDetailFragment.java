@@ -68,10 +68,6 @@ public class OwnerDetailFragment extends Fragment {
                         @Override
                         public void onCallback(Map map) {
                             String imageEncoded = (String) map.get("userimg");
-                            SharedPreferences.Editor prefEditor = getContext().
-                                    getSharedPreferences("Profile", Context.MODE_PRIVATE).edit();
-                            prefEditor.putString("profileimg", imageEncoded);
-                            prefEditor.commit();
 
                             byte[] decodedByte = Base64.decode(imageEncoded, 0);
                             Bitmap img = BitmapFactory

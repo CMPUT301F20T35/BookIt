@@ -448,6 +448,10 @@ FireStoreHelper {
 
     }
 
+    /**
+     * remove book objects and images from firebase
+     * @param book
+     */
     public void removeBook(Book book) {
         String isbn = book.getISBN();
         db = FirebaseFirestore.getInstance();

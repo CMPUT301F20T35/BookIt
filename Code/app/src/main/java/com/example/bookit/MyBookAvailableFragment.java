@@ -96,7 +96,6 @@ public class MyBookAvailableFragment extends Fragment {
         bAdapter = new BookAdapter(getActivity(), dataList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
                 Book bookCliced=dataList.get(pos);
                 String isbn=bookCliced.getISBN();
                 String des=bookCliced.getDescription();
