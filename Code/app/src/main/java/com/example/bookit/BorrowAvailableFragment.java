@@ -94,6 +94,10 @@ public class BorrowAvailableFragment extends Fragment {
         bAdapter = new BookAdapter(getActivity(), testList, new BookAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
+                if (bAdapter.getBookObject(pos).getRequests() != null && bAdapter.getBookObject(pos).getRequests().getReturnProcess()) {
+                    Toast.makeText(getActivity(),"not finished return process yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Toast.makeText(getActivity(),"Testing"+pos, Toast.LENGTH_SHORT).show();
 
                 // get current clicked book info
@@ -158,7 +162,7 @@ public class BorrowAvailableFragment extends Fragment {
                 String author=map.get("author").toString();
                 String description=map.get("description").toString();
                 String ownerName=map.get("ownerName").toString();
-                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                Book b= new Book(title,author,ISBN,description,ownerName,new RequestHandler(new BookState(),new ArrayList<String>(), "", false, true));
                 testList.add(b);
                 bAdapter.notifyDataSetChanged();
             }

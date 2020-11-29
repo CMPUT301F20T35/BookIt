@@ -94,6 +94,10 @@ public class MyBookBorrowedFragment extends Fragment {
             @Override
             public void onClick(int pos) {
                 Book bookGet = bAdapter.getBookObject(pos);
+                if (bookGet.getRequests().getBorrowProcess()) {
+                    Toast.makeText(getActivity(), "borrower not received yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String isbn=bookGet.getISBN();
                 String des=bookGet.getDescription();
                 String title=bookGet.getTitle();
@@ -148,7 +152,8 @@ public class MyBookBorrowedFragment extends Fragment {
                 String author=map.get("author").toString();
                 String description=map.get("description").toString();
                 String ownerName=map.get("ownerName").toString();
-                Book b= new Book(title,author,ISBN,description,ownerName,null);
+                String borrower=map.get("borrower").toString();
+                Book b= new Book(title,author,ISBN,description,ownerName, new RequestHandler(new BookState(),new ArrayList<String>(),borrower, true, false));
                 dataList.add(b);
                 bAdapter.notifyDataSetChanged();
             }
