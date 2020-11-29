@@ -34,14 +34,10 @@ public class BorrowAcceptedFragment extends Fragment {
     private Button borrowedButton;
     private Button requestedButton;
     private RecyclerView rv;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private BookAdapter bAdapter;
     private ImageButton searchButton;
 
-    private TextView booktitle;
-    private TextView ownername;
-    private TextView ISBNnumber;
-    private TextView bookdescription;
     @Override
     /**
      * fragment used for displaying books being accepted and borrower wants to borrow

@@ -60,8 +60,8 @@ public class NewBookEditFragment extends Fragment {
     private EditText newBookDescriptionET;
     private FloatingActionButton addNewBook;
     private Button addImage;
-    AlertDialog dialog;
-    FireStoreHelper db;
+    private AlertDialog dialog;
+    private FireStoreHelper db;
 
     private ImageButton scanBtn;
 

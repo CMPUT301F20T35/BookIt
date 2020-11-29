@@ -31,7 +31,7 @@ public class BorrowLocationFragment extends Fragment {
     private Button borrowButton;
     private ImageView backButton;
     private TextView ownerDetail;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private String isbn;
     private String title;
     private String description;

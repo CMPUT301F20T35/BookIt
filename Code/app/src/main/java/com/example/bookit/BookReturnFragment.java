@@ -35,10 +35,10 @@ public class BookReturnFragment extends Fragment {
     private TextView textView5;
     private Button returnBook;
     private ImageView backButton;
-    protected ImageView imageView1;
+    private ImageView imageView1;
 
     private String ISBN;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     @Override
     /**

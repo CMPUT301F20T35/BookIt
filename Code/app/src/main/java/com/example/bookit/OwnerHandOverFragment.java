@@ -34,7 +34,7 @@ public class OwnerHandOverFragment extends Fragment {
     private Button handOverBtn;
     private ImageView backButton;
     private TextView authorView;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private String isbn;
     private String title;
     private String description;

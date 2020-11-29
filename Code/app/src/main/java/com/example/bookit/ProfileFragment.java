@@ -44,9 +44,9 @@ import static java.lang.Integer.parseInt;
 
 public class ProfileFragment extends Fragment {
     boolean alertReady;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     public static final int PICK_IMAGE = 1;
-    protected ImageView image;
+    private ImageView image;
     private Uri MediaUri;
     private android.app.AlertDialog dialog;
     @SuppressLint("WrongThread")

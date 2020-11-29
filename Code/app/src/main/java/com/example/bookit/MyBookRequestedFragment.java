@@ -28,7 +28,7 @@ public class MyBookRequestedFragment extends Fragment {
     private Button acceptedButton;
     private Button availableButton;
     private Button borrowedButton;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
     private RecyclerView rv;
     private BookAdapter bAdapter;
     private FloatingActionButton addButton;
@@ -157,14 +157,6 @@ public class MyBookRequestedFragment extends Fragment {
     }
 
 
-    //decoration part for recycler view
-    class MyDecoration extends RecyclerView.ItemDecoration{
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.set(0,0,0,getResources().getDimensionPixelOffset(R.dimen.dividerHeight));
-        }
-    }
 
 
 }

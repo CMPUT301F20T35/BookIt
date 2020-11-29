@@ -25,8 +25,8 @@ import java.util.Map;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHolder> {
     private Context mContext;
     private ArrayList<User> userData = new ArrayList<>();
-    public MyClickListener myClickListener;
-    FireStoreHelper fs;
+    private MyClickListener myClickListener;
+    private FireStoreHelper fs;
 
     /**
      * This constructor takes in two parameters
@@ -126,9 +126,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LinearViewHold
 
         MyClickListener listener;
         private TextView email;
-        public Button acceptButton;
-        public Button denyButton;
-        public ImageView photo;
+        private Button acceptButton;
+        private Button denyButton;
+        private ImageView photo;
         public LinearViewHolder(View itemView, MyClickListener listener){
             super(itemView);
             email = itemView.findViewById(R.id.user_email);

@@ -23,7 +23,7 @@ public class signUpValidator {
     private String email;
     private String number;
 
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     /**
      * This consrtuctor takes in four parameter

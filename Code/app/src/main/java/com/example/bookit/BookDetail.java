@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 public class BookDetail extends Fragment {
 
-    boolean alertReady;
+    private boolean alertReady;
 
     private static final int PICK_IMAGE = 1;
     private Uri MediaUri;
@@ -50,8 +50,8 @@ public class BookDetail extends Fragment {
     private TextView descriptionView;
     private TextView authorView;
 
-    protected ImageView imageView;
-    FireStoreHelper db;
+    private ImageView imageView;
+    private FireStoreHelper db;
 
     private String isbn;
     private String title;

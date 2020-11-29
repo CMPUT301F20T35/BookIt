@@ -20,7 +20,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.LinearViewHold
     private Context mContext;
     private ArrayList<Book> bookData = new ArrayList<>();
     private OnItemClickListener mlistener;
-    FireStoreHelper fs;
+    private FireStoreHelper fs;
 
     /**
      * This constructor takes in three parameters
