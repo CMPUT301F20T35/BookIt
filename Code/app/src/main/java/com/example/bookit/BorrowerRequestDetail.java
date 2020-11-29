@@ -92,11 +92,6 @@ public class BorrowerRequestDetail extends Fragment {
                 @Override
                 public void onCallback(Map map) {
                     String imageEncoded = (String) map.get("bookimage");
-                    SharedPreferences.Editor prefEditor = getContext().
-                            getSharedPreferences("Book", Context.MODE_PRIVATE).edit();
-                    prefEditor.putString("bookimg", imageEncoded);
-                    prefEditor.commit();
-
                     byte[] decodedByte = Base64.decode(imageEncoded, 0);
                     Bitmap img = BitmapFactory
                             .decodeByteArray(decodedByte, 0, decodedByte.length);

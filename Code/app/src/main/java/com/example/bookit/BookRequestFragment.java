@@ -1,6 +1,9 @@
 package com.example.bookit;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +17,9 @@ import androidx.navigation.Navigation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BookRequestFragment extends Fragment {
     private Button requestButton;
@@ -23,6 +28,7 @@ public class BookRequestFragment extends Fragment {
     private TextView ownerName;
     private TextView bookISBN;
     private TextView bookDescription;
+    protected ImageView imageView;
 
     private String isbn;
     private String des;
@@ -49,6 +55,7 @@ public class BookRequestFragment extends Fragment {
         ownerName = view.findViewById(R.id.tv_owner_name);
         bookISBN = view.findViewById(R.id.tv_IBSN_number);
         bookDescription = view.findViewById(R.id.tv_description);
+        imageView = view.findViewById(R.id.iv_book);
 
         // get current book info from bundle
         Bundle b = getArguments();
@@ -74,6 +81,23 @@ public class BookRequestFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+
+        try {
+            fs.load_book_image(isbn, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("bookimage");
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+                    imageView.setImageBitmap(img);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // set listener for owner name
         ownerName.setOnClickListener(new View.OnClickListener() {

@@ -3,8 +3,12 @@ package com.example.bookit;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Looper;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +43,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +99,7 @@ public class fragment_requestList extends Fragment {
         ownerView=view.findViewById(R.id.owner_name);
         isbnView=view.findViewById(R.id.ISBN);
         descriptionView=view.findViewById(R.id.Description);
+        imageView = view.findViewById(R.id.imageView);
         //authorView=view.findViewById(R.id.);
         //editInfo=view.findViewById(R.id.editbookinfo);
 
@@ -101,7 +108,6 @@ public class fragment_requestList extends Fragment {
         title=b.getString("title");
         description=b.getString("description");
         owner=b.getString("owner");
-        isbn=b.getString("isbn");
         rh = (RequestHandler) b.getSerializable("rh");
         //author=b.getString("author");
         //set text
@@ -145,6 +151,22 @@ public class fragment_requestList extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),DividerItemDecoration.HORIZONTAL);
         rv.addItemDecoration(divider);
 
+
+        try {
+            fs.load_book_image(isbn, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("bookimage");
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+                    imageView.setImageBitmap(img);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         int i;
         for (i=0;i<requestorTemp.size();i++){

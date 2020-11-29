@@ -1,7 +1,10 @@
 package com.example.bookit;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import androidx.navigation.Navigation;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class BookReturnFragment extends Fragment {
@@ -31,6 +35,7 @@ public class BookReturnFragment extends Fragment {
     private TextView textView5;
     private Button returnBook;
     private ImageView backButton;
+    protected ImageView imageView1;
 
     private String ISBN;
     FireStoreHelper fs;
@@ -53,6 +58,7 @@ public class BookReturnFragment extends Fragment {
         description = view.findViewById(R.id.Description);
         borrower=view.findViewById(R.id.borrower);
         textView5=view.findViewById(R.id.textView5);
+        imageView1 = view.findViewById(R.id.imageView);
 
         ISBN = bundle.getString("isbn");
         isbn.setText(ISBN);
@@ -64,6 +70,9 @@ public class BookReturnFragment extends Fragment {
         if (bundle.getString("is_borrowed").equals("true")){
             textView5.setText("");
         }
+
+
+
 
         returnBook = view.findViewById(R.id.button_return);
         returnBook.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +101,22 @@ public class BookReturnFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        try {
+            fs.load_book_image(ISBN, new dbCallback() {
+                @Override
+                public void onCallback(Map map) {
+                    String imageEncoded = (String) map.get("bookimage");
+                    byte[] decodedByte = Base64.decode(imageEncoded, 0);
+                    Bitmap img = BitmapFactory
+                            .decodeByteArray(decodedByte, 0, decodedByte.length);
+                    imageView1.setImageBitmap(img);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
