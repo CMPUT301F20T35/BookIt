@@ -2,20 +2,17 @@ package com.example.bookit;
 
 import android.widget.EditText;
 
-import com.robotium.solo.Solo;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+
+import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertThat;
-
-public class US090101Test {
+public class US060101Test {
     private Solo solo;
 
     @Rule
@@ -40,15 +37,12 @@ public class US090101Test {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         solo.clickOnView(solo.getView(R.id.navigation_my_book));
-        solo.clickOnButton("Requested");
-        solo.waitForFragmentByTag("MyBookRequestedFragment", 5000);
+        solo.clickOnButton("Accepted");
+        solo.waitForFragmentByTag("BorrowAcceptedFragment");
+
         solo.clickInRecyclerView(0);
-        solo.waitForFragmentByTag("fragment_requestList", 5000);
-        solo.clickOnView(solo.getView(R.id.accpet));
-        solo.waitForFragmentByTag("fragment_maps", 5000);
 
-
-
+        solo.clickOnView(solo.getView(R.id.confirm));
 
     }
 
